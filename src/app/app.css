@@ -1,0 +1,42 @@
+.brand-marquee {
+	width: 100%;
+	overflow: hidden;
+}
+
+.brand-marquee-track {
+	display: flex;
+	align-items: center;
+	width: max-content;
+	animation: vm-brand-scroll 30s linear infinite;
+}
+
+.brand-logo-item {
+	flex: 0 0 auto;
+	width: 180px;
+	height: 72px;
+	margin-right: 16px;
+	border-radius: 12px;
+	border: 1px solid #e5e7eb;
+	background: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+	.brand-logo-item {
+		width: 220px;
+		height: 84px;
+		margin-right: 20px;
+	}
+}
+
+@keyframes vm-brand-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}

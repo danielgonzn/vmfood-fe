@@ -13,7 +13,7 @@ import { SeoService } from '../../shared/services/seo.service';
   template: `
     <section class="min-h-screen bg-gray-50 pt-24">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <button routerLink="/catalogo" class="inline-flex items-center gap-2 text-gray-700 hover:text-vm-red font-medium mb-6">
+        <button routerLink="/catalogo" class="inline-flex items-center gap-2 vm-nav-link mb-6">
           <mat-icon>arrow_back</mat-icon>
           Volver al catálogo
         </button>
@@ -101,7 +101,7 @@ import { SeoService } from '../../shared/services/seo.service';
                 <a
                   [href]="getQuoteLink(product)"
                   target="_blank"
-                  class="w-full sm:w-auto border border-vm-red text-vm-red font-medium py-2.5 px-5 rounded hover:bg-vm-red hover:text-white transition-colors inline-flex items-center justify-center gap-2"
+                  class="w-full sm:w-auto vm-btn-outline-red py-2.5 px-5 inline-flex items-center justify-center gap-2"
                 >
                   <mat-icon class="text-base">chat</mat-icon>
                   Solicitar cotización
@@ -115,7 +115,7 @@ import { SeoService } from '../../shared/services/seo.service';
               <h2 class="text-2xl font-bold text-black mb-4">Productos relacionados</h2>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 @for (item of relatedProducts; track item.id) {
-                  <article class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+                  <article class="vm-card overflow-hidden">
                     <div class="h-40 bg-gray-100">
                       <img [src]="item.image" [alt]="item.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
                     </div>

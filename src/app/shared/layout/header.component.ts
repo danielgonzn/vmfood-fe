@@ -18,11 +18,11 @@ import { RouterLink } from '@angular/router';
           </a>
 
           <div class="hidden md:flex space-x-8 items-center">
-            <a [routerLink]="['/']" fragment="home" class="text-gray-700 hover:text-vm-red font-medium transition-colors">Inicio</a>
-            <a [routerLink]="['/']" fragment="about" class="text-gray-700 hover:text-vm-red font-medium transition-colors">Nosotros</a>
-            <a [routerLink]="['/']" fragment="products" class="text-gray-700 hover:text-vm-red font-medium transition-colors">Productos</a>
-            <a [routerLink]="['/']" fragment="location" class="text-gray-700 hover:text-vm-red font-medium transition-colors">Ubicación</a>
-            <a [routerLink]="['/']" fragment="contact" class="bg-vm-red text-white px-5 py-2 rounded-full font-medium hover:bg-red-700 transition-colors shadow-md hover:shadow-lg">
+            <a [routerLink]="['/']" fragment="home" class="vm-nav-link">Inicio</a>
+            <a [routerLink]="['/']" fragment="about" class="vm-nav-link">Nosotros</a>
+            <a [routerLink]="['/']" fragment="products" class="vm-nav-link">Productos</a>
+            <a [routerLink]="['/']" fragment="location" class="vm-nav-link">Ubicación</a>
+            <a [routerLink]="['/']" fragment="contact" class="vm-btn-primary px-5 py-2 rounded-full">
               Contacto
             </a>
           </div>

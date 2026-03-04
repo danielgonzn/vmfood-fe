@@ -26,11 +26,11 @@ import { SeoService } from '../../shared/services/seo.service';
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
-              <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none">
+              <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-              <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+              <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="vm-input">
                 <option value="all">Todas</option>
                 @for (category of categories; track category) {
                   <option [value]="category">{{ category }}</option>
@@ -39,7 +39,7 @@ import { SeoService } from '../../shared/services/seo.service';
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
-              <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+              <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="vm-input">
                 <option value="all">Todas</option>
                 @for (subcategory of subcategories; track subcategory) {
                   <option [value]="subcategory">{{ subcategory }}</option>
@@ -48,7 +48,7 @@ import { SeoService } from '../../shared/services/seo.service';
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
-              <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+              <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="vm-input">
                 <option value="all">Todas</option>
                 @for (brand of brands; track brand) {
                   <option [value]="brand">{{ brand }}</option>
@@ -57,7 +57,7 @@ import { SeoService } from '../../shared/services/seo.service';
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Origen</label>
-              <select [(ngModel)]="selectedOrigin" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+              <select [(ngModel)]="selectedOrigin" (ngModelChange)="onFilterChange()" class="vm-input">
                 <option value="all">Todos</option>
                 @for (origin of origins; track origin) {
                   <option [value]="origin">{{ origin }}</option>
@@ -66,7 +66,7 @@ import { SeoService } from '../../shared/services/seo.service';
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
-              <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+              <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="vm-input">
                 <option value="all">Todas</option>
                 <option value="Nueva">Nueva</option>
                 <option value="Usada">Usada</option>
@@ -80,12 +80,12 @@ import { SeoService } from '../../shared/services/seo.service';
               Solo disponibles
             </label>
             <div class="sm:ml-auto w-full sm:w-auto">
-              <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+              <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" class="vm-input">
                 <option value="name-asc">Nombre A-Z</option>
                 <option value="name-desc">Nombre Z-A</option>
               </select>
             </div>
-            <button type="button" (click)="clearFilters()" class="border border-gray-400 text-gray-700 px-4 py-2 rounded-lg hover:border-black hover:text-black">Limpiar filtros</button>
+            <button type="button" (click)="clearFilters()" class="vm-btn-secondary px-4 py-2">Limpiar filtros</button>
           </div>
         </div>
 
@@ -96,7 +96,7 @@ import { SeoService } from '../../shared/services/seo.service';
 
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           @for (product of paginatedProducts; track product.id) {
-            <article class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+            <article class="vm-card overflow-hidden">
               <div class="h-52 bg-gray-100 overflow-hidden">
                 <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
               </div>
@@ -127,11 +127,11 @@ import { SeoService } from '../../shared/services/seo.service';
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <a [routerLink]="['/catalogo', product.id]" class="border border-black text-black font-medium py-2 rounded hover:bg-black hover:text-white transition-colors inline-flex items-center justify-center gap-2">
+                  <a [routerLink]="['/catalogo', product.id]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
                     <mat-icon class="text-base">visibility</mat-icon>
                     Ver ficha
                   </a>
-                  <a [href]="getQuoteLink(product)" target="_blank" class="border border-vm-red text-vm-red font-medium py-2 rounded hover:bg-vm-red hover:text-white transition-colors inline-flex items-center justify-center gap-2">
+                  <a [href]="getQuoteLink(product)" target="_blank" class="vm-btn-outline-red py-2 inline-flex items-center justify-center gap-2">
                     <mat-icon class="text-base">chat</mat-icon>
                     Cotizar
                   </a>

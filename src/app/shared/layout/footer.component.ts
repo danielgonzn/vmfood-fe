@@ -16,8 +16,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           </div>
 
           <div class="flex space-x-6 mb-6 md:mb-0">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">Aviso de Privacidad</a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">Términos y Condiciones</a>
+            <a href="#" class="vm-footer-link">Aviso de Privacidad</a>
+            <a href="#" class="vm-footer-link">Términos y Condiciones</a>
           </div>
 
           <div class="text-gray-500 text-sm">

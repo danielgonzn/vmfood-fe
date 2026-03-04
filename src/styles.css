@@ -26,3 +26,43 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-montserrat);
 }
+
+@layer components {
+  .vm-nav-link {
+    @apply text-gray-700 hover:text-vm-red font-medium transition-colors duration-200;
+  }
+
+  .vm-card {
+    @apply bg-white border border-gray-100 rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl;
+  }
+
+  .vm-btn-primary {
+    @apply bg-vm-red text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:bg-red-800 hover:shadow-lg;
+  }
+
+  .vm-btn-secondary {
+    @apply border border-black text-black font-semibold rounded-lg transition-all duration-200 hover:bg-black hover:text-white;
+  }
+
+  .vm-btn-outline-red {
+    @apply border border-vm-red text-vm-red font-semibold rounded-lg transition-all duration-200 hover:bg-vm-red hover:text-white;
+  }
+
+  .vm-footer-link {
+    @apply text-gray-400 hover:text-white transition-colors duration-200;
+  }
+
+  .vm-input {
+    @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white outline-none transition-all focus:border-vm-red focus:ring-2 focus:ring-vm-red/20;
+  }
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-vm-red);
+  outline-offset: 2px;
+}

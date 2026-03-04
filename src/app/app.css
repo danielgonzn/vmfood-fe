@@ -10,6 +10,10 @@
 	animation: vm-brand-scroll 30s linear infinite;
 }
 
+.brand-marquee:hover .brand-marquee-track {
+	animation-play-state: paused;
+}
+
 .brand-logo-item {
 	flex: 0 0 auto;
 	width: 180px;
@@ -38,5 +42,11 @@
 	}
 	to {
 		transform: translateX(-50%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.brand-marquee-track {
+		animation: none;
 	}
 }

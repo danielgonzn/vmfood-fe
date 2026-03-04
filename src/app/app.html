@@ -29,11 +29,11 @@
         {{ heroSlides[currentHeroSlide].subtitle }}
       </p>
       <div class="flex flex-col sm:flex-row gap-4">
-        <button (click)="scrollToSection('products')" class="bg-vm-red text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-red-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
+        <button (click)="scrollToSection('products')" class="vm-btn-primary px-8 py-4 text-lg transform hover:-translate-y-1 flex items-center justify-center gap-2">
           Ver Catálogo
           <mat-icon>arrow_forward</mat-icon>
         </button>
-        <button (click)="scrollToSection('contact')" class="border-2 border-black text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-black hover:text-white transition-all flex items-center justify-center">
+        <button (click)="scrollToSection('contact')" class="vm-btn-secondary px-8 py-4 text-lg flex items-center justify-center">
           Contáctanos
         </button>
       </div>
@@ -190,7 +190,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       @for (product of products; track product.id) {
-        <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100">
+        <div class="vm-card overflow-hidden group">
           <div class="relative h-64 overflow-hidden bg-gray-200">
             <img 
               [src]="product.image" 
@@ -203,7 +203,7 @@
           <div class="p-6">
             <h4 class="font-bold text-xl mb-2 text-black group-hover:text-vm-red transition-colors">{{ product.title }}</h4>
             <p class="text-gray-500 text-sm mb-6 line-clamp-3">{{ product.description }}</p>
-            <button class="w-full border border-vm-red text-vm-red font-medium py-2 rounded hover:bg-vm-red hover:text-white transition-colors flex items-center justify-center gap-2">
+            <button class="w-full vm-btn-outline-red py-2 flex items-center justify-center gap-2">
               <mat-icon class="text-sm">request_quote</mat-icon>
               Cotizar
             </button>
@@ -213,7 +213,7 @@
     </div>
 
     <div class="text-center mt-12">
-      <button routerLink="/catalogo" class="inline-flex items-center text-gray-600 font-medium hover:text-vm-red transition-colors border-b-2 border-transparent hover:border-vm-red pb-1">
+      <button routerLink="/catalogo" class="inline-flex items-center text-gray-700 font-semibold hover:text-vm-red transition-colors border-b-2 border-transparent hover:border-vm-red pb-1">
         Ver catálogo completo
         <mat-icon class="ml-2">arrow_forward</mat-icon>
       </button>
@@ -309,10 +309,10 @@
         <p class="text-gray-600">Cuéntanos capacidad, tipo de producto y objetivo. Te proponemos equipos y soluciones ajustadas a tu operación.</p>
       </div>
       <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
-        <a href="https://wa.me/584120000000" target="_blank" class="bg-vm-red text-white px-6 py-3 rounded-lg text-center font-semibold hover:bg-red-800 transition-colors">
+        <a href="https://wa.me/584120000000" target="_blank" class="vm-btn-primary px-6 py-3 text-center">
           Cotizar por WhatsApp
         </a>
-        <a routerLink="/catalogo" class="border border-black text-black px-6 py-3 rounded-lg text-center font-semibold hover:bg-black hover:text-white transition-colors">
+        <a routerLink="/catalogo" class="vm-btn-secondary px-6 py-3 text-center">
           Ver catálogo completo
         </a>
       </div>

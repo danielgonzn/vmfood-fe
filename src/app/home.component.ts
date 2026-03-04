@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { SeoService } from './shared/services/seo.service';
 
 interface Product {
   id: number;
@@ -25,6 +26,11 @@ interface BrandLogo {
   image: string;
 }
 
+interface BusinessFaq {
+  question: string;
+  answer: string;
+}
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
@@ -36,29 +42,30 @@ interface BrandLogo {
 export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private readonly cdr: ChangeDetectorRef,
-    @Inject(PLATFORM_ID) private readonly platformId: object
+    @Inject(PLATFORM_ID) private readonly platformId: object,
+    private readonly seoService: SeoService
   ) {}
 
   heroSlides: HeroSlide[] = [
     {
       id: 1,
-      badge: 'Líderes en Maquinaria Industrial',
-      title: 'Tecnología Industrial para el Procesamiento de Alimentos',
-      subtitle: 'Importación de maquinaria de alta gama y materia prima para potenciar tu producción con estándares internacionales.',
+      badge: 'VM Food Import · Desde 2021',
+      title: 'Importación y Distribución de Maquinaria para Procesamiento de Alimentos',
+      subtitle: 'Acompañamiento técnico y respaldo internacional para plantas procesadoras de carnes y embutidos en Venezuela.',
       image: 'https://picsum.photos/seed/factory-main/1920/1080?blur=1'
     },
     {
       id: 2,
-      badge: 'Innovación y Productividad',
-      title: 'Equipos de Alto Desempeño para Operación Continua 24/7',
-      subtitle: 'Soluciones robustas en acero inoxidable para procesos más eficientes, limpios y seguros en planta.',
+      badge: 'Misión y Respaldo Técnico',
+      title: 'Soluciones de Alta Calidad con Soporte Especializado',
+      subtitle: 'Reconocemos las necesidades de cada cliente y proponemos equipos con enfoque en productividad, continuidad operativa y rentabilidad.',
       image: 'https://picsum.photos/seed/factory-line/1920/1080?blur=1'
     },
     {
       id: 3,
-      badge: 'Respaldo Técnico',
-      title: 'Acompañamiento Integral Desde la Compra Hasta la Puesta en Marcha',
-      subtitle: 'Instalación, capacitación y soporte técnico especializado para mantener tu producción siempre activa.',
+      badge: 'Portafolio Integral',
+      title: 'Maquinaria Alemana, Maquinaria China y Materias Primas No Cárnicas',
+      subtitle: 'Embutidoras, molinos, hornos, sistemas de empaque, refrigeración, generadores y aditivos para líneas de alimentos.',
       image: 'https://picsum.photos/seed/factory-support/1920/1080?blur=1'
     }
   ];
@@ -66,39 +73,39 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentHeroSlide = 0;
 
   brandLogos: BrandLogo[] = [
-    { id: 1, name: 'Marel', image: 'https://logo.clearbit.com/marel.com' },
-    { id: 2, name: 'Multivac', image: 'https://logo.clearbit.com/multivac.com' },
-    { id: 3, name: 'Bizerba', image: 'https://logo.clearbit.com/bizerba.com' },
-    { id: 4, name: 'Handtmann', image: 'https://logo.clearbit.com/handtmann.com' },
-    { id: 5, name: 'GEA', image: 'https://logo.clearbit.com/gea.com' },
-    { id: 6, name: 'Ishida', image: 'https://logo.clearbit.com/ishida.com' },
-    { id: 7, name: 'ULMA Packaging', image: 'https://logo.clearbit.com/ulmapackaging.com' },
-    { id: 8, name: 'JBT', image: 'https://logo.clearbit.com/jbtc.com' }
+    { id: 1, name: 'Handtmann', image: 'https://logo.clearbit.com/handtmann.com' },
+    { id: 2, name: 'Treif', image: 'https://logo.clearbit.com/treif.com' },
+    { id: 3, name: 'Poly-Clip', image: 'https://logo.clearbit.com/polyclip.com' },
+    { id: 4, name: 'Marel', image: 'https://logo.clearbit.com/marel.com' },
+    { id: 5, name: 'Multivac', image: 'https://logo.clearbit.com/multivac.com' },
+    { id: 6, name: 'Bizerba', image: 'https://logo.clearbit.com/bizerba.com' },
+    { id: 7, name: 'GEA', image: 'https://logo.clearbit.com/gea.com' },
+    { id: 8, name: 'ULMA Packaging', image: 'https://logo.clearbit.com/ulmapackaging.com' }
   ];
 
   products: Product[] = [
     {
       id: 1,
-      title: 'Empacadora al Vacío',
-      description: 'Doble campana, acero inoxidable 304. Ideal para alta producción cárnica.',
+      title: 'Maquinaria Alemana',
+      description: 'Tecnología de prestigio como Handtmann, Treif y Poly-Clip para procesos de alto estándar.',
       image: 'https://picsum.photos/seed/vacuum/600/400'
     },
     {
       id: 2,
-      title: 'Mezcladora Industrial',
-      description: 'Capacidad 200kg. Paletas reforzadas para masas densas y embutidos.',
+      title: 'Maquinaria Industrial China',
+      description: 'Embutidoras, tumbler, cutters, molinos y líneas completas con excelente relación costo-beneficio.',
       image: 'https://picsum.photos/seed/mixer/600/400'
     },
     {
       id: 3,
-      title: 'Molino de Carne',
-      description: 'Cabezal #32, motor 3HP. Alta eficiencia y bajo mantenimiento.',
+      title: 'Equipamiento Complementario',
+      description: 'Generadores, refrigeración, paneles frigoríficos, apiladores y transpaletas para operación integral.',
       image: 'https://picsum.photos/seed/grinder/600/400'
     },
     {
       id: 4,
-      title: 'Bobina de Plástico',
-      description: 'Multicapa de alta barrera. Calibre ideal para termoformado.',
+      title: 'Materias Primas No Cárnicas',
+      description: 'Tripas de colágeno y aditivos clave para formulaciones de embutidos y productos procesados.',
       image: 'https://picsum.photos/seed/plastic/600/400'
     }
   ];
@@ -169,6 +176,34 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentFeaturedSlide = 0;
   showPromoPopup = false;
 
+  trustStats = [
+    { label: 'Año de fundación', value: '2021' },
+    { label: 'Líneas de solución', value: '4' },
+    { label: 'Enfoque de soporte', value: 'Técnico' },
+  ];
+
+  purchaseSteps = [
+    { title: 'Diagnóstico', description: 'Entendemos tu capacidad, proceso y objetivo de producción.' },
+    { title: 'Propuesta técnica', description: 'Seleccionamos equipos y materias primas según requerimiento real.' },
+    { title: 'Importación y entrega', description: 'Coordinamos suministro con respaldo de proveedores internacionales.' },
+    { title: 'Puesta en marcha', description: 'Acompañamos instalación, arranque y soporte operativo.' },
+  ];
+
+  faqs: BusinessFaq[] = [
+    {
+      question: '¿Trabajan con equipos nuevos y usados?',
+      answer: 'Sí. Ofrecemos opciones nuevas y usadas según el presupuesto y los objetivos del cliente.',
+    },
+    {
+      question: '¿También suministran materias primas?',
+      answer: 'Sí. Incluimos tripas de colágeno y aditivos no cárnicos como parte de la solución integral.',
+    },
+    {
+      question: '¿Brindan acompañamiento técnico?',
+      answer: 'Sí. Nuestro enfoque incluye asesoría técnica antes, durante y después de la compra.',
+    },
+  ];
+
   private heroSliderIntervalId?: number;
 
   contactForm = new FormGroup({
@@ -179,9 +214,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     message: new FormControl('', [Validators.required])
   });
 
-  currentYear = new Date().getFullYear();
-
   ngOnInit(): void {
+    this.seoService.setMeta({
+      title: 'VM Food Import | Maquinaria para Procesamiento de Alimentos',
+      description:
+        'Importación y distribución de maquinaria para carnes y embutidos en Venezuela. Soluciones industriales, soporte técnico y materias primas no cárnicas.',
+      keywords:
+        'VM Food Import, maquinaria para embutidos, maquinaria alemana, maquinaria china, equipos de empaque, aditivos alimentarios',
+      url: 'https://vmfoodimport.com/',
+      image: 'https://picsum.photos/seed/vmfood-og/1200/630',
+    });
+
+    this.seoService.setJsonLd('vmfood-org-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'VM Food Import',
+      url: 'https://vmfoodimport.com/',
+      foundingDate: '2021-11',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Los Teques',
+        addressRegion: 'Miranda',
+        addressCountry: 'VE',
+      },
+    });
+
+    this.seoService.setJsonLd('vmfood-faq-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: this.faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    });
+
     this.startHeroSlider();
     this.showPromoPopup = true;
     this.cdr.markForCheck();

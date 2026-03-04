@@ -111,10 +111,21 @@
       <!-- Text Content -->
       <div>
         <h2 class="text-vm-red font-bold tracking-widest uppercase text-sm mb-2">Sobre Nosotros</h2>
-        <h3 class="text-4xl font-bold text-black mb-6">Impulsando la Industria Alimentaria</h3>
+        <h3 class="text-4xl font-bold text-black mb-6">Aliado Estratégico para Plantas Procesadoras</h3>
         <p class="text-gray-600 text-lg mb-6 leading-relaxed">
-          En <span class="font-bold text-black">VM Food Import</span>, nos dedicamos a proveer soluciones integrales para la industria. No solo vendemos maquinaria; ofrecemos el respaldo técnico y la asesoría necesaria para optimizar sus procesos productivos.
+          En <span class="font-bold text-black">VM Food Import</span> nos dedicamos a la importación, comercialización y distribución de máquinas nuevas y usadas para el procesamiento de carnes y embutidos. Nuestra misión es contribuir al crecimiento de cada planta mediante acompañamiento técnico y soluciones de alta calidad.
         </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div class="p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <p class="text-xs uppercase tracking-widest text-vm-red font-bold mb-2">Misión</p>
+            <p class="text-gray-600 text-sm">Reconocer necesidades de producción y responder con maquinaria confiable, soporte técnico y respaldo de proveedores internacionales.</p>
+          </div>
+          <div class="p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <p class="text-xs uppercase tracking-widest text-vm-red font-bold mb-2">Visión</p>
+            <p class="text-gray-600 text-sm">Ser el mejor aliado estratégico de nuestros clientes con propuestas de valor que impulsen su rentabilidad.</p>
+          </div>
+        </div>
         
         <div class="space-y-6 mt-8">
           <div class="flex items-start">
@@ -142,8 +153,8 @@
               <mat-icon class="text-vm-red">public</mat-icon>
             </div>
             <div>
-              <h4 class="font-bold text-lg">Importación Directa</h4>
-              <p class="text-gray-500">Sin intermediarios, asegurando el mejor precio del mercado.</p>
+              <h4 class="font-bold text-lg">Respaldo de Proveedores Internacionales</h4>
+              <p class="text-gray-500">Tecnología de punta y propuestas competitivas para operaciones industriales.</p>
             </div>
           </div>
         </div>
@@ -160,8 +171,8 @@
           referrerpolicy="no-referrer"
         >
         <div class="absolute bottom-10 left-10 z-20 bg-white p-6 rounded-xl shadow-lg max-w-xs border-l-4 border-vm-red">
-          <p class="font-bold text-4xl text-vm-red mb-1">+15</p>
-          <p class="font-medium text-gray-800">Años de experiencia en el sector industrial.</p>
+          <p class="font-bold text-4xl text-vm-red mb-1">2021</p>
+          <p class="font-medium text-gray-800">Fundación de VM Food Import en noviembre.</p>
         </div>
       </div>
     </div>
@@ -173,8 +184,8 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-vm-red font-bold tracking-widest uppercase text-sm mb-2">Nuestro Catálogo</h2>
-      <h3 class="text-4xl font-bold text-black mb-4">Maquinaria de Alta Gama</h3>
-      <p class="text-gray-600 text-lg">Soluciones robustas diseñadas para operar 24/7 en entornos exigentes.</p>
+      <h3 class="text-4xl font-bold text-black mb-4">Líneas de Solución para la Industria Alimentaria</h3>
+      <p class="text-gray-600 text-lg">Maquinaria, equipamiento y materias primas para potenciar procesos de carnes y embutidos.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -210,108 +221,6 @@
   </div>
 </section>
 
-<!-- Featured Products Carousel -->
-<section id="destacados" class="py-24 bg-white border-y border-gray-100">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-14">
-      <h2 class="text-vm-red font-bold tracking-widest uppercase text-sm mb-2">Productos Destacados</h2>
-      <h3 class="text-4xl font-bold text-black mb-4">Novedades y Equipos Recomendados</h3>
-      <p class="text-gray-600 text-lg">Explora referencias destacadas de alto rendimiento para tu operación industrial.</p>
-    </div>
-
-    <div class="relative max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-          <div class="h-72 bg-gray-100 overflow-hidden">
-            <img
-              [src]="getFeaturedProduct(0).image"
-              [alt]="getFeaturedProduct(0).title"
-              class="w-full h-full object-cover"
-              referrerpolicy="no-referrer"
-            >
-          </div>
-          <div class="p-6">
-            <h4 class="text-xl font-bold text-black mb-3">{{ getFeaturedProduct(0).title }}</h4>
-            <p class="text-gray-600 mb-6">{{ getFeaturedProduct(0).description }}</p>
-            <button class="border border-vm-red text-vm-red font-semibold px-5 py-2.5 rounded-lg hover:bg-vm-red hover:text-white transition-colors inline-flex items-center gap-2">
-              <mat-icon class="text-base">request_quote</mat-icon>
-              Cotizar
-            </button>
-          </div>
-        </div>
-
-        <div class="hidden md:block bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-          <div class="h-72 bg-gray-100 overflow-hidden">
-            <img
-              [src]="getFeaturedProduct(1).image"
-              [alt]="getFeaturedProduct(1).title"
-              class="w-full h-full object-cover"
-              referrerpolicy="no-referrer"
-            >
-          </div>
-          <div class="p-6">
-            <h4 class="text-xl font-bold text-black mb-3">{{ getFeaturedProduct(1).title }}</h4>
-            <p class="text-gray-600 mb-6">{{ getFeaturedProduct(1).description }}</p>
-            <button class="border border-vm-red text-vm-red font-semibold px-5 py-2.5 rounded-lg hover:bg-vm-red hover:text-white transition-colors inline-flex items-center gap-2">
-              <mat-icon class="text-base">request_quote</mat-icon>
-              Cotizar
-            </button>
-          </div>
-        </div>
-
-        <div class="hidden lg:block bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-          <div class="h-72 bg-gray-100 overflow-hidden">
-            <img
-              [src]="getFeaturedProduct(2).image"
-              [alt]="getFeaturedProduct(2).title"
-              class="w-full h-full object-cover"
-              referrerpolicy="no-referrer"
-            >
-          </div>
-          <div class="p-6">
-            <h4 class="text-xl font-bold text-black mb-3">{{ getFeaturedProduct(2).title }}</h4>
-            <p class="text-gray-600 mb-6">{{ getFeaturedProduct(2).description }}</p>
-            <button class="border border-vm-red text-vm-red font-semibold px-5 py-2.5 rounded-lg hover:bg-vm-red hover:text-white transition-colors inline-flex items-center gap-2">
-              <mat-icon class="text-base">request_quote</mat-icon>
-              Cotizar
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        (click)="prevFeaturedSlide()"
-        class="absolute -left-2 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-gray-200 text-black shadow hover:border-vm-red"
-        aria-label="Anterior destacado"
-      >
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-
-      <button
-        type="button"
-        (click)="nextFeaturedSlide()"
-        class="absolute -right-2 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-gray-200 text-black shadow hover:border-vm-red"
-        aria-label="Siguiente destacado"
-      >
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
-
-    <div class="flex justify-center items-center gap-2 mt-8">
-      @for (item of featuredProducts; track item.id; let i = $index) {
-        <button
-          type="button"
-          (click)="goToFeaturedSlide(i)"
-          class="w-2.5 h-2.5 rounded-full transition-colors"
-          [class.bg-vm-red]="currentFeaturedSlide === i"
-          [class.bg-gray-300]="currentFeaturedSlide !== i"
-          [attr.aria-label]="'Ir al producto destacado ' + (i + 1)"
-        ></button>
-      }
-    </div>
-  </div>
-</section>
 
 <!-- Location Section -->
 <section id="location" class="flex flex-col lg:flex-row h-auto lg:h-[600px]">
@@ -324,7 +233,7 @@
         <mat-icon class="text-vm-red mr-4 mt-1">location_on</mat-icon>
         <div>
           <p class="font-bold text-lg mb-1">Dirección Principal</p>
-          <p class="text-gray-400">Av. Industrial 1234, Parque Industrial Norte.<br>Ciudad de México, CP 11520</p>
+          <p class="text-gray-400">Los Teques, Edo. Miranda.<br>Venezuela</p>
         </div>
       </div>
 
@@ -332,7 +241,7 @@
         <mat-icon class="text-vm-red mr-4 mt-1">schedule</mat-icon>
         <div>
           <p class="font-bold text-lg mb-1">Horarios de Atención</p>
-          <p class="text-gray-400">Lunes a Viernes: 8:00 AM - 6:00 PM<br>Sábados: 9:00 AM - 1:00 PM</p>
+          <p class="text-gray-400">Lunes a Viernes: 8:00 AM - 5:00 PM<br>Sábados: 8:00 AM - 12:00 PM</p>
         </div>
       </div>
 
@@ -340,7 +249,7 @@
         <mat-icon class="text-vm-red mr-4 mt-1">phone</mat-icon>
         <div>
           <p class="font-bold text-lg mb-1">Teléfonos</p>
-          <p class="text-gray-400">+52 (55) 1234-5678<br>+52 (55) 8765-4321</p>
+          <p class="text-gray-400">+58 (412) 000-0000<br>+58 (414) 000-0000</p>
         </div>
       </div>
     </div>
@@ -349,7 +258,7 @@
   <!-- Map Side -->
   <div class="lg:w-2/3 bg-gray-200 relative min-h-[400px]">
     <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3762.539578672986!2d-99.17389868509334!3d19.43260768688424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f8cc986423d7%3A0x2969408427467617!2sPolanco%2C%20Polanco%20V%20Secc%2C%20Miguel%20Hidalgo%2C%2011560%20Ciudad%20de%20M%C3%A9xico%2C%20CDMX!5e0!3m2!1sen!2smx!4v1646764839213!5m2!1sen!2smx" 
+      src="https://www.google.com/maps?q=Los%20Teques%2C%20Miranda%2C%20Venezuela&output=embed" 
       width="100%" 
       height="100%" 
       style="border:0;" 
@@ -360,87 +269,80 @@
   </div>
 </section>
 
-<!-- Contact Section -->
-<section id="contact" class="py-24 bg-white relative overflow-hidden">
-  <!-- Decorative Background Elements -->
-  <div class="absolute top-0 right-0 w-1/3 h-full bg-gray-50 skew-x-12 transform translate-x-20 z-0"></div>
+<!-- Value & Process Section -->
+<section class="py-20 bg-white border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-vm-red font-bold tracking-widest uppercase text-sm mb-2">Cómo Trabajamos</h2>
+      <h3 class="text-4xl font-bold text-black mb-4">Proceso Comercial y Técnico para tu Planta</h3>
+      <p class="text-gray-600 text-lg">Desde el diagnóstico de necesidad hasta la puesta en marcha, con enfoque en continuidad operativa y rentabilidad.</p>
+    </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-8 md:p-12 border-t-8 border-vm-red">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold text-black mb-2">Contáctanos</h2>
-        <p class="text-gray-600">Solicita una cotización o asesoría personalizada.</p>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
+      @for (step of purchaseSteps; track step.title; let i = $index) {
+        <article class="bg-gray-50 border border-gray-100 rounded-xl p-5">
+          <p class="text-xs font-bold text-vm-red tracking-widest uppercase mb-2">Paso {{ i + 1 }}</p>
+          <h4 class="font-bold text-black mb-2">{{ step.title }}</h4>
+          <p class="text-sm text-gray-600">{{ step.description }}</p>
+        </article>
+      }
+    </div>
 
-      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
-            <input 
-              type="text" 
-              id="name" 
-              formControlName="name"
-              class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none transition-all"
-              placeholder="Juan Pérez"
-            >
-          </div>
-          <div>
-            <label for="company" class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
-            <input 
-              type="text" 
-              id="company" 
-              formControlName="company"
-              class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none transition-all"
-              placeholder="Nombre de tu empresa"
-            >
-          </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      @for (item of trustStats; track item.label) {
+        <div class="bg-black text-white rounded-xl p-5">
+          <p class="text-gray-400 text-sm mb-1">{{ item.label }}</p>
+          <p class="text-2xl font-bold">{{ item.value }}</p>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
-            <input 
-              type="email" 
-              id="email" 
-              formControlName="email"
-              class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none transition-all"
-              placeholder="juan@empresa.com"
-            >
-          </div>
-          <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-            <input 
-              type="tel" 
-              id="phone" 
-              formControlName="phone"
-              class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none transition-all"
-              placeholder="+52 (55) ..."
-            >
-          </div>
-        </div>
-
-        <div>
-          <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
-          <textarea 
-            id="message" 
-            rows="4" 
-            formControlName="message"
-            class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none transition-all"
-            placeholder="Estoy interesado en..."
-          ></textarea>
-        </div>
-
-        <button 
-          type="submit" 
-          [disabled]="contactForm.invalid"
-          class="w-full bg-vm-red text-white font-bold py-4 rounded-lg hover:bg-red-800 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Enviar Mensaje
-        </button>
-      </form>
+      }
     </div>
   </div>
 </section>
+
+<!-- Contact CTA Section -->
+<section id="contact" class="py-20 bg-gray-50 border-y border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-2xl border border-gray-200 p-8 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+      <div class="lg:col-span-2">
+        <p class="text-vm-red font-bold tracking-widest uppercase text-xs mb-2">Solicitud de Cotización</p>
+        <h3 class="text-3xl font-bold text-black mb-2">Conversemos sobre tu línea de producción</h3>
+        <p class="text-gray-600">Cuéntanos capacidad, tipo de producto y objetivo. Te proponemos equipos y soluciones ajustadas a tu operación.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
+        <a href="https://wa.me/584120000000" target="_blank" class="bg-vm-red text-white px-6 py-3 rounded-lg text-center font-semibold hover:bg-red-800 transition-colors">
+          Cotizar por WhatsApp
+        </a>
+        <a routerLink="/catalogo" class="border border-black text-black px-6 py-3 rounded-lg text-center font-semibold hover:bg-black hover:text-white transition-colors">
+          Ver catálogo completo
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <h2 class="text-vm-red font-bold tracking-widest uppercase text-sm mb-2">FAQ</h2>
+      <h3 class="text-3xl font-bold text-black">Preguntas Frecuentes</h3>
+    </div>
+
+    <div class="space-y-3">
+      @for (faq of faqs; track faq.question) {
+        <details class="group border border-gray-200 rounded-lg p-4 bg-gray-50">
+          <summary class="cursor-pointer font-semibold text-black list-none flex items-center justify-between">
+            {{ faq.question }}
+            <mat-icon class="group-open:rotate-180 transition-transform">expand_more</mat-icon>
+          </summary>
+          <p class="text-gray-600 mt-3">{{ faq.answer }}</p>
+        </details>
+      }
+    </div>
+  </div>
+</section>
+
+
 
 <!-- Promo Popup -->
 @if (showPromoPopup) {

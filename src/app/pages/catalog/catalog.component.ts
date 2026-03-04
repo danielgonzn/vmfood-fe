@@ -2,15 +2,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-
-interface CatalogProduct {
-  id: number;
-  title: string;
-  category: string;
-  description: string;
-  image: string;
-  available: boolean;
-}
+import { CATALOG_PRODUCTS } from './catalog.data';
+import { CatalogProduct } from './catalog.models';
+import { SeoService } from '../../shared/services/seo.service';
 
 @Component({
   selector: 'app-catalog',
@@ -29,132 +23,197 @@ interface CatalogProduct {
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 mb-8">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="lg:col-span-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
-              <input
-                [(ngModel)]="searchTerm"
-                type="text"
-                placeholder="Ej. empacadora, molino, bobina..."
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none"
-              >
+              <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none">
             </div>
-
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-              <select
-                [(ngModel)]="selectedCategory"
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white"
-              >
+              <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
                 <option value="all">Todas</option>
                 @for (category of categories; track category) {
                   <option [value]="category">{{ category }}</option>
                 }
               </select>
             </div>
-
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Ordenar</label>
-              <select
-                [(ngModel)]="sortBy"
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white"
-              >
-                <option value="name-asc">Nombre A-Z</option>
-                <option value="name-desc">Nombre Z-A</option>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
+              <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+                <option value="all">Todas</option>
+                @for (subcategory of subcategories; track subcategory) {
+                  <option [value]="subcategory">{{ subcategory }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
+              <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+                <option value="all">Todas</option>
+                @for (brand of brands; track brand) {
+                  <option [value]="brand">{{ brand }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Origen</label>
+              <select [(ngModel)]="selectedOrigin" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+                <option value="all">Todos</option>
+                @for (origin of origins; track origin) {
+                  <option [value]="origin">{{ origin }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
+              <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+                <option value="all">Todas</option>
+                <option value="Nueva">Nueva</option>
+                <option value="Usada">Usada</option>
               </select>
             </div>
           </div>
 
           <div class="mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
             <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-              <input [(ngModel)]="onlyAvailable" type="checkbox" class="w-4 h-4 accent-vm-red">
+              <input [(ngModel)]="onlyAvailable" (ngModelChange)="onFilterChange()" type="checkbox" class="w-4 h-4 accent-vm-red">
               Solo disponibles
             </label>
-
-            <button
-              type="button"
-              (click)="clearFilters()"
-              class="sm:ml-auto border border-gray-400 text-gray-700 px-4 py-2 rounded-lg hover:border-black hover:text-black"
-            >
-              Limpiar filtros
-            </button>
+            <div class="sm:ml-auto w-full sm:w-auto">
+              <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-vm-red focus:ring-2 focus:ring-vm-red/20 outline-none bg-white">
+                <option value="name-asc">Nombre A-Z</option>
+                <option value="name-desc">Nombre Z-A</option>
+              </select>
+            </div>
+            <button type="button" (click)="clearFilters()" class="border border-gray-400 text-gray-700 px-4 py-2 rounded-lg hover:border-black hover:text-black">Limpiar filtros</button>
           </div>
         </div>
 
         <div class="flex items-center justify-between mb-5">
           <p class="text-gray-600">{{ filteredProducts.length }} productos encontrados</p>
+          <p class="text-sm text-gray-500">Página {{ currentPage }} de {{ totalPages }}</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          @for (product of filteredProducts; track product.id) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          @for (product of paginatedProducts; track product.id) {
             <article class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
               <div class="h-52 bg-gray-100 overflow-hidden">
                 <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
               </div>
               <div class="p-5">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-xs font-semibold uppercase tracking-wide text-vm-red">{{ product.category }}</span>
-                  <span
-                    class="text-xs font-semibold px-2 py-1 rounded-full"
-                    [class.bg-green-100]="product.available"
-                    [class.text-green-700]="product.available"
-                    [class.bg-gray-100]="!product.available"
-                    [class.text-gray-600]="!product.available"
-                  >
-                    {{ product.available ? 'Disponible' : 'Bajo pedido' }}
-                  </span>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-xs font-semibold uppercase tracking-wide text-vm-red bg-vm-red/10 px-2 py-1 rounded-full">{{ product.category }}</span>
+                  <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.brand }}</span>
+                  <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.origin }}</span>
                 </div>
-                <h3 class="font-bold text-lg text-black mb-2">{{ product.title }}</h3>
+
+                <h3 class="font-bold text-lg text-black mb-1">{{ product.title }}</h3>
+                <p class="text-sm text-gray-500 mb-3">{{ product.subcategory }} · {{ product.condition }}</p>
                 <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
-                <button class="w-full border border-vm-red text-vm-red font-medium py-2 rounded hover:bg-vm-red hover:text-white transition-colors">
-                  Solicitar cotización
-                </button>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4 text-xs">
+                  <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.capacity">
+                    <p class="text-gray-500">Capacidad</p>
+                    <p class="font-semibold text-black">{{ product.capacity || 'N/D' }}</p>
+                  </div>
+                  <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.voltage">
+                    <p class="text-gray-500">Voltaje</p>
+                    <p class="font-semibold text-black">{{ product.voltage || 'N/D' }}</p>
+                  </div>
+                  <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.power">
+                    <p class="text-gray-500">Potencia</p>
+                    <p class="font-semibold text-black">{{ product.power || 'N/D' }}</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a [routerLink]="['/catalogo', product.id]" class="border border-black text-black font-medium py-2 rounded hover:bg-black hover:text-white transition-colors inline-flex items-center justify-center gap-2">
+                    <mat-icon class="text-base">visibility</mat-icon>
+                    Ver ficha
+                  </a>
+                  <a [href]="getQuoteLink(product)" target="_blank" class="border border-vm-red text-vm-red font-medium py-2 rounded hover:bg-vm-red hover:text-white transition-colors inline-flex items-center justify-center gap-2">
+                    <mat-icon class="text-base">chat</mat-icon>
+                    Cotizar
+                  </a>
+                </div>
               </div>
             </article>
           }
         </div>
+
+        @if (filteredProducts.length > pageSize) {
+          <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
+            <button type="button" (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Anterior</button>
+            @for (page of pageNumbers; track page) {
+              <button type="button" (click)="goToPage(page)" class="w-10 h-10 rounded border text-sm" [class.border-vm-red]="currentPage === page" [class.text-vm-red]="currentPage === page" [class.border-gray-300]="currentPage !== page" [class.text-gray-700]="currentPage !== page">{{ page }}</button>
+            }
+            <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Siguiente</button>
+          </div>
+        }
       </div>
     </section>
   `,
 })
 export class CatalogComponent {
+  constructor(private readonly seoService: SeoService) {
+    this.seoService.setMeta({
+      title: 'Catálogo de Maquinaria | VM Food Import',
+      description:
+        'Explora el catálogo completo de VM Food Import: maquinaria alemana, maquinaria industrial china, equipamiento complementario y materias primas no cárnicas.',
+      keywords:
+        'catálogo VM Food Import, embutidoras Handtmann, maquinaria china alimentos, equipos industriales Venezuela',
+      url: 'https://vmfoodimport.com/catalogo',
+      image: 'https://picsum.photos/seed/vmfood-catalog-og/1200/630',
+    });
+  }
+
   searchTerm = '';
   selectedCategory = 'all';
+  selectedSubcategory = 'all';
+  selectedBrand = 'all';
+  selectedOrigin = 'all';
+  selectedCondition: 'all' | 'Nueva' | 'Usada' = 'all';
   sortBy: 'name-asc' | 'name-desc' = 'name-asc';
   onlyAvailable = false;
 
-  readonly products: CatalogProduct[] = [
-    { id: 1, title: 'Empacadora al Vacío', category: 'Empaque', description: 'Doble campana en acero inoxidable 304 para procesos continuos.', image: 'https://picsum.photos/seed/catalog-vacuum/700/500', available: true },
-    { id: 2, title: 'Mezcladora Industrial', category: 'Procesamiento', description: 'Paletas reforzadas para mezclas densas y embutidos.', image: 'https://picsum.photos/seed/catalog-mixer/700/500', available: true },
-    { id: 3, title: 'Molino de Carne', category: 'Procesamiento', description: 'Cabezal #32 con motor de alto desempeño y fácil limpieza.', image: 'https://picsum.photos/seed/catalog-grinder/700/500', available: true },
-    { id: 4, title: 'Bobina de Plástico', category: 'Materia Prima', description: 'Multicapa de alta barrera para empaque termoformado.', image: 'https://picsum.photos/seed/catalog-bobina/700/500', available: true },
-    { id: 5, title: 'Selladora de Banda', category: 'Empaque', description: 'Sellado continuo para líneas de alta productividad.', image: 'https://picsum.photos/seed/catalog-sealer/700/500', available: true },
-    { id: 6, title: 'Embutidora Hidráulica', category: 'Procesamiento', description: 'Dosificación homogénea y estructura sanitaria.', image: 'https://picsum.photos/seed/catalog-stuffer/700/500', available: false },
-    { id: 7, title: 'Etiquetadora Automática', category: 'Empaque', description: 'Aplicación precisa para distintos tipos de envase.', image: 'https://picsum.photos/seed/catalog-label/700/500', available: true },
-    { id: 8, title: 'Marmita Industrial', category: 'Cocción', description: 'Control de temperatura para salsas y productos viscosos.', image: 'https://picsum.photos/seed/catalog-kettle/700/500', available: false },
-    { id: 9, title: 'Túnel de Termoencogido', category: 'Empaque', description: 'Acabado profesional para empaque secundario.', image: 'https://picsum.photos/seed/catalog-shrink/700/500', available: true },
-    { id: 10, title: 'Báscula Multihead', category: 'Pesaje', description: 'Pesaje inteligente para minimizar mermas.', image: 'https://picsum.photos/seed/catalog-scale/700/500', available: false },
-    { id: 11, title: 'Cutter Industrial', category: 'Procesamiento', description: 'Corte uniforme para líneas de preparación cárnica.', image: 'https://picsum.photos/seed/catalog-cutter/700/500', available: true },
-    { id: 12, title: 'Línea de Lavado Vegetal', category: 'Procesamiento', description: 'Limpieza y desinfección continua de materia prima.', image: 'https://picsum.photos/seed/catalog-wash/700/500', available: true },
-  ];
+  readonly products: CatalogProduct[] = CATALOG_PRODUCTS;
+  readonly pageSize = 6;
+  currentPage = 1;
 
   get categories(): string[] {
     return [...new Set(this.products.map((product) => product.category))];
   }
 
+  get subcategories(): string[] {
+    const base = this.selectedCategory === 'all' ? this.products : this.products.filter((product) => product.category === this.selectedCategory);
+    return [...new Set(base.map((product) => product.subcategory))];
+  }
+
+  get brands(): string[] {
+    return [...new Set(this.products.map((product) => product.brand))];
+  }
+
+  get origins(): string[] {
+    return [...new Set(this.products.map((product) => product.origin))];
+  }
+
   get filteredProducts(): CatalogProduct[] {
     let result = this.products.filter((product) => {
+      const search = this.searchTerm.toLowerCase().trim();
       const matchesSearch =
-        this.searchTerm.trim().length === 0 ||
-        product.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(this.searchTerm.toLowerCase());
+        search.length === 0 ||
+        product.title.toLowerCase().includes(search) ||
+        product.description.toLowerCase().includes(search) ||
+        product.tags.some((tag) => tag.toLowerCase().includes(search));
 
-      const matchesCategory =
-        this.selectedCategory === 'all' || product.category === this.selectedCategory;
-
+      const matchesCategory = this.selectedCategory === 'all' || product.category === this.selectedCategory;
+      const matchesSubcategory = this.selectedSubcategory === 'all' || product.subcategory === this.selectedSubcategory;
+      const matchesBrand = this.selectedBrand === 'all' || product.brand === this.selectedBrand;
+      const matchesOrigin = this.selectedOrigin === 'all' || product.origin === this.selectedOrigin;
+      const matchesCondition = this.selectedCondition === 'all' || product.condition === this.selectedCondition;
       const matchesAvailability = !this.onlyAvailable || product.available;
 
-      return matchesSearch && matchesCategory && matchesAvailability;
+      return matchesSearch && matchesCategory && matchesSubcategory && matchesBrand && matchesOrigin && matchesCondition && matchesAvailability;
     });
 
     result = [...result].sort((a, b) => {
@@ -167,10 +226,52 @@ export class CatalogComponent {
     return result;
   }
 
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  get paginatedProducts(): CatalogProduct[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredProducts.slice(start, start + this.pageSize);
+  }
+
+  onFilterChange(): void {
+    this.currentPage = 1;
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages) {
+      return;
+    }
+    this.currentPage = page;
+  }
+
+  nextPage(): void {
+    this.goToPage(this.currentPage + 1);
+  }
+
+  prevPage(): void {
+    this.goToPage(this.currentPage - 1);
+  }
+
+  getQuoteLink(product: CatalogProduct): string {
+    const message = encodeURIComponent(`Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`);
+    return `https://wa.me/584120000000?text=${message}`;
+  }
+
   clearFilters(): void {
     this.searchTerm = '';
     this.selectedCategory = 'all';
+    this.selectedSubcategory = 'all';
+    this.selectedBrand = 'all';
+    this.selectedOrigin = 'all';
+    this.selectedCondition = 'all';
     this.sortBy = 'name-asc';
     this.onlyAvailable = false;
+    this.currentPage = 1;
   }
 }

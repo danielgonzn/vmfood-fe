@@ -12,7 +12,25 @@ import { SeoService } from '../../shared/services/seo.service';
   imports: [FormsModule, MatIconModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="min-h-screen bg-gray-50 pt-24">
+    <section class="min-h-screen bg-gray-50 pt-32">
+      <div class="relative w-full h-[360px] md:h-[400px] overflow-hidden">
+          <img
+            src="https://picsum.photos/seed/vmfood-catalog-banner/1800/900"
+            alt="Banner catálogo VM Food Import"
+            class="absolute inset-0 w-full h-full object-cover"
+            referrerpolicy="no-referrer"
+          >
+          <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-black/20"></div>
+
+          <div class="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-end">
+            <div class="pb-6 md:pb-10 text-white max-w-3xl">
+              <p class="text-xs md:text-sm uppercase tracking-[0.2em] font-semibold text-white/90 mb-3">VM Food Import</p>
+              <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-3">Catálogo de maquinaria y soluciones industriales</h1>
+              <p class="text-sm md:text-base text-white/90">Explora equipos para procesamiento de carnes y embutidos con respaldo técnico especializado.</p>
+            </div>
+          </div>
+        </div>
+
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex items-center justify-between mb-6">
           <button routerLink="/" class="inline-flex items-center gap-2 text-gray-700 hover:text-vm-red font-medium">
@@ -22,134 +40,143 @@ import { SeoService } from '../../shared/services/seo.service';
           <h1 class="text-xl md:text-2xl font-bold text-black">Catálogo Completo</h1>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 mb-8">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
-              <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-              <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="vm-input">
-                <option value="all">Todas</option>
-                @for (category of categories; track category) {
-                  <option [value]="category">{{ category }}</option>
-                }
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
-              <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="vm-input">
-                <option value="all">Todas</option>
-                @for (subcategory of subcategories; track subcategory) {
-                  <option [value]="subcategory">{{ subcategory }}</option>
-                }
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
-              <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="vm-input">
-                <option value="all">Todas</option>
-                @for (brand of brands; track brand) {
-                  <option [value]="brand">{{ brand }}</option>
-                }
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Origen</label>
-              <select [(ngModel)]="selectedOrigin" (ngModelChange)="onFilterChange()" class="vm-input">
-                <option value="all">Todos</option>
-                @for (origin of origins; track origin) {
-                  <option [value]="origin">{{ origin }}</option>
-                }
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
-              <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="vm-input">
-                <option value="all">Todas</option>
-                <option value="Nueva">Nueva</option>
-                <option value="Usada">Usada</option>
-              </select>
-            </div>
-          </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <aside class="lg:col-span-4 xl:col-span-3">
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 lg:sticky lg:top-32">
+              <h2 class="text-lg font-bold text-black mb-4">Filtros</h2>
 
-          <div class="mt-4 flex flex-col sm:flex-row sm:items-center gap-4">
-            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-              <input [(ngModel)]="onlyAvailable" (ngModelChange)="onFilterChange()" type="checkbox" class="w-4 h-4 accent-vm-red">
-              Solo disponibles
-            </label>
-            <div class="sm:ml-auto w-full sm:w-auto">
-              <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" class="vm-input">
-                <option value="name-asc">Nombre A-Z</option>
-                <option value="name-desc">Nombre Z-A</option>
-              </select>
-            </div>
-            <button type="button" (click)="clearFilters()" class="vm-btn-secondary px-4 py-2">Limpiar filtros</button>
-          </div>
-        </div>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+                  <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                  <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="vm-input">
+                    <option value="all">Todas</option>
+                    @for (category of categories; track category) {
+                      <option [value]="category">{{ category }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
+                  <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="vm-input">
+                    <option value="all">Todas</option>
+                    @for (subcategory of subcategories; track subcategory) {
+                      <option [value]="subcategory">{{ subcategory }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
+                  <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="vm-input">
+                    <option value="all">Todas</option>
+                    @for (brand of brands; track brand) {
+                      <option [value]="brand">{{ brand }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Origen</label>
+                  <select [(ngModel)]="selectedOrigin" (ngModelChange)="onFilterChange()" class="vm-input">
+                    <option value="all">Todos</option>
+                    @for (origin of origins; track origin) {
+                      <option [value]="origin">{{ origin }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
+                  <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="vm-input">
+                    <option value="all">Todas</option>
+                    <option value="Nueva">Nueva</option>
+                    <option value="Usada">Usada</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                    <input [(ngModel)]="onlyAvailable" (ngModelChange)="onFilterChange()" type="checkbox" class="w-4 h-4 accent-vm-red">
+                    Solo disponibles
+                  </label>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Ordenar</label>
+                  <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" class="vm-input">
+                    <option value="name-asc">Nombre A-Z</option>
+                    <option value="name-desc">Nombre Z-A</option>
+                  </select>
+                </div>
 
-        <div class="flex items-center justify-between mb-5">
-          <p class="text-gray-600">{{ filteredProducts.length }} productos encontrados</p>
-          <p class="text-sm text-gray-500">Página {{ currentPage }} de {{ totalPages }}</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-          @for (product of paginatedProducts; track product.id) {
-            <article class="vm-card overflow-hidden">
-              <div class="h-52 bg-gray-100 overflow-hidden">
-                <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                <button type="button" (click)="clearFilters()" class="w-full vm-btn-secondary px-4 py-2">Limpiar filtros</button>
               </div>
-              <div class="p-5">
-                <div class="flex flex-wrap gap-2 mb-3">
-                  <span class="text-xs font-semibold uppercase tracking-wide text-vm-red bg-vm-red/10 px-2 py-1 rounded-full">{{ product.category }}</span>
-                  <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.brand }}</span>
-                  <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.origin }}</span>
-                </div>
+            </div>
+          </aside>
 
-                <h3 class="font-bold text-lg text-black mb-1">{{ product.title }}</h3>
-                <p class="text-sm text-gray-500 mb-3">{{ product.subcategory }} · {{ product.condition }}</p>
-                <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+          <div class="lg:col-span-8 xl:col-span-9">
+            <div class="flex items-center justify-between mb-5">
+              <p class="text-gray-600">{{ filteredProducts.length }} productos encontrados</p>
+              <p class="text-sm text-gray-500">Página {{ currentPage }} de {{ totalPages }}</p>
+            </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4 text-xs">
-                  <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.capacity">
-                    <p class="text-gray-500">Capacidad</p>
-                    <p class="font-semibold text-black">{{ product.capacity || 'N/D' }}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              @for (product of paginatedProducts; track product.id) {
+                <article class="vm-card overflow-hidden">
+                  <div class="h-52 bg-gray-100 overflow-hidden">
+                    <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
                   </div>
-                  <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.voltage">
-                    <p class="text-gray-500">Voltaje</p>
-                    <p class="font-semibold text-black">{{ product.voltage || 'N/D' }}</p>
-                  </div>
-                  <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.power">
-                    <p class="text-gray-500">Potencia</p>
-                    <p class="font-semibold text-black">{{ product.power || 'N/D' }}</p>
-                  </div>
-                </div>
+                  <div class="p-5">
+                    <div class="flex flex-wrap gap-2 mb-3">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-vm-red bg-vm-red/10 px-2 py-1 rounded-full">{{ product.category }}</span>
+                      <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.brand }}</span>
+                      <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.origin }}</span>
+                    </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <a [routerLink]="['/catalogo', product.id]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
-                    <mat-icon class="text-base">visibility</mat-icon>
-                    Ver ficha
-                  </a>
-                  <a [href]="getQuoteLink(product)" target="_blank" class="vm-btn-outline-red py-2 inline-flex items-center justify-center gap-2">
-                    <mat-icon class="text-base">chat</mat-icon>
-                    Cotizar
-                  </a>
-                </div>
+                    <h3 class="font-bold text-lg text-black mb-1">{{ product.title }}</h3>
+                    <p class="text-sm text-gray-500 mb-3">{{ product.subcategory }} · {{ product.condition }}</p>
+                    <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4 text-xs">
+                      <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.capacity">
+                        <p class="text-gray-500">Capacidad</p>
+                        <p class="font-semibold text-black">{{ product.capacity || 'N/D' }}</p>
+                      </div>
+                      <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.voltage">
+                        <p class="text-gray-500">Voltaje</p>
+                        <p class="font-semibold text-black">{{ product.voltage || 'N/D' }}</p>
+                      </div>
+                      <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.power">
+                        <p class="text-gray-500">Potencia</p>
+                        <p class="font-semibold text-black">{{ product.power || 'N/D' }}</p>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <a [routerLink]="['/catalogo', product.id]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
+                        <mat-icon class="text-base">visibility</mat-icon>
+                        Ver ficha
+                      </a>
+                      <a [href]="getQuoteLink(product)" target="_blank" class="vm-btn-outline-red py-2 inline-flex items-center justify-center gap-2">
+                        <mat-icon class="text-base">chat</mat-icon>
+                        Cotizar
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+
+            @if (filteredProducts.length > pageSize) {
+              <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
+                <button type="button" (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Anterior</button>
+                @for (page of pageNumbers; track page) {
+                  <button type="button" (click)="goToPage(page)" class="w-10 h-10 rounded border text-sm" [class.border-vm-red]="currentPage === page" [class.text-vm-red]="currentPage === page" [class.border-gray-300]="currentPage !== page" [class.text-gray-700]="currentPage !== page">{{ page }}</button>
+                }
+                <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Siguiente</button>
               </div>
-            </article>
-          }
-        </div>
-
-        @if (filteredProducts.length > pageSize) {
-          <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
-            <button type="button" (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Anterior</button>
-            @for (page of pageNumbers; track page) {
-              <button type="button" (click)="goToPage(page)" class="w-10 h-10 rounded border text-sm" [class.border-vm-red]="currentPage === page" [class.text-vm-red]="currentPage === page" [class.border-gray-300]="currentPage !== page" [class.text-gray-700]="currentPage !== page">{{ page }}</button>
             }
-            <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Siguiente</button>
           </div>
-        }
+        </div>
       </div>
     </section>
   `,

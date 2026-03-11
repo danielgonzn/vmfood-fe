@@ -165,7 +165,7 @@
         <div class="absolute -top-4 -left-4 w-24 h-24 bg-vm-red/10 rounded-full z-0"></div>
         <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-gray-100 rounded-full z-0"></div>
         <img 
-          src="https://picsum.photos/seed/engineer/800/1000" 
+          src="/images/about.png" 
           alt="Equipo Técnico" 
           class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[600px]"
           referrerpolicy="no-referrer"
@@ -190,7 +190,12 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       @for (product of products; track product.id) {
-        <div class="vm-card overflow-hidden group">
+        <a
+          class="vm-card overflow-hidden group block cursor-pointer"
+          [routerLink]="['/catalogo']"
+          [queryParams]="{ categoria: product.title }"
+          [attr.aria-label]="'Ver ' + product.title + ' en el catálogo'"
+        >
           <div class="relative h-64 overflow-hidden bg-gray-200">
             <img 
               [src]="product.image" 
@@ -203,19 +208,16 @@
           <div class="p-6">
             <h4 class="font-bold text-xl mb-2 text-black group-hover:text-vm-red transition-colors">{{ product.title }}</h4>
             <p class="text-gray-500 text-sm mb-6 line-clamp-3">{{ product.description }}</p>
-            <button class="w-full vm-btn-outline-red py-2 flex items-center justify-center gap-2">
-              <mat-icon class="text-sm">request_quote</mat-icon>
-              Cotizar
-            </button>
+          
           </div>
-        </div>
+        </a>
       }
     </div>
 
     <div class="text-center mt-12">
-      <button routerLink="/catalogo" class="inline-flex items-center text-gray-700 font-semibold hover:text-vm-red transition-colors border-b-2 border-transparent hover:border-vm-red pb-1">
+      <button routerLink="/catalogo" class="inline-flex items-center gap-2 bg-vm-red text-white font-semibold px-6 py-3 rounded-full shadow-md hover:bg-red-800 hover:scale-105 transition-all duration-300 cursor-pointer">
         Ver catálogo completo
-        <mat-icon class="ml-2">arrow_forward</mat-icon>
+        <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
   </div>

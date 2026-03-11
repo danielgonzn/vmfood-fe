@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <nav class="fixed top-0 w-full z-50 shadow-sm transition-all duration-300">
       <div class="bg-black text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between gap-4 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4 text-xs">
           <div class="hidden lg:flex items-center gap-5 text-gray-200">
             <a href="mailto:info@vmfoodimport.com" class="inline-flex items-center gap-1.5 hover:text-white transition-colors">
               <mat-icon class="!text-sm">mail</mat-icon>
@@ -39,12 +39,10 @@ import { RouterLink } from '@angular/router';
       </div>
 
       <div class="bg-white/95 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-20">
             <a class="flex-shrink-0 flex items-center cursor-pointer" [routerLink]="['/']" fragment="home">
-              <span class="font-montserrat font-bold text-2xl tracking-tighter">
-                VM FOOD <span class="text-vm-red">IMPORT</span>
-              </span>
+              <img src="/images/logo.png" alt="VM Food Import Logo" class="h-14 w-auto">
             </a>
 
             <div class="hidden md:flex space-x-8 items-center">

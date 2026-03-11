@@ -12,7 +12,7 @@ import { SeoService } from '../../shared/services/seo.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="min-h-screen bg-gray-50 pt-24">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <button routerLink="/catalogo" class="inline-flex items-center gap-2 vm-nav-link mb-6">
           <mat-icon>arrow_back</mat-icon>
           Volver al catálogo

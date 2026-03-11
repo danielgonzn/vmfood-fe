@@ -52,35 +52,28 @@ export class HomeComponent implements OnInit, OnDestroy {
       badge: 'VM Food Import · Desde 2021',
       title: 'Importación y Distribución de Maquinaria para Procesamiento de Alimentos',
       subtitle: 'Acompañamiento técnico y respaldo internacional para plantas procesadoras de carnes y embutidos en Venezuela.',
-      image: 'https://picsum.photos/seed/factory-main/1920/1080?blur=1'
+      image: '/images/banners/background1.JPG'
     },
     {
       id: 2,
       badge: 'Misión y Respaldo Técnico',
       title: 'Soluciones de Alta Calidad con Soporte Especializado',
       subtitle: 'Reconocemos las necesidades de cada cliente y proponemos equipos con enfoque en productividad, continuidad operativa y rentabilidad.',
-      image: 'https://picsum.photos/seed/factory-line/1920/1080?blur=1'
+      image: '/images/banners/background2.jpeg'
     },
-    {
-      id: 3,
-      badge: 'Portafolio Integral',
-      title: 'Maquinaria Alemana, Maquinaria China y Materias Primas No Cárnicas',
-      subtitle: 'Embutidoras, molinos, hornos, sistemas de empaque, refrigeración, generadores y aditivos para líneas de alimentos.',
-      image: 'https://picsum.photos/seed/factory-support/1920/1080?blur=1'
-    }
   ];
 
   currentHeroSlide = 0;
 
   brandLogos: BrandLogo[] = [
-    { id: 1, name: 'Handtmann', image: 'https://logo.clearbit.com/handtmann.com' },
-    { id: 2, name: 'Treif', image: 'https://logo.clearbit.com/treif.com' },
-    { id: 3, name: 'Poly-Clip', image: 'https://logo.clearbit.com/polyclip.com' },
-    { id: 4, name: 'Marel', image: 'https://logo.clearbit.com/marel.com' },
-    { id: 5, name: 'Multivac', image: 'https://logo.clearbit.com/multivac.com' },
-    { id: 6, name: 'Bizerba', image: 'https://logo.clearbit.com/bizerba.com' },
-    { id: 7, name: 'GEA', image: 'https://logo.clearbit.com/gea.com' },
-    { id: 8, name: 'ULMA Packaging', image: 'https://logo.clearbit.com/ulmapackaging.com' }
+    { id: 1, name: 'Handtmann', image: '/images/brands/handtmann.webp' },
+    { id: 2, name: 'Treif', image: '/images/brands/treif.png' },
+    { id: 3, name: 'Poly-Clip', image: '/images/brands/polyclip.svg' },
+    { id: 4, name: 'Marel', image: '/images/brands/marel.ico' },
+    { id: 5, name: 'Multivac', image: '/images/brands/multivac.png' },
+    { id: 6, name: 'Bizerba', image: '/images/brands/bizerba.ico' },
+    { id: 7, name: 'GEA', image: '/images/brands/gea.png' },
+    { id: 8, name: 'ULMA Packaging', image: '/images/brands/ulma.png' }
   ];
 
   products: Product[] = [

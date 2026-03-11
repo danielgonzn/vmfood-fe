@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CATALOG_PRODUCTS } from './catalog.data';
 import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
@@ -15,7 +15,7 @@ import { SeoService } from '../../shared/services/seo.service';
     <section class="min-h-screen bg-gray-50 pt-32">
       <div class="relative w-full h-[360px] md:h-[400px] overflow-hidden">
           <img
-            src="https://picsum.photos/seed/vmfood-catalog-banner/1800/900"
+            src="/images/banners/bannerFilter.jpg"
             alt="Banner catálogo VM Food Import"
             class="absolute inset-0 w-full h-full object-cover"
             referrerpolicy="no-referrer"
@@ -31,7 +31,7 @@ import { SeoService } from '../../shared/services/seo.service';
           </div>
         </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div class="flex items-center justify-between mb-6">
           <button routerLink="/" class="inline-flex items-center gap-2 text-gray-700 hover:text-vm-red font-medium">
             <mat-icon>arrow_back</mat-icon>
@@ -181,8 +181,11 @@ import { SeoService } from '../../shared/services/seo.service';
     </section>
   `,
 })
-export class CatalogComponent {
-  constructor(private readonly seoService: SeoService) {
+export class CatalogComponent implements OnInit {
+  constructor(
+    private readonly seoService: SeoService,
+    private readonly route: ActivatedRoute
+  ) {
     this.seoService.setMeta({
       title: 'Catálogo de Maquinaria | VM Food Import',
       description:
@@ -206,6 +209,18 @@ export class CatalogComponent {
   readonly products: CatalogProduct[] = CATALOG_PRODUCTS;
   readonly pageSize = 6;
   currentPage = 1;
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const categoryFromUrl = params.get('categoria')?.trim();
+
+      if (categoryFromUrl && this.categories.includes(categoryFromUrl)) {
+        this.selectedCategory = categoryFromUrl;
+        this.selectedSubcategory = 'all';
+        this.currentPage = 1;
+      }
+    });
+  }
 
   get categories(): string[] {
     return [...new Set(this.products.map((product) => product.category))];

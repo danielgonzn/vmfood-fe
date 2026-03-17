@@ -1,5 +1,6 @@
 export interface CatalogProduct {
   id: number;
+  slug?: string;
   title: string;
   category: string;
   subcategory: string;

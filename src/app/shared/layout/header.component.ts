@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -51,6 +52,7 @@ import { RouterLink } from '@angular/router';
               <a [routerLink]="['/']" fragment="products" class="vm-nav-link">Productos</a>
               <a [routerLink]="['/']" fragment="faq" class="vm-nav-link">FAQ</a>
               <a [routerLink]="['/']" fragment="location" class="vm-nav-link">Ubicación</a>
+              <a [href]="adminUrl" target="_blank" rel="noopener noreferrer" class="vm-nav-link">Admin</a>
               <a [routerLink]="['/']" fragment="contact" class="vm-btn-primary px-5 py-2 rounded-full">
                 Contacto
               </a>
@@ -67,4 +69,6 @@ import { RouterLink } from '@angular/router';
     </nav>
   `,
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  readonly adminUrl = `${environment.backendBaseUrl}/admin`;
+}

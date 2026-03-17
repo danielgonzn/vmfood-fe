@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CATALOG_PRODUCTS } from './catalog.data';
 import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
+import { CatalogApiService } from '../../core/services/catalog-api.service';
+import { CatalogProductDto } from '../../core/models/api.models';
 
 @Component({
   selector: 'app-catalog-detail',
@@ -122,7 +124,7 @@ import { SeoService } from '../../shared/services/seo.service';
                     <div class="p-4">
                       <p class="text-xs font-semibold uppercase tracking-wide text-vm-red mb-1">{{ item.brand }}</p>
                       <h3 class="font-bold text-black mb-3">{{ item.title }}</h3>
-                      <a [routerLink]="['/catalogo', item.id]" class="text-sm font-medium text-vm-red hover:underline">Ver ficha</a>
+                      <a [routerLink]="['/catalogo', item.slug || item.id]" class="text-sm font-medium text-vm-red hover:underline">Ver ficha</a>
                     </div>
                   </article>
                 }
@@ -140,49 +142,53 @@ import { SeoService } from '../../shared/services/seo.service';
     </section>
   `,
 })
-export class CatalogDetailComponent {
-  readonly product: CatalogProduct | undefined;
-  readonly galleryImages: string[];
+export class CatalogDetailComponent implements OnInit {
+  product: CatalogProduct | undefined;
+  galleryImages: string[] = [];
+  private productsPool: CatalogProduct[] = CATALOG_PRODUCTS;
   currentImageIndex = 0;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly seoService: SeoService
-  ) {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.product = CATALOG_PRODUCTS.find((item) => item.id === id);
-    this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
+    private readonly seoService: SeoService,
+    private readonly catalogApi: CatalogApiService
+  ) {}
 
-    if (this.product) {
-      this.seoService.setMeta({
-        title: `${this.product.title} | VM Food Import`,
-        description: `${this.product.description} Marca: ${this.product.brand}. Categoría: ${this.product.category}.`,
-        keywords: `${this.product.title}, ${this.product.brand}, ${this.product.category}, VM Food Import`,
-        url: `https://vmfoodimport.com/catalogo/${this.product.id}`,
-        image: this.product.image,
-      });
+  ngOnInit(): void {
+    this.catalogApi.getProducts({ perPage: 100 }).subscribe({
+      next: (response) => {
+        if (response.data.length) {
+          this.productsPool = response.data.map((item) => this.mapProduct(item));
+        }
+      },
+      error: () => {
+        this.productsPool = CATALOG_PRODUCTS;
+      },
+    });
 
-      this.seoService.setJsonLd('vmfood-product-schema', {
-        '@context': 'https://schema.org',
-        '@type': 'Product',
-        name: this.product.title,
-        description: this.product.description,
-        image: this.product.image,
-        brand: {
-          '@type': 'Brand',
-          name: this.product.brand,
+    this.route.paramMap.subscribe((params) => {
+      const slug = (params.get('slug') ?? '').trim();
+      if (!slug) {
+        this.product = undefined;
+        this.galleryImages = [];
+        return;
+      }
+
+      this.catalogApi.getProductBySlug(slug).subscribe({
+        next: (response) => {
+          this.product = this.mapProduct(response.data);
+          this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
+          this.currentImageIndex = 0;
+          this.applySeo();
         },
-        offers: {
-          '@type': 'Offer',
-          availability: this.product.available
-            ? 'https://schema.org/InStock'
-            : 'https://schema.org/PreOrder',
-          priceCurrency: 'USD',
-          price: '0',
-          url: `https://vmfoodimport.com/catalogo/${this.product.id}`,
+        error: () => {
+          this.product = this.productsPool.find((item) => item.slug === slug || String(item.id) === slug);
+          this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
+          this.currentImageIndex = 0;
+          this.applySeo();
         },
       });
-    }
+    });
   }
 
   get relatedProducts(): CatalogProduct[] {
@@ -190,7 +196,7 @@ export class CatalogDetailComponent {
       return [];
     }
 
-    return CATALOG_PRODUCTS
+    return this.productsPool
       .filter((item) => item.category === this.product?.category && item.id !== this.product?.id)
       .slice(0, 3);
   }
@@ -221,6 +227,61 @@ export class CatalogDetailComponent {
       `Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`
     );
     return `https://wa.me/584120000000?text=${message}`;
+  }
+
+  private applySeo(): void {
+    if (!this.product) {
+      return;
+    }
+
+    this.seoService.setMeta({
+      title: `${this.product.title} | VM Food Import`,
+      description: `${this.product.description} Marca: ${this.product.brand}. Categoría: ${this.product.category}.`,
+      keywords: `${this.product.title}, ${this.product.brand}, ${this.product.category}, VM Food Import`,
+      url: `https://vmfoodimport.com/catalogo/${this.product.slug ?? this.product.id}`,
+      image: this.product.image,
+    });
+
+    this.seoService.setJsonLd('vmfood-product-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: this.product.title,
+      description: this.product.description,
+      image: this.product.image,
+      brand: {
+        '@type': 'Brand',
+        name: this.product.brand,
+      },
+      offers: {
+        '@type': 'Offer',
+        availability: this.product.available
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/PreOrder',
+        priceCurrency: 'USD',
+        price: '0',
+        url: `https://vmfoodimport.com/catalogo/${this.product.slug ?? this.product.id}`,
+      },
+    });
+  }
+
+  private mapProduct(item: CatalogProductDto): CatalogProduct {
+    return {
+      id: item.id,
+      slug: item.slug,
+      title: item.title,
+      category: item.category ?? 'Sin categoría',
+      subcategory: item.subcategory ?? item.category ?? 'General',
+      brand: item.brand ?? 'Sin marca',
+      origin: item.origin ?? 'N/D',
+      condition: item.condition,
+      description: item.description ?? item.short_description ?? '',
+      image: item.image ?? 'https://picsum.photos/seed/vmfood-fallback/700/500',
+      available: item.available,
+      capacity: item.capacity ?? undefined,
+      voltage: item.voltage ?? undefined,
+      power: item.power ?? undefined,
+      tags: item.tags ?? [],
+    };
   }
 
   private buildGalleryImages(product: CatalogProduct): string[] {

@@ -3,6 +3,9 @@ import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { WebContentDto } from './core/models/api.models';
+import { CatalogApiService } from './core/services/catalog-api.service';
 import { SeoService } from './shared/services/seo.service';
 
 interface Product {
@@ -31,6 +34,16 @@ interface BusinessFaq {
   answer: string;
 }
 
+interface TrustStat {
+  label: string;
+  value: string;
+}
+
+interface PurchaseStep {
+  title: string;
+  description: string;
+}
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
@@ -43,6 +56,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private readonly cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private readonly platformId: object,
+    private readonly catalogApi: CatalogApiService,
+    private readonly sanitizer: DomSanitizer,
     private readonly seoService: SeoService
   ) {}
 
@@ -169,13 +184,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentFeaturedSlide = 0;
   showPromoPopup = false;
 
-  trustStats = [
+  trustStats: TrustStat[] = [
     { label: 'Año de fundación', value: '2021' },
     { label: 'Líneas de solución', value: '4' },
     { label: 'Enfoque de soporte', value: 'Técnico' },
   ];
 
-  purchaseSteps = [
+  purchaseSteps: PurchaseStep[] = [
     { title: 'Diagnóstico', description: 'Entendemos tu capacidad, proceso y objetivo de producción.' },
     { title: 'Propuesta técnica', description: 'Seleccionamos equipos y materias primas según requerimiento real.' },
     { title: 'Importación y entrega', description: 'Coordinamos suministro con respaldo de proveedores internacionales.' },
@@ -198,6 +213,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   private heroSliderIntervalId?: number;
+
+  aboutTitle = 'Aliado Estratégico para Plantas Procesadoras';
+  aboutBody =
+    'En VM Food Import nos dedicamos a la importación, comercialización y distribución de máquinas nuevas y usadas para el procesamiento de carnes y embutidos. Nuestra misión es contribuir al crecimiento de cada planta mediante acompañamiento técnico y soluciones de alta calidad.';
+  missionBody =
+    'Reconocer necesidades de producción y responder con maquinaria confiable, soporte técnico y respaldo de proveedores internacionales.';
+  visionBody =
+    'Ser el mejor aliado estratégico de nuestros clientes con propuestas de valor que impulsen su rentabilidad.';
+  contactTitle = 'Conversemos sobre tu línea de producción';
+  contactBody =
+    'Cuéntanos capacidad, tipo de producto y objetivo. Te proponemos equipos y soluciones ajustadas a tu operación.';
+  promoTitle = 'Promociones en Maquinaria Seleccionada';
+  promoSubtitle = 'Descubre ofertas vigentes en equipos industriales y solicita asesoría para tu planta.';
+  promoImage = 'https://picsum.photos/seed/promo-vmfood/1200/700';
+  locationTitle = 'Visítanos';
+  locationAddressTitle = 'Dirección Principal';
+  locationAddressValue = 'Los Teques, Edo. Miranda. Venezuela';
+  locationHoursTitle = 'Horarios de Atención';
+  locationHoursValue = 'Lunes a Viernes: 8:00 AM - 5:00 PM | Sábados: 8:00 AM - 12:00 PM';
+  locationPhoneTitle = 'Teléfonos';
+  locationPhone1 = '+58 (412) 000-0000';
+  locationPhone2 = '+58 (414) 000-0000';
+  locationMapUrl = 'https://www.google.com/maps?q=Los%20Teques%2C%20Miranda%2C%20Venezuela&output=embed';
+  safeLocationMapUrl!: SafeResourceUrl;
 
   contactForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -232,21 +271,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.seoService.setJsonLd('vmfood-faq-schema', {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: this.faqs.map((faq) => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.answer,
-        },
-      })),
-    });
+    this.refreshFaqSchema();
 
     this.startHeroSlider();
     this.showPromoPopup = true;
+    this.safeLocationMapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.locationMapUrl);
+    this.loadCmsContent();
     this.cdr.markForCheck();
   }
 
@@ -338,5 +368,132 @@ export class HomeComponent implements OnInit, OnDestroy {
       alert('Gracias por contactarnos. Nos pondremos en contacto pronto.');
       this.contactForm.reset();
     }
+  }
+
+  private loadCmsContent(): void {
+    this.catalogApi.getWebContent().subscribe({
+      next: (response) => {
+        this.applyCmsContent(response.data);
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        // Keep defaults when CMS content endpoint is unavailable.
+      },
+    });
+  }
+
+  private applyCmsContent(items: WebContentDto[]): void {
+    const byKey = new Map(items.map((item) => [item.key, item]));
+
+    const hero = byKey.get('home_hero');
+    if (hero) {
+      this.heroSlides[0] = {
+        ...this.heroSlides[0],
+        title: hero.title || this.heroSlides[0].title,
+        subtitle: hero.subtitle || this.heroSlides[0].subtitle,
+        badge: hero.name || this.heroSlides[0].badge,
+        image: hero.banner_url || hero.image_url || this.heroSlides[0].image,
+      };
+    }
+
+    const about = byKey.get('about_story');
+    if (about) {
+      this.aboutTitle = about.title || this.aboutTitle;
+      this.aboutBody = about.body || this.aboutBody;
+    }
+
+    const mission = byKey.get('about_mission');
+    if (mission) {
+      this.missionBody = mission.body || this.missionBody;
+    }
+
+    const vision = byKey.get('about_vision');
+    if (vision) {
+      this.visionBody = vision.body || this.visionBody;
+    }
+
+    const contact = byKey.get('contact_main');
+    if (contact) {
+      this.contactTitle = contact.title || this.contactTitle;
+      this.contactBody = contact.body || this.contactBody;
+    }
+
+    const promo = byKey.get('home_banner_top');
+    if (promo) {
+      this.promoTitle = promo.title || this.promoTitle;
+      this.promoSubtitle = promo.subtitle || this.promoSubtitle;
+      this.promoImage = promo.banner_url || promo.image_url || this.promoImage;
+    }
+
+    const heroSecondary = byKey.get('home_hero_secondary');
+    if (heroSecondary) {
+      this.heroSlides[1] = {
+        ...this.heroSlides[1],
+        title: heroSecondary.title || this.heroSlides[1].title,
+        subtitle: heroSecondary.subtitle || this.heroSlides[1].subtitle,
+        badge: heroSecondary.name || this.heroSlides[1].badge,
+        image: heroSecondary.banner_url || heroSecondary.image_url || this.heroSlides[1].image,
+      };
+    }
+
+    const processSteps = this.mapContentByPrefix(items, 'process_step_').map((item) => ({
+      title: item.title || item.name,
+      description: item.body || item.subtitle || '',
+    }));
+    if (processSteps.length > 0) {
+      this.purchaseSteps = processSteps;
+    }
+
+    const stats = this.mapContentByPrefix(items, 'stat_').map((item) => ({
+      label: item.title || item.name,
+      value: item.subtitle || item.body || '-',
+    }));
+    if (stats.length > 0) {
+      this.trustStats = stats;
+    }
+
+    const faqItems = this.mapContentByPrefix(items, 'faq_').map((item) => ({
+      question: item.title || item.name,
+      answer: item.body || item.subtitle || '',
+    }));
+    if (faqItems.length > 0) {
+      this.faqs = faqItems;
+      this.refreshFaqSchema();
+    }
+
+    const location = byKey.get('location_main');
+    if (location) {
+      this.locationTitle = location.title || this.locationTitle;
+      this.locationAddressTitle = location.meta?.['address_title'] || this.locationAddressTitle;
+      this.locationAddressValue = location.meta?.['address_value'] || this.locationAddressValue;
+      this.locationHoursTitle = location.meta?.['hours_title'] || this.locationHoursTitle;
+      this.locationHoursValue = location.meta?.['hours_value'] || this.locationHoursValue;
+      this.locationPhoneTitle = location.meta?.['phone_title'] || this.locationPhoneTitle;
+      this.locationPhone1 = location.meta?.['phone_1'] || this.locationPhone1;
+      this.locationPhone2 = location.meta?.['phone_2'] || this.locationPhone2;
+      this.locationMapUrl = location.meta?.['map_url'] || this.locationMapUrl;
+      this.safeLocationMapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.locationMapUrl);
+    }
+  }
+
+  private mapContentByPrefix(items: WebContentDto[], keyPrefix: string): WebContentDto[] {
+    return items
+      .filter((item) => item.key.startsWith(keyPrefix))
+      .sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+  }
+
+  private refreshFaqSchema(): void {
+    this.seoService.setJsonLd('vmfood-faq-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: this.faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    });
   }
 }

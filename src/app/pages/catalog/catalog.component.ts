@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CATALOG_PRODUCTS } from './catalog.data';
 import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
+import { CatalogApiService } from '../../core/services/catalog-api.service';
+import { CatalogProductDto } from '../../core/models/api.models';
 
 @Component({
   selector: 'app-catalog',
@@ -152,7 +154,7 @@ import { SeoService } from '../../shared/services/seo.service';
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <a [routerLink]="['/catalogo', product.id]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
+                      <a [routerLink]="['/catalogo', product.slug || product.id]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
                         <mat-icon class="text-base">visibility</mat-icon>
                         Ver ficha
                       </a>
@@ -184,7 +186,8 @@ import { SeoService } from '../../shared/services/seo.service';
 export class CatalogComponent implements OnInit {
   constructor(
     private readonly seoService: SeoService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly catalogApi: CatalogApiService
   ) {
     this.seoService.setMeta({
       title: 'Catálogo de Maquinaria | VM Food Import',
@@ -206,11 +209,13 @@ export class CatalogComponent implements OnInit {
   sortBy: 'name-asc' | 'name-desc' = 'name-asc';
   onlyAvailable = false;
 
-  readonly products: CatalogProduct[] = CATALOG_PRODUCTS;
+  products: CatalogProduct[] = CATALOG_PRODUCTS;
   readonly pageSize = 6;
   currentPage = 1;
 
   ngOnInit(): void {
+    this.loadProducts();
+
     this.route.queryParamMap.subscribe((params) => {
       const categoryFromUrl = params.get('categoria')?.trim();
 
@@ -303,6 +308,41 @@ export class CatalogComponent implements OnInit {
   getQuoteLink(product: CatalogProduct): string {
     const message = encodeURIComponent(`Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`);
     return `https://wa.me/584120000000?text=${message}`;
+  }
+
+  private loadProducts(): void {
+    this.catalogApi.getProducts({ perPage: 100 }).subscribe({
+      next: (response) => {
+        if (!response.data.length) {
+          return;
+        }
+
+        this.products = response.data.map((item) => this.mapProduct(item));
+      },
+      error: () => {
+        this.products = CATALOG_PRODUCTS;
+      },
+    });
+  }
+
+  private mapProduct(item: CatalogProductDto): CatalogProduct {
+    return {
+      id: item.id,
+      slug: item.slug,
+      title: item.title,
+      category: item.category ?? 'Sin categoría',
+      subcategory: item.subcategory ?? item.category ?? 'General',
+      brand: item.brand ?? 'Sin marca',
+      origin: item.origin ?? 'N/D',
+      condition: item.condition,
+      description: item.description ?? item.short_description ?? '',
+      image: item.image ?? 'https://picsum.photos/seed/vmfood-fallback/700/500',
+      available: item.available,
+      capacity: item.capacity ?? undefined,
+      voltage: item.voltage ?? undefined,
+      power: item.power ?? undefined,
+      tags: item.tags ?? [],
+    };
   }
 
   clearFilters(): void {

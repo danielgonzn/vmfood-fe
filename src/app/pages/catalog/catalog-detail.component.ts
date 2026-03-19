@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CATALOG_PRODUCTS } from './catalog.data';
@@ -154,7 +154,8 @@ export class CatalogDetailComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly seoService: SeoService,
-    private readonly catalogApi: CatalogApiService
+    private readonly catalogApi: CatalogApiService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -162,10 +163,12 @@ export class CatalogDetailComponent implements OnInit {
       next: (response) => {
         this.productsPool = response.data.map((item) => this.mapProduct(item));
         this.resolveProduct(this.currentLookup);
+        this.cdr.markForCheck();
       },
       error: () => {
         this.productsPool = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
         this.resolveProduct(this.currentLookup);
+        this.cdr.markForCheck();
       },
     });
 
@@ -294,6 +297,7 @@ export class CatalogDetailComponent implements OnInit {
         this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
         this.currentImageIndex = 0;
         this.applySeo();
+        this.cdr.markForCheck();
       },
       error: () => {
         if (!environment.production) {
@@ -304,6 +308,7 @@ export class CatalogDetailComponent implements OnInit {
             this.galleryImages = this.buildGalleryImages(localMatch);
             this.currentImageIndex = 0;
             this.applySeo();
+            this.cdr.markForCheck();
             return;
           }
         }
@@ -311,6 +316,7 @@ export class CatalogDetailComponent implements OnInit {
         this.product = undefined;
         this.galleryImages = [];
         this.currentImageIndex = 0;
+        this.cdr.markForCheck();
       },
     });
   }

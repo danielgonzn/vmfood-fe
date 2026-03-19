@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -201,7 +201,8 @@ export class CatalogComponent implements OnInit {
   constructor(
     private readonly seoService: SeoService,
     private readonly route: ActivatedRoute,
-    private readonly catalogApi: CatalogApiService
+    private readonly catalogApi: CatalogApiService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.seoService.setMeta({
       title: 'Catálogo de Maquinaria | VM Food Import',
@@ -331,10 +332,12 @@ export class CatalogComponent implements OnInit {
     this.catalogApi.getProducts({ perPage: 100 }).subscribe({
       next: (response) => {
         this.products = response.data.map((item) => this.mapProduct(item));
+        this.cdr.markForCheck();
       },
       error: () => {
         this.loadError = true;
         this.products = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
+        this.cdr.markForCheck();
       },
     });
   }

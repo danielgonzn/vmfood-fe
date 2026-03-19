@@ -128,75 +128,51 @@ import { environment } from '../../../environments/environment';
               <p class="text-sm text-gray-500">Página {{ currentPage }} de {{ totalPages }}</p>
             </div>
 
-            <div class="relative min-h-[180px]">
-              @if (!isCatalogReady) {
-                <div class="absolute inset-0 z-10 vm-loader-overlay rounded-xl flex items-center justify-center">
-                  <div class="vm-loader-card px-6 py-5 text-center min-w-[240px]">
-                    <img
-                      src="/images/logo.png"
-                      alt="VM Food Import"
-                      class="vm-loader-logo mx-auto mb-3"
-                      referrerpolicy="no-referrer"
-                    >
-                    <p class="text-sm font-semibold text-black">Cargando productos...</p>
-                    <p class="text-xs text-gray-500 mt-1">Estamos organizando el catalogo para ti.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              @for (product of paginatedProducts; track product.id) {
+                <article class="vm-card overflow-hidden">
+                  <div class="h-52 bg-gray-100 overflow-hidden">
+                    <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
                   </div>
-                </div>
+                  <div class="p-5">
+                    <div class="flex flex-wrap gap-2 mb-3">
+                      <span class="text-xs font-semibold uppercase tracking-wide text-vm-red bg-vm-red/10 px-2 py-1 rounded-full">{{ product.category }}</span>
+                      <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.brand }}</span>
+                      <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.origin }}</span>
+                    </div>
+
+                    <h3 class="font-bold text-lg text-black mb-1">{{ product.title }}</h3>
+                    <p class="text-sm text-gray-500 mb-3">{{ product.subcategory }} · {{ product.condition }}</p>
+                    <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4 text-xs">
+                      <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.capacity">
+                        <p class="text-gray-500">Capacidad</p>
+                        <p class="font-semibold text-black">{{ product.capacity || 'N/D' }}</p>
+                      </div>
+                      <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.voltage">
+                        <p class="text-gray-500">Voltaje</p>
+                        <p class="font-semibold text-black">{{ product.voltage || 'N/D' }}</p>
+                      </div>
+                      <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.power">
+                        <p class="text-gray-500">Potencia</p>
+                        <p class="font-semibold text-black">{{ product.power || 'N/D' }}</p>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <a [routerLink]="['/catalogo', product.slug]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
+                        <mat-icon class="text-base">visibility</mat-icon>
+                        Ver ficha
+                      </a>
+                      <a [href]="getQuoteLink(product)" target="_blank" class="vm-btn-outline-red py-2 inline-flex items-center justify-center gap-2">
+                        <mat-icon class="text-base">chat</mat-icon>
+                        Cotizar
+                      </a>
+                    </div>
+                  </div>
+                </article>
               }
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                @for (product of paginatedProducts; track product.id) {
-                  <article class="vm-card overflow-hidden">
-                    <div class="h-52 bg-gray-100 overflow-hidden">
-                      <img
-                        [src]="product.image"
-                        [alt]="product.title"
-                        class="w-full h-full object-cover"
-                        referrerpolicy="no-referrer"
-                        (load)="onProductImageResolved(product.image)"
-                        (error)="onProductImageResolved(product.image)"
-                      >
-                    </div>
-                    <div class="p-5">
-                      <div class="flex flex-wrap gap-2 mb-3">
-                        <span class="text-xs font-semibold uppercase tracking-wide text-vm-red bg-vm-red/10 px-2 py-1 rounded-full">{{ product.category }}</span>
-                        <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.brand }}</span>
-                        <span class="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{{ product.origin }}</span>
-                      </div>
-
-                      <h3 class="font-bold text-lg text-black mb-1">{{ product.title }}</h3>
-                      <p class="text-sm text-gray-500 mb-3">{{ product.subcategory }} · {{ product.condition }}</p>
-                      <p class="text-sm text-gray-600 mb-4">{{ product.description }}</p>
-
-                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4 text-xs">
-                        <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.capacity">
-                          <p class="text-gray-500">Capacidad</p>
-                          <p class="font-semibold text-black">{{ product.capacity || 'N/D' }}</p>
-                        </div>
-                        <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.voltage">
-                          <p class="text-gray-500">Voltaje</p>
-                          <p class="font-semibold text-black">{{ product.voltage || 'N/D' }}</p>
-                        </div>
-                        <div class="bg-gray-50 rounded-md p-2" [class.opacity-50]="!product.power">
-                          <p class="text-gray-500">Potencia</p>
-                          <p class="font-semibold text-black">{{ product.power || 'N/D' }}</p>
-                        </div>
-                      </div>
-
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <a [routerLink]="['/catalogo', product.slug]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
-                          <mat-icon class="text-base">visibility</mat-icon>
-                          Ver ficha
-                        </a>
-                        <a [href]="getQuoteLink(product)" target="_blank" class="vm-btn-outline-red py-2 inline-flex items-center justify-center gap-2">
-                          <mat-icon class="text-base">chat</mat-icon>
-                          Cotizar
-                        </a>
-                      </div>
-                    </div>
-                  </article>
-                }
-              </div>
             </div>
 
             @if (filteredProducts.length === 0) {
@@ -250,9 +226,6 @@ export class CatalogComponent implements OnInit {
 
   products: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   loadError = false;
-  isCatalogReady = false;
-  private pendingVisibleImages = new Set<string>();
-  private readyTimeoutId: ReturnType<typeof setTimeout> | null = null;
   readonly pageSize = 6;
   currentPage = 1;
 
@@ -266,7 +239,6 @@ export class CatalogComponent implements OnInit {
         this.selectedCategory = categoryFromUrl;
         this.selectedSubcategory = 'all';
         this.currentPage = 1;
-        this.syncCatalogRenderState();
       }
     });
   }
@@ -332,7 +304,6 @@ export class CatalogComponent implements OnInit {
 
   onFilterChange(): void {
     this.currentPage = 1;
-    this.syncCatalogRenderState();
   }
 
   goToPage(page: number): void {
@@ -341,7 +312,6 @@ export class CatalogComponent implements OnInit {
     }
 
     this.currentPage = page;
-    this.syncCatalogRenderState();
   }
 
   nextPage(): void {
@@ -357,64 +327,20 @@ export class CatalogComponent implements OnInit {
     return `https://wa.me/584120000000?text=${message}`;
   }
 
-  onProductImageResolved(imageUrl: string): void {
-    if (!this.pendingVisibleImages.has(imageUrl)) {
-      return;
-    }
-
-    this.pendingVisibleImages.delete(imageUrl);
-
-    if (this.pendingVisibleImages.size === 0) {
-      this.scheduleCatalogReady();
-    }
-  }
-
   private loadProducts(): void {
     this.loadError = false;
 
     this.catalogApi.getProducts({ perPage: 100 }).subscribe({
       next: (response) => {
         this.products = response.data.map((item) => this.mapProduct(item));
-        this.syncCatalogRenderState();
         this.cdr.markForCheck();
       },
       error: () => {
         this.loadError = true;
         this.products = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
-        this.syncCatalogRenderState();
         this.cdr.markForCheck();
       },
     });
-  }
-
-  private syncCatalogRenderState(): void {
-    if (this.readyTimeoutId) {
-      clearTimeout(this.readyTimeoutId);
-      this.readyTimeoutId = null;
-    }
-
-    const visibleImages = this.paginatedProducts.map((product) => product.image);
-    this.pendingVisibleImages = new Set(visibleImages);
-
-    if (this.pendingVisibleImages.size === 0) {
-      this.scheduleCatalogReady();
-      return;
-    }
-
-    this.isCatalogReady = false;
-    this.cdr.markForCheck();
-  }
-
-  private scheduleCatalogReady(): void {
-    if (this.readyTimeoutId) {
-      clearTimeout(this.readyTimeoutId);
-    }
-
-    this.readyTimeoutId = setTimeout(() => {
-      this.isCatalogReady = true;
-      this.readyTimeoutId = null;
-      this.cdr.markForCheck();
-    }, 1000);
   }
 
   private mapProduct(item: CatalogProductDto): CatalogProduct {
@@ -478,6 +404,5 @@ export class CatalogComponent implements OnInit {
     this.sortBy = 'name-asc';
     this.onlyAvailable = false;
     this.currentPage = 1;
-    this.syncCatalogRenderState();
   }
 }

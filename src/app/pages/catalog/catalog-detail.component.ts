@@ -21,32 +21,12 @@ import { environment } from '../../../environments/environment';
           Volver al catálogo
         </button>
 
-        @if (isDetailLoading) {
-          <div class="mb-6 vm-loader-card px-6 py-5 inline-flex flex-col items-center gap-2 min-w-[240px]">
-            <img
-              src="/images/logo.png"
-              alt="VM Food Import"
-              class="vm-loader-logo"
-              referrerpolicy="no-referrer"
-            >
-            <p class="text-sm font-semibold text-black">Cargando ficha del producto...</p>
-            <p class="text-xs text-gray-500">Un momento mientras completamos el render.</p>
-          </div>
-        }
-
         @if (product) {
-          <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm" [class.opacity-60]="isDetailLoading">
+          <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div class="bg-gray-100">
                 <div class="relative min-h-[300px]">
-                  <img
-                    [src]="galleryImages[currentImageIndex]"
-                    [alt]="product.title"
-                    class="w-full h-full object-cover"
-                    referrerpolicy="no-referrer"
-                    (load)="onMainImageResolved()"
-                    (error)="onMainImageResolved()"
-                  >
+                  <img [src]="galleryImages[currentImageIndex]" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
 
                   <button
                     type="button"
@@ -169,8 +149,6 @@ export class CatalogDetailComponent implements OnInit {
   private productsPool: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   private currentLookup = '';
   currentImageIndex = 0;
-  isDetailLoading = true;
-  private hideDetailLoaderTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -197,8 +175,6 @@ export class CatalogDetailComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const slug = (params.get('slug') ?? '').trim();
       this.currentLookup = slug;
-      this.cancelDetailLoaderTimeout();
-      this.isDetailLoading = true;
       this.resolveProduct(slug);
     });
   }
@@ -239,14 +215,6 @@ export class CatalogDetailComponent implements OnInit {
       `Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`
     );
     return `https://wa.me/584120000000?text=${message}`;
-  }
-
-  onMainImageResolved(): void {
-    if (!this.isDetailLoading) {
-      return;
-    }
-
-    this.scheduleHideDetailLoader();
   }
 
   private applySeo(): void {
@@ -309,7 +277,6 @@ export class CatalogDetailComponent implements OnInit {
       this.product = undefined;
       this.galleryImages = [];
       this.currentImageIndex = 0;
-      this.isDetailLoading = false;
       return;
     }
 
@@ -330,9 +297,6 @@ export class CatalogDetailComponent implements OnInit {
         this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
         this.currentImageIndex = 0;
         this.applySeo();
-        if (this.galleryImages.length === 0) {
-          this.scheduleHideDetailLoader();
-        }
         this.cdr.markForCheck();
       },
       error: () => {
@@ -344,9 +308,6 @@ export class CatalogDetailComponent implements OnInit {
             this.galleryImages = this.buildGalleryImages(localMatch);
             this.currentImageIndex = 0;
             this.applySeo();
-            if (this.galleryImages.length === 0) {
-              this.scheduleHideDetailLoader();
-            }
             this.cdr.markForCheck();
             return;
           }
@@ -355,28 +316,9 @@ export class CatalogDetailComponent implements OnInit {
         this.product = undefined;
         this.galleryImages = [];
         this.currentImageIndex = 0;
-        this.scheduleHideDetailLoader();
         this.cdr.markForCheck();
       },
     });
-  }
-
-  private scheduleHideDetailLoader(): void {
-    this.cancelDetailLoaderTimeout();
-    this.hideDetailLoaderTimeoutId = setTimeout(() => {
-      this.isDetailLoading = false;
-      this.hideDetailLoaderTimeoutId = null;
-      this.cdr.markForCheck();
-    }, 1000);
-  }
-
-  private cancelDetailLoaderTimeout(): void {
-    if (!this.hideDetailLoaderTimeoutId) {
-      return;
-    }
-
-    clearTimeout(this.hideDetailLoaderTimeoutId);
-    this.hideDetailLoaderTimeoutId = null;
   }
 
   private buildGalleryImages(product: CatalogProduct): string[] {

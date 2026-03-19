@@ -1,5 +1,11 @@
 Options -Indexes
 
+ErrorDocument 404 /index.html
+
+<IfModule mod_dir.c>
+    FallbackResource /index.html
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
@@ -10,5 +16,5 @@ Options -Indexes
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    RewriteRule ^ index.html [L]
+    RewriteRule . /index.html [L]
 </IfModule>

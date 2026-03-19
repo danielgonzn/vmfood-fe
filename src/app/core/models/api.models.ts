@@ -93,3 +93,18 @@ export interface InquiryCreateResponse {
     status: 'new' | 'contacted' | 'closed';
   };
 }
+
+export interface SiteMaintenanceConfigDto {
+  enabled: boolean;
+  title: string;
+  subtitle: string;
+  email: string;
+  phone: string;
+  address: string;
+  whatsapp: string;
+  logo_url: string | null;
+}
+
+export interface SiteConfigDto {
+  maintenance: SiteMaintenanceConfigDto;
+}

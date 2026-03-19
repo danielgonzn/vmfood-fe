@@ -10,6 +10,7 @@ import {
   CategoryDto,
   InquiryCreatePayload,
   InquiryCreateResponse,
+  SiteConfigDto,
   WebContentDto,
 } from '../models/api.models';
 
@@ -56,6 +57,10 @@ export class CatalogApiService {
     if (filters?.key) params = params.set('key', filters.key);
 
     return this.http.get<ApiListResponse<WebContentDto>>(`${this.api}/catalog/content`, { params });
+  }
+
+  getSiteConfig(): Observable<ApiItemResponse<SiteConfigDto>> {
+    return this.http.get<ApiItemResponse<SiteConfigDto>>(`${this.api}/catalog/site-config`);
   }
 
   createInquiry(payload: InquiryCreatePayload): Observable<InquiryCreateResponse> {

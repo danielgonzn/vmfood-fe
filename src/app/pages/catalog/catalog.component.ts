@@ -154,7 +154,7 @@ import { CatalogProductDto } from '../../core/models/api.models';
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <a [routerLink]="['/catalogo', product.slug || product.id]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
+                      <a [routerLink]="['/catalogo', product.slug]" class="vm-btn-secondary py-2 inline-flex items-center justify-center gap-2">
                         <mat-icon class="text-base">visibility</mat-icon>
                         Ver ficha
                       </a>
@@ -209,7 +209,7 @@ export class CatalogComponent implements OnInit {
   sortBy: 'name-asc' | 'name-desc' = 'name-asc';
   onlyAvailable = false;
 
-  products: CatalogProduct[] = CATALOG_PRODUCTS;
+  products: CatalogProduct[] = this.withSlug(CATALOG_PRODUCTS);
   readonly pageSize = 6;
   currentPage = 1;
 
@@ -320,7 +320,7 @@ export class CatalogComponent implements OnInit {
         this.products = response.data.map((item) => this.mapProduct(item));
       },
       error: () => {
-        this.products = CATALOG_PRODUCTS;
+        this.products = this.withSlug(CATALOG_PRODUCTS);
       },
     });
   }
@@ -328,7 +328,7 @@ export class CatalogComponent implements OnInit {
   private mapProduct(item: CatalogProductDto): CatalogProduct {
     return {
       id: item.id,
-      slug: item.slug,
+      slug: this.toSlug(item.slug || item.title),
       title: item.title,
       category: item.category ?? 'Sin categoría',
       subcategory: item.subcategory ?? item.category ?? 'General',
@@ -343,6 +343,23 @@ export class CatalogComponent implements OnInit {
       power: item.power ?? undefined,
       tags: item.tags ?? [],
     };
+  }
+
+  private withSlug(products: CatalogProduct[]): CatalogProduct[] {
+    return products.map((product) => ({
+      ...product,
+      slug: this.toSlug(product.slug || product.title),
+    }));
+  }
+
+  private toSlug(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   clearFilters(): void {

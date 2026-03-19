@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CATALOG_PRODUCTS } from './catalog.data';
 import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
@@ -124,7 +124,7 @@ import { CatalogProductDto } from '../../core/models/api.models';
                     <div class="p-4">
                       <p class="text-xs font-semibold uppercase tracking-wide text-vm-red mb-1">{{ item.brand }}</p>
                       <h3 class="font-bold text-black mb-3">{{ item.title }}</h3>
-                      <a [routerLink]="['/catalogo', item.slug || item.id]" class="text-sm font-medium text-vm-red hover:underline">Ver ficha</a>
+                      <a [routerLink]="['/catalogo', item.slug]" class="text-sm font-medium text-vm-red hover:underline">Ver ficha</a>
                     </div>
                   </article>
                 }
@@ -145,12 +145,13 @@ import { CatalogProductDto } from '../../core/models/api.models';
 export class CatalogDetailComponent implements OnInit {
   product: CatalogProduct | undefined;
   galleryImages: string[] = [];
-  private productsPool: CatalogProduct[] = CATALOG_PRODUCTS;
+  private productsPool: CatalogProduct[] = this.withSlug(CATALOG_PRODUCTS);
   private currentLookup = '';
   currentImageIndex = 0;
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly seoService: SeoService,
     private readonly catalogApi: CatalogApiService
   ) {}
@@ -164,7 +165,7 @@ export class CatalogDetailComponent implements OnInit {
         }
       },
       error: () => {
-        this.productsPool = CATALOG_PRODUCTS;
+        this.productsPool = this.withSlug(CATALOG_PRODUCTS);
         this.resolveProduct(this.currentLookup);
       },
     });
@@ -223,7 +224,7 @@ export class CatalogDetailComponent implements OnInit {
       title: `${this.product.title} | VM Food Import`,
       description: `${this.product.description} Marca: ${this.product.brand}. Categoría: ${this.product.category}.`,
       keywords: `${this.product.title}, ${this.product.brand}, ${this.product.category}, VM Food Import`,
-      url: `https://vmfoodimport.com/catalogo/${this.product.slug ?? this.product.id}`,
+      url: `https://vmfoodimport.com/catalogo/${this.product.slug}`,
       image: this.product.image,
     });
 
@@ -244,7 +245,7 @@ export class CatalogDetailComponent implements OnInit {
           : 'https://schema.org/PreOrder',
         priceCurrency: 'USD',
         price: '0',
-        url: `https://vmfoodimport.com/catalogo/${this.product.slug ?? this.product.id}`,
+        url: `https://vmfoodimport.com/catalogo/${this.product.slug}`,
       },
     });
   }
@@ -252,7 +253,7 @@ export class CatalogDetailComponent implements OnInit {
   private mapProduct(item: CatalogProductDto): CatalogProduct {
     return {
       id: item.id,
-      slug: item.slug,
+      slug: this.toSlug(item.slug || item.title),
       title: item.title,
       category: item.category ?? 'Sin categoría',
       subcategory: item.subcategory ?? item.category ?? 'General',
@@ -277,9 +278,14 @@ export class CatalogDetailComponent implements OnInit {
       return;
     }
 
-    const localMatch = this.productsPool.find((item) => item.slug === lookup || String(item.id) === lookup);
+    const normalizedLookup = this.toSlug(lookup);
+    const localMatch = this.productsPool.find((item) => item.slug === normalizedLookup || String(item.id) === lookup);
 
     if (localMatch) {
+      if (String(localMatch.id) === lookup) {
+        this.router.navigate(['/catalogo', localMatch.slug], { replaceUrl: true });
+      }
+
       this.product = localMatch;
       this.galleryImages = this.buildGalleryImages(localMatch);
       this.currentImageIndex = 0;
@@ -287,7 +293,7 @@ export class CatalogDetailComponent implements OnInit {
       return;
     }
 
-    this.catalogApi.getProductBySlug(lookup).subscribe({
+    this.catalogApi.getProductBySlug(normalizedLookup).subscribe({
       next: (response) => {
         this.product = this.mapProduct(response.data);
         this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
@@ -304,5 +310,22 @@ export class CatalogDetailComponent implements OnInit {
 
   private buildGalleryImages(product: CatalogProduct): string[] {
     return [product.image];
+  }
+
+  private withSlug(products: CatalogProduct[]): CatalogProduct[] {
+    return products.map((product) => ({
+      ...product,
+      slug: this.toSlug(product.slug || product.title),
+    }));
+  }
+
+  private toSlug(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 }

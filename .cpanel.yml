@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export REPOPATH=$PWD
+    - export DEPLOYPATH=$HOME/public_html
+    - /usr/bin/env npm ci
+    - /usr/bin/env npm run build
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R dist/app/browser/. $DEPLOYPATH/

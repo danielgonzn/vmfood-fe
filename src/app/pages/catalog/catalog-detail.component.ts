@@ -6,6 +6,7 @@ import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
 import { CatalogApiService } from '../../core/services/catalog-api.service';
 import { CatalogProductDto } from '../../core/models/api.models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-catalog-detail',
@@ -145,7 +146,7 @@ import { CatalogProductDto } from '../../core/models/api.models';
 export class CatalogDetailComponent implements OnInit {
   product: CatalogProduct | undefined;
   galleryImages: string[] = [];
-  private productsPool: CatalogProduct[] = this.withSlug(CATALOG_PRODUCTS);
+  private productsPool: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   private currentLookup = '';
   currentImageIndex = 0;
 
@@ -159,13 +160,11 @@ export class CatalogDetailComponent implements OnInit {
   ngOnInit(): void {
     this.catalogApi.getProducts({ perPage: 100 }).subscribe({
       next: (response) => {
-        if (response.data.length) {
-          this.productsPool = response.data.map((item) => this.mapProduct(item));
-          this.resolveProduct(this.currentLookup);
-        }
+        this.productsPool = response.data.map((item) => this.mapProduct(item));
+        this.resolveProduct(this.currentLookup);
       },
       error: () => {
-        this.productsPool = this.withSlug(CATALOG_PRODUCTS);
+        this.productsPool = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
         this.resolveProduct(this.currentLookup);
       },
     });
@@ -278,20 +277,16 @@ export class CatalogDetailComponent implements OnInit {
       return;
     }
 
-    const normalizedLookup = this.toSlug(lookup);
-    const localMatch = this.productsPool.find((item) => item.slug === normalizedLookup || String(item.id) === lookup);
-
-    if (localMatch) {
-      if (String(localMatch.id) === lookup) {
-        this.router.navigate(['/catalogo', localMatch.slug], { replaceUrl: true });
+    const idLookup = Number(lookup);
+    if (!Number.isNaN(idLookup)) {
+      const productById = this.productsPool.find((item) => item.id === idLookup);
+      if (productById) {
+        this.router.navigate(['/catalogo', productById.slug], { replaceUrl: true });
+        return;
       }
-
-      this.product = localMatch;
-      this.galleryImages = this.buildGalleryImages(localMatch);
-      this.currentImageIndex = 0;
-      this.applySeo();
-      return;
     }
+
+    const normalizedLookup = this.toSlug(lookup);
 
     this.catalogApi.getProductBySlug(normalizedLookup).subscribe({
       next: (response) => {
@@ -301,6 +296,18 @@ export class CatalogDetailComponent implements OnInit {
         this.applySeo();
       },
       error: () => {
+        if (!environment.production) {
+          const localMatch = this.productsPool.find((item) => item.slug === normalizedLookup);
+
+          if (localMatch) {
+            this.product = localMatch;
+            this.galleryImages = this.buildGalleryImages(localMatch);
+            this.currentImageIndex = 0;
+            this.applySeo();
+            return;
+          }
+        }
+
         this.product = undefined;
         this.galleryImages = [];
         this.currentImageIndex = 0;

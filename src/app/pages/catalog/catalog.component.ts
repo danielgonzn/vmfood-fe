@@ -7,6 +7,7 @@ import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
 import { CatalogApiService } from '../../core/services/catalog-api.service';
 import { CatalogProductDto } from '../../core/models/api.models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-catalog',
@@ -41,6 +42,12 @@ import { CatalogProductDto } from '../../core/models/api.models';
           </button>
           <h1 class="text-xl md:text-2xl font-bold text-black">Catálogo Completo</h1>
         </div>
+
+        @if (loadError) {
+          <div class="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            No pudimos sincronizar el catálogo con el servidor. Revisa la conexión e intenta nuevamente.
+          </div>
+        }
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <aside class="lg:col-span-4 xl:col-span-3">
@@ -168,6 +175,13 @@ import { CatalogProductDto } from '../../core/models/api.models';
               }
             </div>
 
+            @if (filteredProducts.length === 0) {
+              <div class="mt-6 rounded-xl border border-gray-200 bg-white px-6 py-8 text-center">
+                <h3 class="text-lg font-semibold text-black">No hay productos para mostrar</h3>
+                <p class="mt-2 text-sm text-gray-600">Ajusta tus filtros o vuelve a intentar en unos minutos.</p>
+              </div>
+            }
+
             @if (filteredProducts.length > pageSize) {
               <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
                 <button type="button" (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Anterior</button>
@@ -209,7 +223,8 @@ export class CatalogComponent implements OnInit {
   sortBy: 'name-asc' | 'name-desc' = 'name-asc';
   onlyAvailable = false;
 
-  products: CatalogProduct[] = this.withSlug(CATALOG_PRODUCTS);
+  products: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
+  loadError = false;
   readonly pageSize = 6;
   currentPage = 1;
 
@@ -311,16 +326,15 @@ export class CatalogComponent implements OnInit {
   }
 
   private loadProducts(): void {
+    this.loadError = false;
+
     this.catalogApi.getProducts({ perPage: 100 }).subscribe({
       next: (response) => {
-        if (!response.data.length) {
-          return;
-        }
-
         this.products = response.data.map((item) => this.mapProduct(item));
       },
       error: () => {
-        this.products = this.withSlug(CATALOG_PRODUCTS);
+        this.loadError = true;
+        this.products = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
       },
     });
   }

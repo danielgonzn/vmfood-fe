@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { finalize } from 'rxjs/operators';
 import { WebContentDto } from './core/models/api.models';
 import { CatalogApiService } from './core/services/catalog-api.service';
 import { SeoService } from './shared/services/seo.service';
@@ -238,12 +239,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   locationMapUrl = 'https://www.google.com/maps?q=Los%20Teques%2C%20Miranda%2C%20Venezuela&output=embed';
   safeLocationMapUrl!: SafeResourceUrl;
 
+  isSubmittingInquiry = false;
+  inquirySuccessMessage = '';
+  inquiryErrorMessage = '';
+
   contactForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    company: new FormControl('', [Validators.required]),
+    company: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', [Validators.required]),
-    message: new FormControl('', [Validators.required])
+    message: new FormControl('', [Validators.required, Validators.minLength(12)])
   });
 
   ngOnInit(): void {
@@ -363,11 +368,48 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.contactForm.valid) {
-      console.log('Form Submitted', this.contactForm.value);
-      alert('Gracias por contactarnos. Nos pondremos en contacto pronto.');
-      this.contactForm.reset();
+    if (this.contactForm.invalid || this.isSubmittingInquiry) {
+      this.contactForm.markAllAsTouched();
+      return;
     }
+
+    this.inquirySuccessMessage = '';
+    this.inquiryErrorMessage = '';
+    this.isSubmittingInquiry = true;
+
+    const value = this.contactForm.value;
+
+    this.catalogApi
+      .createInquiry({
+        name: (value.name ?? '').trim(),
+        company: value.company ? value.company.trim() : null,
+        email: (value.email ?? '').trim(),
+        phone: (value.phone ?? '').trim(),
+        message: (value.message ?? '').trim(),
+      })
+      .pipe(
+        finalize(() => {
+          this.isSubmittingInquiry = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.inquirySuccessMessage =
+            'Gracias por tu solicitud. Nuestro equipo te contactara muy pronto.';
+          this.contactForm.reset({
+            name: '',
+            company: '',
+            email: '',
+            phone: '',
+            message: '',
+          });
+        },
+        error: () => {
+          this.inquiryErrorMessage =
+            'No pudimos enviar tu solicitud en este momento. Intentalo de nuevo en unos minutos.';
+        },
+      });
   }
 
   private loadCmsContent(): void {

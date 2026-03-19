@@ -8,6 +8,8 @@ import {
   BrandDto,
   CatalogProductDto,
   CategoryDto,
+  InquiryCreatePayload,
+  InquiryCreateResponse,
   WebContentDto,
 } from '../models/api.models';
 
@@ -54,5 +56,9 @@ export class CatalogApiService {
     if (filters?.key) params = params.set('key', filters.key);
 
     return this.http.get<ApiListResponse<WebContentDto>>(`${this.api}/catalog/content`, { params });
+  }
+
+  createInquiry(payload: InquiryCreatePayload): Observable<InquiryCreateResponse> {
+    return this.http.post<InquiryCreateResponse>(`${this.api}/catalog/inquiries`, payload);
   }
 }

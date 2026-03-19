@@ -146,6 +146,7 @@ export class CatalogDetailComponent implements OnInit {
   product: CatalogProduct | undefined;
   galleryImages: string[] = [];
   private productsPool: CatalogProduct[] = CATALOG_PRODUCTS;
+  private currentLookup = '';
   currentImageIndex = 0;
 
   constructor(
@@ -159,35 +160,19 @@ export class CatalogDetailComponent implements OnInit {
       next: (response) => {
         if (response.data.length) {
           this.productsPool = response.data.map((item) => this.mapProduct(item));
+          this.resolveProduct(this.currentLookup);
         }
       },
       error: () => {
         this.productsPool = CATALOG_PRODUCTS;
+        this.resolveProduct(this.currentLookup);
       },
     });
 
     this.route.paramMap.subscribe((params) => {
       const slug = (params.get('slug') ?? '').trim();
-      if (!slug) {
-        this.product = undefined;
-        this.galleryImages = [];
-        return;
-      }
-
-      this.catalogApi.getProductBySlug(slug).subscribe({
-        next: (response) => {
-          this.product = this.mapProduct(response.data);
-          this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
-          this.currentImageIndex = 0;
-          this.applySeo();
-        },
-        error: () => {
-          this.product = this.productsPool.find((item) => item.slug === slug || String(item.id) === slug);
-          this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
-          this.currentImageIndex = 0;
-          this.applySeo();
-        },
-      });
+      this.currentLookup = slug;
+      this.resolveProduct(slug);
     });
   }
 
@@ -275,7 +260,7 @@ export class CatalogDetailComponent implements OnInit {
       origin: item.origin ?? 'N/D',
       condition: item.condition,
       description: item.description ?? item.short_description ?? '',
-      image: item.image ?? 'https://picsum.photos/seed/vmfood-fallback/700/500',
+      image: item.image ?? '/images/banners/bannerFilter.jpg',
       available: item.available,
       capacity: item.capacity ?? undefined,
       voltage: item.voltage ?? undefined,
@@ -284,11 +269,40 @@ export class CatalogDetailComponent implements OnInit {
     };
   }
 
+  private resolveProduct(lookup: string): void {
+    if (!lookup) {
+      this.product = undefined;
+      this.galleryImages = [];
+      this.currentImageIndex = 0;
+      return;
+    }
+
+    const localMatch = this.productsPool.find((item) => item.slug === lookup || String(item.id) === lookup);
+
+    if (localMatch) {
+      this.product = localMatch;
+      this.galleryImages = this.buildGalleryImages(localMatch);
+      this.currentImageIndex = 0;
+      this.applySeo();
+      return;
+    }
+
+    this.catalogApi.getProductBySlug(lookup).subscribe({
+      next: (response) => {
+        this.product = this.mapProduct(response.data);
+        this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
+        this.currentImageIndex = 0;
+        this.applySeo();
+      },
+      error: () => {
+        this.product = undefined;
+        this.galleryImages = [];
+        this.currentImageIndex = 0;
+      },
+    });
+  }
+
   private buildGalleryImages(product: CatalogProduct): string[] {
-    return [
-      product.image,
-      `https://picsum.photos/seed/${product.id}-gallery-1/1000/700`,
-      `https://picsum.photos/seed/${product.id}-gallery-2/1000/700`,
-    ];
+    return [product.image];
   }
 }

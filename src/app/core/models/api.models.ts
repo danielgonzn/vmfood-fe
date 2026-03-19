@@ -76,3 +76,20 @@ export interface WebContentDto {
   sort_order: number;
   is_active: boolean;
 }
+
+export interface InquiryCreatePayload {
+  product_id?: number | null;
+  name: string;
+  company?: string | null;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+export interface InquiryCreateResponse {
+  message: string;
+  data: {
+    id: number;
+    status: 'new' | 'contacted' | 'closed';
+  };
+}

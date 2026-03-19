@@ -259,19 +259,91 @@
 <!-- Contact CTA Section -->
 <section id="contact" class="py-20 bg-gray-50 border-y border-gray-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white rounded-2xl border border-gray-200 p-8 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+    <div class="bg-white rounded-2xl border border-gray-200 p-8 md:p-10 grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
       <div class="lg:col-span-2">
         <p class="text-vm-red font-bold tracking-widest uppercase text-xs mb-2">Solicitud de Cotización</p>
-        <h3 class="text-3xl font-bold text-black mb-2">{{ contactTitle }}</h3>
-        <p class="text-gray-600">{{ contactBody }}</p>
-      </div>
-      <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
-        <a href="https://wa.me/584120000000" target="_blank" class="vm-btn-primary px-6 py-3 text-center">
+        <h3 class="text-3xl font-bold text-black mb-3">{{ contactTitle }}</h3>
+        <p class="text-gray-600 mb-6">{{ contactBody }}</p>
+
+        <div class="space-y-4 mb-6">
+          <div class="flex items-start gap-3">
+            <mat-icon class="text-vm-red mt-0.5">bolt</mat-icon>
+            <p class="text-sm text-gray-700">Respuesta inicial en menos de 24 horas hábiles.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <mat-icon class="text-vm-red mt-0.5">support_agent</mat-icon>
+            <p class="text-sm text-gray-700">Acompañamiento comercial y técnico para tu necesidad real.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <mat-icon class="text-vm-red mt-0.5">verified</mat-icon>
+            <p class="text-sm text-gray-700">Propuesta personalizada según capacidad, producto y presupuesto.</p>
+          </div>
+        </div>
+
+        <a href="https://wa.me/584120000000" target="_blank" class="vm-btn-secondary px-6 py-3 text-center inline-flex items-center justify-center gap-2">
           Cotizar por WhatsApp
+          <mat-icon>open_in_new</mat-icon>
         </a>
-        <a routerLink="/catalogo" class="vm-btn-secondary px-6 py-3 text-center">
-          Ver catálogo completo
-        </a>
+      </div>
+
+      <div class="lg:col-span-3">
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="contact-name" class="block text-sm font-semibold text-gray-800 mb-1">Nombre completo *</label>
+            <input id="contact-name" type="text" formControlName="name" class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-vm-red" placeholder="Ej: Carlos Perez">
+            @if (contactForm.controls.name.touched && contactForm.controls.name.invalid) {
+              <p class="text-xs text-red-600 mt-1">Ingresa tu nombre para continuar.</p>
+            }
+          </div>
+
+          <div>
+            <label for="contact-company" class="block text-sm font-semibold text-gray-800 mb-1">Empresa</label>
+            <input id="contact-company" type="text" formControlName="company" class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-vm-red" placeholder="Ej: Alimentos ABC C.A.">
+          </div>
+
+          <div>
+            <label for="contact-email" class="block text-sm font-semibold text-gray-800 mb-1">Correo electrónico *</label>
+            <input id="contact-email" type="email" formControlName="email" class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-vm-red" placeholder="nombre@empresa.com">
+            @if (contactForm.controls.email.touched && contactForm.controls.email.invalid) {
+              <p class="text-xs text-red-600 mt-1">Ingresa un correo válido.</p>
+            }
+          </div>
+
+          <div>
+            <label for="contact-phone" class="block text-sm font-semibold text-gray-800 mb-1">Teléfono *</label>
+            <input id="contact-phone" type="text" formControlName="phone" class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-vm-red" placeholder="Ej: +58 412 000 0000">
+            @if (contactForm.controls.phone.touched && contactForm.controls.phone.invalid) {
+              <p class="text-xs text-red-600 mt-1">Ingresa un teléfono de contacto.</p>
+            }
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="contact-message" class="block text-sm font-semibold text-gray-800 mb-1">Cuéntanos qué necesitas *</label>
+            <textarea id="contact-message" rows="5" formControlName="message" class="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-vm-red" placeholder="Indica tipo de producto, capacidad de producción y objetivo."></textarea>
+            @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+              <p class="text-xs text-red-600 mt-1">Describe tu requerimiento (mínimo 12 caracteres).</p>
+            }
+          </div>
+
+          @if (inquirySuccessMessage) {
+            <div class="md:col-span-2 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-green-700 text-sm">
+              {{ inquirySuccessMessage }}
+            </div>
+          }
+
+          @if (inquiryErrorMessage) {
+            <div class="md:col-span-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">
+              {{ inquiryErrorMessage }}
+            </div>
+          }
+
+          <div class="md:col-span-2 flex flex-col sm:flex-row gap-3">
+            <button type="submit" class="vm-btn-primary px-6 py-3 text-center" [disabled]="isSubmittingInquiry">
+              {{ isSubmittingInquiry ? 'Enviando solicitud...' : 'Enviar solicitud de cotización' }}
+            </button>
+            <a routerLink="/catalogo" class="vm-btn-secondary px-6 py-3 text-center">Ver catálogo completo</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>

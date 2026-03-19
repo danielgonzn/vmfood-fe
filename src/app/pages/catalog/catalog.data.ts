@@ -10,7 +10,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Alemania',
     condition: 'Usada',
     description: 'Con elevador para contenedores de 200L y alto desempeño para producción continua.',
-    image: 'https://picsum.photos/seed/vf300/700/500',
+    image: 'https://loremflickr.com/1200/800/industrial,sausage,stuffer?lock=101',
     available: true,
     capacity: '10,000 kg/h',
     voltage: '380V',
@@ -26,7 +26,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Alemania',
     condition: 'Usada',
     description: 'Incluye elevador de 200L, diseñada para líneas de embutidos de media-alta escala.',
-    image: 'https://picsum.photos/seed/vf200b/700/500',
+    image: 'https://loremflickr.com/1200/800/meat,processing,machine?lock=102',
     available: true,
     capacity: 'Producción media-alta',
     voltage: '380V',
@@ -42,7 +42,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Alemania',
     condition: 'Usada',
     description: 'Versión compacta para plantas con alta exigencia sanitaria y de rendimiento.',
-    image: 'https://picsum.photos/seed/vf100/700/500',
+    image: 'https://loremflickr.com/1200/800/stainless,food,machinery?lock=103',
     available: false,
     voltage: '380V - 400V',
     tags: ['embutidos', 'compacta']
@@ -56,7 +56,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Alemania',
     condition: 'Usada',
     description: 'Cortes precisos para línea cárnica con alta repetibilidad y productividad.',
-    image: 'https://picsum.photos/seed/treif2411/700/500',
+    image: 'https://loremflickr.com/1200/800/meat,slicer,industrial?lock=104',
     available: true,
     capacity: 'Banda entrada 210mm / salida 407mm',
     tags: ['corte', 'cárnico']
@@ -70,7 +70,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Alemania',
     condition: 'Usada',
     description: 'Cortadora automática móvil con sistema Polyclip para cierre de embutidos.',
-    image: 'https://picsum.photos/seed/fca3462/700/500',
+    image: 'https://loremflickr.com/1200/800/sausage,clipper,machine?lock=105',
     available: true,
     tags: ['clipado', 'embutidos']
   },
@@ -83,7 +83,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Tolva de 30L ideal para pequeñas y medianas empresas del rubro alimentario.',
-    image: 'https://picsum.photos/seed/gqd30/700/500',
+    image: 'https://loremflickr.com/1200/800/food,stuffer,machine?lock=106',
     available: true,
     capacity: '30 L',
     tags: ['embutidos', 'pyme']
@@ -97,7 +97,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Equipo de pistón para producción de embutidos con excelente estabilidad de flujo.',
-    image: 'https://picsum.photos/seed/sf260/700/500',
+    image: 'https://loremflickr.com/1200/800/piston,stuffer,industrial?lock=107',
     available: true,
     capacity: '400 kg/h',
     power: '750 W',
@@ -112,7 +112,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Sistema para fabricación de jamón con gran capacidad para lotes industriales.',
-    image: 'https://picsum.photos/seed/sz2000/700/500',
+    image: 'https://loremflickr.com/1200/800/tumbler,meat,processing?lock=108',
     available: false,
     capacity: '1500 kg / 2000 L',
     tags: ['jamón', 'tumbler']
@@ -126,7 +126,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Emulsificación y corte fino en acero inoxidable para pastas cárnicas.',
-    image: 'https://picsum.photos/seed/cutter80/700/500',
+    image: 'https://loremflickr.com/1200/800/bowl,cutter,industrial?lock=109',
     available: true,
     capacity: '80 L',
     tags: ['emulsión', 'cárnico']
@@ -140,7 +140,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Molino para carne congelada y fresca para líneas de alta demanda.',
-    image: 'https://picsum.photos/seed/molino250ajr/700/500',
+    image: 'https://loremflickr.com/1200/800/meat,grinder,machine?lock=110',
     available: true,
     capacity: 'Hasta 8,000 kg/h (fresco)',
     tags: ['molino', 'congelado']
@@ -154,7 +154,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Empaque industrial de alta eficiencia para prolongar vida útil del producto.',
-    image: 'https://picsum.photos/seed/doblecamera/700/500',
+    image: 'https://loremflickr.com/1200/800/vacuum,packaging,machine?lock=111',
     available: true,
     tags: ['vacío', 'empaque']
   },
@@ -167,7 +167,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Horno para ahumado de salchichas, jamón y pollo en escala industrial.',
-    image: 'https://picsum.photos/seed/horno4carros/700/500',
+    image: 'https://loremflickr.com/1200/800/smokehouse,food,oven?lock=112',
     available: false,
     capacity: '4 carros',
     tags: ['ahumado', 'hornos']
@@ -181,7 +181,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Generador tipo silencioso para respaldo de planta y continuidad operativa.',
-    image: 'https://picsum.photos/seed/generador60/700/500',
+    image: 'https://loremflickr.com/1200/800/diesel,generator,industrial?lock=113',
     available: true,
     capacity: '60 KVA',
     tags: ['energía', 'respaldo']
@@ -195,7 +195,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Solución de frío industrial para cavas y áreas de conservación.',
-    image: 'https://picsum.photos/seed/refrigeracion20/700/500',
+    image: 'https://loremflickr.com/1200/800/industrial,refrigeration,compressor?lock=114',
     available: true,
     power: '20 HP',
     tags: ['frío', 'cava cuarto']
@@ -209,7 +209,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'China',
     condition: 'Nueva',
     description: 'Equipo para manejo interno de carga con operación segura en almacenes.',
-    image: 'https://picsum.photos/seed/apilador2000/700/500',
+    image: 'https://loremflickr.com/1200/800/electric,stacker,warehouse?lock=115',
     available: true,
     capacity: '2000 kg',
     tags: ['logística', 'almacén']
@@ -223,7 +223,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Importado',
     condition: 'Nueva',
     description: 'Tripas para salchichas y jamones con excelente desempeño en proceso.',
-    image: 'https://picsum.photos/seed/tripascolageno/700/500',
+    image: 'https://loremflickr.com/1200/800/sausage,casing,food?lock=116',
     available: true,
     tags: ['insumos', 'embutidos']
   },
@@ -236,7 +236,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Importado',
     condition: 'Nueva',
     description: 'Aglutinante para mejorar textura y retención de agua en formulaciones.',
-    image: 'https://picsum.photos/seed/carragenina/700/500',
+    image: 'https://loremflickr.com/1200/800/food,additive,powder?lock=117',
     available: true,
     tags: ['aditivos', 'aglutinante']
   },
@@ -249,7 +249,7 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     origin: 'Importado',
     condition: 'Nueva',
     description: 'Antioxidante para control de color y estabilidad en productos procesados.',
-    image: 'https://picsum.photos/seed/eritorbato/700/500',
+    image: 'https://loremflickr.com/1200/800/laboratory,food,powder?lock=118',
     available: true,
     tags: ['aditivos', 'antioxidante']
   }

@@ -336,7 +336,7 @@ export class CatalogComponent implements OnInit {
       origin: item.origin ?? 'N/D',
       condition: item.condition,
       description: item.description ?? item.short_description ?? '',
-      image: item.image ?? 'https://picsum.photos/seed/vmfood-fallback/700/500',
+      image: item.image ?? '/images/banners/bannerFilter.jpg',
       available: item.available,
       capacity: item.capacity ?? undefined,
       voltage: item.voltage ?? undefined,

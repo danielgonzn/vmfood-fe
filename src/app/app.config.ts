@@ -7,6 +7,7 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import {routes} from './app.routes';
 import { apiAuthInterceptor } from './core/interceptors/api-auth.interceptor';
+import { httpLoadingInterceptor } from './core/interceptors/http-loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,6 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       })
     ),
-    provideHttpClient(withInterceptors([apiAuthInterceptor])),
+    provideHttpClient(withInterceptors([httpLoadingInterceptor, apiAuthInterceptor])),
   ],
 };

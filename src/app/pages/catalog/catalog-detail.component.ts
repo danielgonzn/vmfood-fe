@@ -21,12 +21,26 @@ import { environment } from '../../../environments/environment';
           Volver al catálogo
         </button>
 
+        @if (isDetailLoading) {
+          <div class="mb-6 rounded-xl border border-gray-200 bg-white px-5 py-4 inline-flex items-center gap-3 shadow-sm">
+            <div class="vm-spinner" aria-hidden="true"></div>
+            <p class="text-sm text-gray-700">Cargando ficha del producto...</p>
+          </div>
+        }
+
         @if (product) {
-          <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+          <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm" [class.opacity-60]="isDetailLoading">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div class="bg-gray-100">
                 <div class="relative min-h-[300px]">
-                  <img [src]="galleryImages[currentImageIndex]" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                  <img
+                    [src]="galleryImages[currentImageIndex]"
+                    [alt]="product.title"
+                    class="w-full h-full object-cover"
+                    referrerpolicy="no-referrer"
+                    (load)="onMainImageResolved()"
+                    (error)="onMainImageResolved()"
+                  >
 
                   <button
                     type="button"
@@ -149,6 +163,7 @@ export class CatalogDetailComponent implements OnInit {
   private productsPool: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   private currentLookup = '';
   currentImageIndex = 0;
+  isDetailLoading = true;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -175,6 +190,7 @@ export class CatalogDetailComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const slug = (params.get('slug') ?? '').trim();
       this.currentLookup = slug;
+      this.isDetailLoading = true;
       this.resolveProduct(slug);
     });
   }
@@ -215,6 +231,15 @@ export class CatalogDetailComponent implements OnInit {
       `Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`
     );
     return `https://wa.me/584120000000?text=${message}`;
+  }
+
+  onMainImageResolved(): void {
+    if (!this.isDetailLoading) {
+      return;
+    }
+
+    this.isDetailLoading = false;
+    this.cdr.markForCheck();
   }
 
   private applySeo(): void {
@@ -277,6 +302,7 @@ export class CatalogDetailComponent implements OnInit {
       this.product = undefined;
       this.galleryImages = [];
       this.currentImageIndex = 0;
+      this.isDetailLoading = false;
       return;
     }
 
@@ -297,6 +323,9 @@ export class CatalogDetailComponent implements OnInit {
         this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
         this.currentImageIndex = 0;
         this.applySeo();
+        if (this.galleryImages.length === 0) {
+          this.isDetailLoading = false;
+        }
         this.cdr.markForCheck();
       },
       error: () => {
@@ -308,6 +337,9 @@ export class CatalogDetailComponent implements OnInit {
             this.galleryImages = this.buildGalleryImages(localMatch);
             this.currentImageIndex = 0;
             this.applySeo();
+            if (this.galleryImages.length === 0) {
+              this.isDetailLoading = false;
+            }
             this.cdr.markForCheck();
             return;
           }
@@ -316,6 +348,7 @@ export class CatalogDetailComponent implements OnInit {
         this.product = undefined;
         this.galleryImages = [];
         this.currentImageIndex = 0;
+        this.isDetailLoading = false;
         this.cdr.markForCheck();
       },
     });

@@ -75,3 +75,18 @@ summary:focus-visible {
   outline: 2px solid var(--color-vm-red);
   outline-offset: 2px;
 }
+
+.vm-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  border: 3px solid #e5e7eb;
+  border-top-color: var(--color-vm-red);
+  animation: vm-spin 0.8s linear infinite;
+}
+
+@keyframes vm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

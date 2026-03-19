@@ -6,13 +6,16 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (active) {
-      <div class="fixed inset-0 z-[200] bg-black/30 backdrop-blur-[1px] flex items-center justify-center" aria-live="polite" aria-busy="true">
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 px-6 py-5 flex items-center gap-4 min-w-[240px]">
-          <div class="vm-spinner" aria-hidden="true"></div>
-          <div>
-            <p class="text-sm font-semibold text-black">{{ title }}</p>
-            <p class="text-xs text-gray-500">{{ message }}</p>
-          </div>
+      <div class="vm-loader-overlay fixed inset-0 z-[200] flex items-center justify-center" aria-live="polite" aria-busy="true">
+        <div class="vm-loader-card px-7 py-6 min-w-[260px] text-center">
+          <img
+            src="/images/logo.png"
+            alt="VM Food Import"
+            class="vm-loader-logo mx-auto mb-4"
+            referrerpolicy="no-referrer"
+          >
+          <p class="text-sm font-semibold text-black tracking-wide">{{ title }}</p>
+          <p class="text-xs text-gray-500 mt-1">{{ message }}</p>
         </div>
       </div>
     }

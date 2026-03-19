@@ -90,3 +90,37 @@ summary:focus-visible {
     transform: rotate(360deg);
   }
 }
+
+.vm-loader-overlay {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(2px);
+}
+
+.vm-loader-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.vm-loader-logo {
+  width: 96px;
+  height: auto;
+  animation: vm-logo-breathe 1.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes vm-logo-breathe {
+  0% {
+    transform: scale(0.94);
+    opacity: 0.78;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.94);
+    opacity: 0.78;
+  }
+}

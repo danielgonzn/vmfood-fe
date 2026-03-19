@@ -130,10 +130,16 @@ import { environment } from '../../../environments/environment';
 
             <div class="relative min-h-[180px]">
               @if (!isCatalogReady) {
-                <div class="absolute inset-0 z-10 bg-white/80 rounded-xl flex items-center justify-center">
-                  <div class="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <div class="vm-spinner" aria-hidden="true"></div>
-                    <p class="text-sm font-medium text-gray-700">Cargando productos...</p>
+                <div class="absolute inset-0 z-10 vm-loader-overlay rounded-xl flex items-center justify-center">
+                  <div class="vm-loader-card px-6 py-5 text-center min-w-[240px]">
+                    <img
+                      src="/images/logo.png"
+                      alt="VM Food Import"
+                      class="vm-loader-logo mx-auto mb-3"
+                      referrerpolicy="no-referrer"
+                    >
+                    <p class="text-sm font-semibold text-black">Cargando productos...</p>
+                    <p class="text-xs text-gray-500 mt-1">Estamos organizando el catalogo para ti.</p>
                   </div>
                 </div>
               }
@@ -246,6 +252,7 @@ export class CatalogComponent implements OnInit {
   loadError = false;
   isCatalogReady = false;
   private pendingVisibleImages = new Set<string>();
+  private readyTimeoutId: ReturnType<typeof setTimeout> | null = null;
   readonly pageSize = 6;
   currentPage = 1;
 
@@ -358,8 +365,7 @@ export class CatalogComponent implements OnInit {
     this.pendingVisibleImages.delete(imageUrl);
 
     if (this.pendingVisibleImages.size === 0) {
-      this.isCatalogReady = true;
-      this.cdr.markForCheck();
+      this.scheduleCatalogReady();
     }
   }
 
@@ -382,10 +388,33 @@ export class CatalogComponent implements OnInit {
   }
 
   private syncCatalogRenderState(): void {
+    if (this.readyTimeoutId) {
+      clearTimeout(this.readyTimeoutId);
+      this.readyTimeoutId = null;
+    }
+
     const visibleImages = this.paginatedProducts.map((product) => product.image);
     this.pendingVisibleImages = new Set(visibleImages);
-    this.isCatalogReady = this.pendingVisibleImages.size === 0;
+
+    if (this.pendingVisibleImages.size === 0) {
+      this.scheduleCatalogReady();
+      return;
+    }
+
+    this.isCatalogReady = false;
     this.cdr.markForCheck();
+  }
+
+  private scheduleCatalogReady(): void {
+    if (this.readyTimeoutId) {
+      clearTimeout(this.readyTimeoutId);
+    }
+
+    this.readyTimeoutId = setTimeout(() => {
+      this.isCatalogReady = true;
+      this.readyTimeoutId = null;
+      this.cdr.markForCheck();
+    }, 1000);
   }
 
   private mapProduct(item: CatalogProductDto): CatalogProduct {

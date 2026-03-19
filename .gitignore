@@ -6,9 +6,7 @@
 
 # Compiled output
 /dist
-/deploy
-!/deploy/browser
-!/deploy/browser/**
+# cPanel artifact (committed build for hosts without modern Node)
 /tmp
 /out-tsc
 /bazel-out

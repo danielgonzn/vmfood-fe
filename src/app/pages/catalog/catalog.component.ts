@@ -353,7 +353,7 @@ export class CatalogComponent implements OnInit {
       origin: item.origin ?? 'N/D',
       condition: item.condition,
       description: item.description ?? item.short_description ?? '',
-      image: item.image ?? '/images/banners/bannerFilter.jpg',
+      image: this.resolveImageUrl(item.image),
       available: item.available,
       capacity: item.capacity ?? undefined,
       voltage: item.voltage ?? undefined,
@@ -377,6 +377,20 @@ export class CatalogComponent implements OnInit {
       .trim()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
+  }
+
+  private resolveImageUrl(image: string | null): string {
+    if (!image) {
+      return '/images/banners/bannerFilter.jpg';
+    }
+
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image;
+    }
+
+    const base = environment.backendBaseUrl.replace(/\/$/, '');
+    const path = image.startsWith('/') ? image : `/${image}`;
+    return `${base}${path}`;
   }
 
   clearFilters(): void {

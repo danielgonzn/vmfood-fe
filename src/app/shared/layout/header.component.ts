@@ -49,10 +49,9 @@ import { environment } from '../../../environments/environment';
             <div class="hidden md:flex space-x-8 items-center">
               <a [routerLink]="['/']" fragment="home" class="vm-nav-link">Inicio</a>
               <a [routerLink]="['/']" fragment="about" class="vm-nav-link">Nosotros</a>
-              <a [routerLink]="['/']" fragment="products" class="vm-nav-link">Productos</a>
+              <a [routerLink]="['/catalogo']" class="vm-nav-link">Productos</a>
               <a [routerLink]="['/']" fragment="faq" class="vm-nav-link">FAQ</a>
               <a [routerLink]="['/']" fragment="location" class="vm-nav-link">Ubicación</a>
-              <a [href]="adminUrl" target="_blank" rel="noopener noreferrer" class="vm-nav-link">Admin</a>
               <a [routerLink]="['/']" fragment="contact" class="vm-btn-primary px-5 py-2 rounded-full">
                 Contacto
               </a>

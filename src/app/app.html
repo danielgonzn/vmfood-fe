@@ -18,7 +18,7 @@
   }
 
   <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-    <div class="max-w-2xl">
+    <div class="max-w-3xl">
       <div class="inline-block bg-vm-red/10 text-vm-red font-bold px-4 py-1 rounded-full text-sm mb-6 tracking-wide uppercase">
         {{ heroSlides[currentHeroSlide].badge }}
       </div>
@@ -196,7 +196,7 @@
           [queryParams]="{ categoria: product.title }"
           [attr.aria-label]="'Ver ' + product.title + ' en el catálogo'"
         >
-          <div class="relative h-64 overflow-hidden bg-gray-200">
+          <div class="relative h-72 md:h-80 overflow-hidden bg-gray-200">
             <img 
               [src]="product.image" 
               [alt]="product.title" 

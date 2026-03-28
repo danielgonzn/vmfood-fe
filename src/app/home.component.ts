@@ -97,25 +97,25 @@ export class HomeComponent implements OnInit, OnDestroy {
       id: 1,
       title: 'Maquinaria Alemana',
       description: 'Tecnología de prestigio como Handtmann, Treif y Poly-Clip para procesos de alto estándar.',
-      image: 'https://picsum.photos/seed/vacuum/600/400'
+      image: '/images/product_alemana.jpg'
     },
     {
       id: 2,
-      title: 'Maquinaria Industrial China',
+      title: 'Maquinaria China',
       description: 'Embutidoras, tumbler, cutters, molinos y líneas completas con excelente relación costo-beneficio.',
-      image: 'https://picsum.photos/seed/mixer/600/400'
+      image: '/images/product_china.jpg'
     },
     {
       id: 3,
       title: 'Equipamiento Complementario',
       description: 'Generadores, refrigeración, paneles frigoríficos, apiladores y transpaletas para operación integral.',
-      image: 'https://picsum.photos/seed/grinder/600/400'
+      image: '/images/equipamento.jpg'
     },
     {
       id: 4,
-      title: 'Materias Primas No Cárnicas',
+      title: 'Materias Primas',
       description: 'Tripas de colágeno y aditivos clave para formulaciones de embutidos y productos procesados.',
-      image: 'https://picsum.photos/seed/plastic/600/400'
+      image: '/images/tripas.jpg'
     }
   ];
 
@@ -279,7 +279,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.refreshFaqSchema();
 
     this.startHeroSlider();
-    this.showPromoPopup = true;
     this.safeLocationMapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.locationMapUrl);
     this.loadCmsContent();
     this.cdr.markForCheck();

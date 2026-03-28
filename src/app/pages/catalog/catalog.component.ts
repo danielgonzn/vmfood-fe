@@ -28,7 +28,7 @@ import { environment } from '../../../environments/environment';
           <div class="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-end">
             <div class="pb-6 md:pb-10 text-white max-w-3xl">
               <p class="text-xs md:text-sm uppercase tracking-[0.2em] font-semibold text-white/90 mb-3">VM Food Import</p>
-              <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-3">Catálogo de maquinaria y soluciones industriales</h1>
+              <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-3">Catálogo de maquinarias nuevas y usadas</h1>
               <p class="text-sm md:text-base text-white/90">Explora equipos para procesamiento de carnes y embutidos con respaldo técnico especializado.</p>
             </div>
           </div>

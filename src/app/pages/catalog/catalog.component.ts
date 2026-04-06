@@ -191,6 +191,48 @@ import { environment } from '../../../environments/environment';
                 <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Siguiente</button>
               </div>
             }
+
+            <section class="mt-14 bg-black text-white rounded-3xl p-7 md:p-8 grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
+              <div>
+                <p class="text-vm-red font-bold tracking-widest uppercase text-xs mb-2">Asesoría Exprés</p>
+                <h2 class="text-2xl md:text-3xl font-bold mb-3">¿No sabes qué equipo elegir?</h2>
+                <p class="text-gray-300 mb-4">Cuéntanos el perfil de tu operación y nuestro equipo te orienta con una ruta técnica y comercial por WhatsApp.</p>
+                <p class="text-sm text-gray-400">Perfil seleccionado: {{ advisorSummary }}</p>
+              </div>
+
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-sm font-medium text-gray-200 mb-1">Tipo de operación</label>
+                  <select [(ngModel)]="advisorIndustry" class="vm-input bg-white text-black">
+                    <option value="embutidos">Embutidos y cárnicos</option>
+                    <option value="panaderia">Panadería y alimentos horneados</option>
+                    <option value="alimentos">Alimentos procesados en general</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-200 mb-1">Nivel de producción</label>
+                  <select [(ngModel)]="advisorVolume" class="vm-input bg-white text-black">
+                    <option value="inicial">Inicial</option>
+                    <option value="media">Media</option>
+                    <option value="alta">Alta</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-200 mb-1">Rango de inversión</label>
+                  <select [(ngModel)]="advisorBudget" class="vm-input bg-white text-black">
+                    <option value="base">Base</option>
+                    <option value="intermedio">Intermedio</option>
+                    <option value="premium">Premium</option>
+                  </select>
+                </div>
+
+                <button type="button" (click)="startAdvisorWhatsApp()" class="w-full vm-btn-primary px-6 py-3">
+                  Recibir orientación por WhatsApp
+                </button>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -211,11 +253,16 @@ export class CatalogComponent implements OnInit {
       keywords:
         'catálogo VM Food Import, embutidoras Handtmann, maquinaria china alimentos, equipos industriales Venezuela',
       url: 'https://vmfoodimport.com/catalogo',
-      image: 'https://picsum.photos/seed/vmfood-catalog-og/1200/630',
+      image: 'https://vmfoodimport.com/images/banners/bannerFilter.jpg',
     });
   }
 
+  readonly whatsappDial = '584127212203';
+
   searchTerm = '';
+  advisorIndustry = 'embutidos';
+  advisorVolume = 'media';
+  advisorBudget = 'intermedio';
   selectedCategory = 'all';
   selectedSubcategory = 'all';
   selectedBrand = 'all';
@@ -302,6 +349,28 @@ export class CatalogComponent implements OnInit {
     return this.filteredProducts.slice(start, start + this.pageSize);
   }
 
+  get advisorSummary(): string {
+    const industryMap: Record<string, string> = {
+      embutidos: 'procesamiento de embutidos',
+      panaderia: 'produccion de panaderia',
+      alimentos: 'lineas de alimentos procesados',
+    };
+
+    const volumeMap: Record<string, string> = {
+      inicial: 'arranque de linea',
+      media: 'expansion de capacidad media',
+      alta: 'operacion de alto volumen',
+    };
+
+    const budgetMap: Record<string, string> = {
+      base: 'presupuesto de entrada',
+      intermedio: 'presupuesto intermedio',
+      premium: 'presupuesto premium',
+    };
+
+    return `${industryMap[this.advisorIndustry]} · ${volumeMap[this.advisorVolume]} · ${budgetMap[this.advisorBudget]}`;
+  }
+
   onFilterChange(): void {
     this.currentPage = 1;
   }
@@ -324,7 +393,19 @@ export class CatalogComponent implements OnInit {
 
   getQuoteLink(product: CatalogProduct): string {
     const message = encodeURIComponent(`Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`);
-    return `https://wa.me/584120000000?text=${message}`;
+    return `https://wa.me/${this.whatsappDial}?text=${message}`;
+  }
+
+  startAdvisorWhatsApp(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const message = encodeURIComponent(
+      `Hola VM Food Import, deseo una recomendacion de equipos para ${this.advisorSummary}.`
+    );
+
+    window.open(`https://wa.me/${this.whatsappDial}?text=${message}`, '_blank', 'noopener');
   }
 
   private loadProducts(): void {

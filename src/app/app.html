@@ -22,20 +22,29 @@
       <div class="inline-block bg-vm-red/10 text-vm-red font-bold px-4 py-1 rounded-full text-sm mb-6 tracking-wide uppercase">
         {{ heroSlides[currentHeroSlide].badge }}
       </div>
-      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-black leading-tight mb-6">
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-black leading-tight mb-6">
         {{ heroSlides[currentHeroSlide].title }}
       </h1>
       <p class="text-lg md:text-xl text-gray-700 mb-10 font-light leading-relaxed max-w-xl">
         {{ heroSlides[currentHeroSlide].subtitle }}
       </p>
       <div class="flex flex-col sm:flex-row gap-4">
-        <button (click)="scrollToSection('products')" class="vm-btn-primary px-8 py-4 text-lg transform hover:-translate-y-1 flex items-center justify-center gap-2">
+        <a routerLink="/catalogo" class="vm-btn-primary px-8 py-4 text-lg transform hover:-translate-y-1 inline-flex items-center justify-center gap-2">
           Ver Catálogo
           <mat-icon>arrow_forward</mat-icon>
-        </button>
+        </a>
         <button (click)="scrollToSection('contact')" class="vm-btn-secondary px-8 py-4 text-lg flex items-center justify-center">
           Contáctanos
         </button>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
+        @for (item of impactHighlights; track item.label) {
+          <div class="bg-white/90 border border-gray-200 rounded-xl px-4 py-3 shadow-sm">
+            <p class="text-xs uppercase tracking-wider text-gray-500">{{ item.label }}</p>
+            <p class="text-sm font-bold text-black">{{ item.value }}</p>
+          </div>
+        }
       </div>
     </div>
   </div>
@@ -256,6 +265,75 @@
   </div>
 </section>
 
+<!-- Success Cases -->
+<section class="py-20 bg-gray-50 border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-vm-red font-bold tracking-widest uppercase text-sm mb-2">Resultados</h2>
+      <h3 class="text-4xl font-bold text-black mb-4">Casos de Éxito y Acompañamiento</h3>
+      <p class="text-gray-600 text-lg">Trabajamos con enfoque técnico y comercial para convertir necesidades operativas en decisiones rentables.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      @for (item of caseStudies; track item.title) {
+        <article class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+          <h4 class="text-lg font-bold text-black mb-3">{{ item.title }}</h4>
+          <p class="text-sm text-gray-600 mb-3"><span class="font-semibold text-gray-900"></span> {{ item.challenge }}</p>
+          <p class="text-sm text-gray-600"><span class="font-semibold text-gray-900"></span> {{ item.outcome }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+
+<!-- Express Advisor -->
+<section class="py-20 bg-white border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-black text-white rounded-3xl p-8 md:p-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div>
+        <p class="text-vm-red font-bold tracking-widest uppercase text-xs mb-2">Asesoría Exprés</p>
+        <h3 class="text-3xl font-bold mb-3">Te orientamos en menos de 60 segundos</h3>
+        <p class="text-gray-300 mb-5">Indica el perfil de tu operación y te ayudamos a identificar una ruta de equipos acorde a tu necesidad.</p>
+        <p class="text-sm text-gray-400">Perfil seleccionado: {{ advisorSummary }}</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-200 mb-1">Tipo de operación</label>
+          <select [(ngModel)]="advisorIndustry" class="vm-input bg-white text-black">
+            <option value="embutidos">Embutidos y cárnicos</option>
+            <option value="panaderia">Panadería y alimentos horneados</option>
+            <option value="alimentos">Alimentos procesados en general</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-200 mb-1">Nivel de producción</label>
+          <select [(ngModel)]="advisorVolume" class="vm-input bg-white text-black">
+            <option value="inicial">Inicial</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-200 mb-1">Rango de inversión</label>
+          <select [(ngModel)]="advisorBudget" class="vm-input bg-white text-black">
+            <option value="base">Base</option>
+            <option value="intermedio">Intermedio</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
+
+        <button type="button" (click)="startAdvisorWhatsApp()" class="w-full vm-btn-primary px-6 py-3">
+          Recibir orientación por WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Contact CTA Section -->
 <section id="contact" class="py-20 bg-gray-50 border-y border-gray-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -280,7 +358,7 @@
           </div>
         </div>
 
-        <a href="https://wa.me/584120000000" target="_blank" class="vm-btn-secondary px-6 py-3 text-center inline-flex items-center justify-center gap-2">
+        <a [href]="floatingWhatsappLink" target="_blank" class="vm-btn-secondary px-6 py-3 text-center inline-flex items-center justify-center gap-2">
           Cotizar por WhatsApp
           <mat-icon>open_in_new</mat-icon>
         </a>
@@ -468,7 +546,7 @@
 
 <!-- WhatsApp Floating Button -->
 <a 
-  href="https://wa.me/525512345678" 
+  [href]="floatingWhatsappLink"
   target="_blank"
   class="fixed bottom-8 right-8 z-[100] bg-whatsapp text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 group"
   aria-label="Contactar por WhatsApp"

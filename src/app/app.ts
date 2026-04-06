@@ -28,8 +28,8 @@ import { LoadingOverlayComponent } from './shared/ui/loading-overlay.component';
 
     <app-loading-overlay
       [active]="(loading$ | async) ?? false"
-      title="Cargando informacion"
-      message="Espera unos segundos..."
+      title="Preparando experiencia"
+      message="Cargando catalogo y contenido comercial..."
     />
   `,
 })

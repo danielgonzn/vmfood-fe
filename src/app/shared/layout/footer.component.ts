@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
+  imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="bg-black text-white py-12 border-t border-gray-800">
@@ -16,8 +18,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           </div>
 
           <div class="flex space-x-6 mb-6 md:mb-0">
-            <a href="#" class="vm-footer-link">Aviso de Privacidad</a>
-            <a href="#" class="vm-footer-link">Términos y Condiciones</a>
+            <a routerLink="/aviso-de-privacidad" class="vm-footer-link">Aviso de Privacidad</a>
+            <a routerLink="/terminos-y-condiciones" class="vm-footer-link">Términos y Condiciones</a>
           </div>
 
           <div class="text-gray-500 text-sm">

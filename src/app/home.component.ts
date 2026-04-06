@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -45,11 +46,17 @@ interface PurchaseStep {
   description: string;
 }
 
+interface CaseStudy {
+  title: string;
+  challenge: string;
+  outcome: string;
+}
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [MatIconModule, ReactiveFormsModule, RouterLink],
+  imports: [MatIconModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -191,6 +198,30 @@ export class HomeComponent implements OnInit, OnDestroy {
     { label: 'Enfoque de soporte', value: 'Técnico' },
   ];
 
+  impactHighlights: TrustStat[] = [
+    { label: 'Respuesta comercial', value: '< 24h hábiles' },
+    { label: 'Cobertura', value: 'Venezuela' },
+    { label: 'Soporte', value: 'Pre y postventa' },
+  ];
+
+  caseStudies: CaseStudy[] = [
+    {
+      title: 'Optimización de línea de embutidos',
+      challenge: '',
+      outcome: '',
+    },
+    {
+      title: 'Arranque de planta multiproducto',
+      challenge: '',
+      outcome: '',
+    },
+    {
+      title: 'Modernización de área de empaque',
+      challenge: '',
+      outcome: '',
+    },
+  ];
+
   purchaseSteps: PurchaseStep[] = [
     { title: 'Diagnóstico', description: 'Entendemos tu capacidad, proceso y objetivo de producción.' },
     { title: 'Propuesta técnica', description: 'Seleccionamos equipos y materias primas según requerimiento real.' },
@@ -210,6 +241,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       question: '¿Brindan acompañamiento técnico?',
       answer: 'Sí. Nuestro enfoque incluye asesoría técnica antes, durante y después de la compra.',
+    },
+    {
+      question: '¿Manejan repuestos y servicio postventa?',
+      answer: 'Sí. Acompañamos con gestión de repuestos y orientación técnica de mantenimiento según cada equipo.',
+    },
+    {
+      question: '¿Pueden recomendar equipos según mi capacidad de producción?',
+      answer: 'Sí. Evaluamos tu proceso y proponemos opciones técnicas alineadas a volumen, presupuesto y objetivo operativo.',
+    },
+    {
+      question: '¿Atienden proyectos de expansión o líneas nuevas?',
+      answer: 'Sí. Diseñamos propuestas para ampliaciones, modernización de planta y nuevas líneas de producto.',
     },
   ];
 
@@ -234,10 +277,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   locationHoursTitle = 'Horarios de Atención';
   locationHoursValue = 'Lunes a Viernes: 8:00 AM - 5:00 PM | Sábados: 8:00 AM - 12:00 PM';
   locationPhoneTitle = 'Teléfonos';
-  locationPhone1 = '+58 (412) 000-0000';
-  locationPhone2 = '+58 (414) 000-0000';
+  locationPhone1 = '+58 (412) 721-2203';
+  locationPhone2 = '+58 (412) 721-2203';
+  readonly whatsappDial = '584127212203';
+  readonly whatsappNumberDisplay = '+58 (412) 721-2203';
   locationMapUrl = 'https://www.google.com/maps?q=Los%20Teques%2C%20Miranda%2C%20Venezuela&output=embed';
   safeLocationMapUrl!: SafeResourceUrl;
+
+  advisorIndustry = 'embutidos';
+  advisorVolume = 'media';
+  advisorBudget = 'intermedio';
 
   isSubmittingInquiry = false;
   inquirySuccessMessage = '';
@@ -259,7 +308,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       keywords:
         'VM Food Import, maquinaria para embutidos, maquinaria alemana, maquinaria china, equipos de empaque, aditivos alimentarios',
       url: 'https://vmfoodimport.com/',
-      image: 'https://picsum.photos/seed/vmfood-og/1200/630',
+      image: 'https://vmfoodimport.com/images/banners/bannerFilter.jpg',
     });
 
     this.seoService.setJsonLd('vmfood-org-schema', {
@@ -342,6 +391,45 @@ export class HomeComponent implements OnInit, OnDestroy {
   closePromoPopup(): void {
     this.showPromoPopup = false;
     this.cdr.markForCheck();
+  }
+
+  get floatingWhatsappLink(): string {
+    const message = encodeURIComponent('Hola VM Food Import, deseo asesoria para seleccionar maquinaria para mi planta.');
+    return `https://wa.me/${this.whatsappDial}?text=${message}`;
+  }
+
+  get advisorSummary(): string {
+    const industryMap: Record<string, string> = {
+      embutidos: 'procesamiento de embutidos',
+      panaderia: 'produccion de panaderia',
+      alimentos: 'lineas de alimentos procesados',
+    };
+
+    const volumeMap: Record<string, string> = {
+      inicial: 'arranque de linea',
+      media: 'expansion de capacidad media',
+      alta: 'operacion de alto volumen',
+    };
+
+    const budgetMap: Record<string, string> = {
+      base: 'presupuesto de entrada',
+      intermedio: 'presupuesto intermedio',
+      premium: 'presupuesto premium',
+    };
+
+    return `${industryMap[this.advisorIndustry]} · ${volumeMap[this.advisorVolume]} · ${budgetMap[this.advisorBudget]}`;
+  }
+
+  startAdvisorWhatsApp(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const message = encodeURIComponent(
+      `Hola VM Food Import, deseo una recomendacion de equipos para ${this.advisorSummary}.`
+    );
+
+    window.open(`https://wa.me/${this.whatsappDial}?text=${message}`, '_blank', 'noopener');
   }
 
   private startHeroSlider(): void {

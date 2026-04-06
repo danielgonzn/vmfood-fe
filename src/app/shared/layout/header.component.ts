@@ -17,9 +17,9 @@ import { environment } from '../../../environments/environment';
               <mat-icon class="!text-sm">mail</mat-icon>
               info@vmfoodimport.com
             </a>
-            <a href="tel:+584120000000" class="inline-flex items-center gap-1.5 hover:text-white transition-colors">
+            <a [href]="'tel:+' + whatsappDial" class="inline-flex items-center gap-1.5 hover:text-white transition-colors">
               <mat-icon class="!text-sm">phone</mat-icon>
-              +58 (412) 000-0000
+              {{ whatsappPhone }}
             </a>
             <span class="inline-flex items-center gap-1.5 text-gray-300">
               <mat-icon class="!text-sm">location_on</mat-icon>
@@ -27,14 +27,14 @@ import { environment } from '../../../environments/environment';
             </span>
           </div>
 
-          <a href="tel:+584120000000" class="lg:hidden inline-flex items-center gap-1.5 text-gray-200 hover:text-white transition-colors">
+          <a [href]="'tel:+' + whatsappDial" class="lg:hidden inline-flex items-center gap-1.5 text-gray-200 hover:text-white transition-colors">
             <mat-icon class="!text-sm">phone</mat-icon>
-            +58 (412) 000-0000
+            {{ whatsappPhone }}
           </a>
 
           <div class="flex items-center gap-3 text-gray-200">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Instagram</a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Facebook</a>
+            <a href="https://www.instagram.com/vmfoodimport" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Instagram</a>
+            <a href="https://www.facebook.com/vmfoodimport" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Facebook</a>
           </div>
         </div>
       </div>
@@ -58,11 +58,28 @@ import { environment } from '../../../environments/environment';
             </div>
 
             <div class="md:hidden flex items-center">
-              <button type="button" class="text-gray-700 hover:text-vm-red" aria-label="Abrir menú">
-                <mat-icon>menu</mat-icon>
+              <button
+                type="button"
+                class="text-gray-700 hover:text-vm-red"
+                (click)="toggleMobileMenu()"
+                [attr.aria-expanded]="isMobileMenuOpen"
+                aria-label="Abrir menú"
+              >
+                <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
               </button>
             </div>
           </div>
+
+          @if (isMobileMenuOpen) {
+            <div class="md:hidden border-t border-gray-200 pt-3 pb-2 flex flex-col gap-1">
+              <a [routerLink]="['/']" fragment="home" (click)="closeMobileMenu()" class="px-2 py-2 vm-nav-link">Inicio</a>
+              <a [routerLink]="['/']" fragment="about" (click)="closeMobileMenu()" class="px-2 py-2 vm-nav-link">Nosotros</a>
+              <a [routerLink]="['/catalogo']" (click)="closeMobileMenu()" class="px-2 py-2 vm-nav-link">Productos</a>
+              <a [routerLink]="['/']" fragment="faq" (click)="closeMobileMenu()" class="px-2 py-2 vm-nav-link">FAQ</a>
+              <a [routerLink]="['/']" fragment="location" (click)="closeMobileMenu()" class="px-2 py-2 vm-nav-link">Ubicación</a>
+              <a [routerLink]="['/']" fragment="contact" (click)="closeMobileMenu()" class="mx-2 mt-2 vm-btn-primary px-4 py-2 text-center rounded-lg">Contacto</a>
+            </div>
+          }
         </div>
       </div>
     </nav>
@@ -70,4 +87,16 @@ import { environment } from '../../../environments/environment';
 })
 export class HeaderComponent {
   readonly adminUrl = `${environment.backendBaseUrl}/admin`;
+  readonly whatsappPhone = '+58 (412) 721-2203';
+  readonly whatsappDial = '584127212203';
+
+  isMobileMenuOpen = false;
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
 }

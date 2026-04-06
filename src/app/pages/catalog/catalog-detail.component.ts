@@ -21,12 +21,18 @@ import { environment } from '../../../environments/environment';
           Volver al catálogo
         </button>
 
-        @if (product) {
+        @if (isLoadingProduct) {
+          <div class="bg-white border border-gray-200 rounded-xl p-8 text-center">
+            <div class="vm-spinner mx-auto mb-4" aria-hidden="true"></div>
+            <h2 class="text-xl font-bold text-black mb-2">Cargando ficha de producto</h2>
+            <p class="text-gray-600">Estamos preparando la información seleccionada.</p>
+          </div>
+        } @else if (product) {
           <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
               <div class="bg-gray-100">
-                <div class="relative min-h-[300px]">
-                  <img [src]="galleryImages[currentImageIndex]" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                <div class="relative h-[340px] md:h-[420px] lg:h-[500px] bg-white">
+                  <img [src]="galleryImages[currentImageIndex]" [alt]="product.title" class="w-full h-full object-contain p-4" referrerpolicy="no-referrer">
 
                   <button
                     type="button"
@@ -56,7 +62,7 @@ import { environment } from '../../../environments/environment';
                       [class.border-vm-red]="currentImageIndex === i"
                       [class.border-gray-200]="currentImageIndex !== i"
                     >
-                      <img [src]="image" [alt]="product.title + ' vista ' + (i + 1)" class="w-full h-full object-cover" referrerpolicy="no-referrer">
+                      <img [src]="image" [alt]="product.title + ' vista ' + (i + 1)" class="w-full h-full object-contain p-1 bg-white" referrerpolicy="no-referrer">
                     </button>
                   }
                 </div>
@@ -144,7 +150,9 @@ import { environment } from '../../../environments/environment';
   `,
 })
 export class CatalogDetailComponent implements OnInit {
+  readonly whatsappDial = '584127212203';
   product: CatalogProduct | undefined;
+  isLoadingProduct = false;
   galleryImages: string[] = [];
   private productsPool: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   private currentLookup = '';
@@ -214,7 +222,7 @@ export class CatalogDetailComponent implements OnInit {
     const message = encodeURIComponent(
       `Hola VM Food Import, deseo cotizar el equipo: ${product.title} (${product.brand}). Categoría: ${product.category}.`
     );
-    return `https://wa.me/584120000000?text=${message}`;
+    return `https://wa.me/${this.whatsappDial}?text=${message}`;
   }
 
   private applySeo(): void {
@@ -245,8 +253,6 @@ export class CatalogDetailComponent implements OnInit {
         availability: this.product.available
           ? 'https://schema.org/InStock'
           : 'https://schema.org/PreOrder',
-        priceCurrency: 'USD',
-        price: '0',
         url: `https://vmfoodimport.com/catalogo/${this.product.slug}`,
       },
     });
@@ -275,6 +281,7 @@ export class CatalogDetailComponent implements OnInit {
   private resolveProduct(lookup: string): void {
     if (!lookup) {
       this.product = undefined;
+      this.isLoadingProduct = false;
       this.galleryImages = [];
       this.currentImageIndex = 0;
       return;
@@ -290,10 +297,13 @@ export class CatalogDetailComponent implements OnInit {
     }
 
     const normalizedLookup = this.toSlug(lookup);
+    this.isLoadingProduct = true;
+    this.cdr.markForCheck();
 
     this.catalogApi.getProductBySlug(normalizedLookup).subscribe({
       next: (response) => {
         this.product = this.mapProduct(response.data);
+        this.isLoadingProduct = false;
         this.galleryImages = this.product ? this.buildGalleryImages(this.product) : [];
         this.currentImageIndex = 0;
         this.applySeo();
@@ -305,6 +315,7 @@ export class CatalogDetailComponent implements OnInit {
 
           if (localMatch) {
             this.product = localMatch;
+            this.isLoadingProduct = false;
             this.galleryImages = this.buildGalleryImages(localMatch);
             this.currentImageIndex = 0;
             this.applySeo();
@@ -314,6 +325,7 @@ export class CatalogDetailComponent implements OnInit {
         }
 
         this.product = undefined;
+        this.isLoadingProduct = false;
         this.galleryImages = [];
         this.currentImageIndex = 0;
         this.cdr.markForCheck();

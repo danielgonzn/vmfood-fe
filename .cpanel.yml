@@ -7,5 +7,7 @@ deployment:
     - /bin/sh -c 'npm ci --no-audit --no-fund'
     - /bin/sh -c 'npm run build'
     - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -R dist/app/browser/. $DEPLOYPATH/
+    - /bin/sh -c 'find "$DEPLOYPATH" -maxdepth 1 -type f \( -name "main-*.js" -o -name "styles-*.css" -o -name "polyfills-*.js" -o -name "index*.html" \) -delete'
+    - /bin/sh -c 'if command -v rsync >/dev/null 2>&1; then rsync -a --delete dist/app/browser/ "$DEPLOYPATH"/; else cp -R dist/app/browser/. "$DEPLOYPATH"/; fi'
+    - /bin/sh -c 'LOCAL_MAIN=$(grep -Eo "main-[A-Z0-9]+\\.js" dist/app/browser/index.html | head -n1); DEPLOY_MAIN=$(grep -Eo "main-[A-Z0-9]+\\.js" "$DEPLOYPATH/index.html" | head -n1); echo "deploy-verify local=$LOCAL_MAIN deployed=$DEPLOY_MAIN"; [ -n "$LOCAL_MAIN" ] && [ "$LOCAL_MAIN" = "$DEPLOY_MAIN" ] || { echo "Deploy verification failed: index en destino no coincide con build actual"; exit 1; }'
     - /bin/sh -c 'echo "$(date +"%Y-%m-%d %H:%M:%S") | $(git rev-parse --short HEAD) | frontend deploy ok" >> $HOME/deploy-frontend.log'

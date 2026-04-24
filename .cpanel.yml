@@ -3,9 +3,7 @@ deployment:
   tasks:
     - export REPOPATH=$PWD
     - export DEPLOYPATH=$HOME/vmfoodimport.com
-    - /bin/sh -c 'command -v npm >/dev/null 2>&1 || { echo "npm no esta disponible en el entorno de deploy"; exit 1; }'
-    - /bin/sh -c 'npm ci --no-audit --no-fund'
-    - /bin/sh -c 'npm run build'
+    - /bin/sh -c 'NODE_BIN=$(ls -d /opt/cpanel/ea-nodejs*/bin 2>/dev/null | sort -V | tail -n1); [ -n "$NODE_BIN" ] || { echo "No se encontro una instalacion ea-nodejs en /opt/cpanel"; exit 1; }; export PATH="$NODE_BIN:$PATH"; echo "Using node from: $NODE_BIN"; node -v; npm -v; npm ci --no-audit --no-fund; npm run build; [ -f dist/app/browser/index.html ] || { echo "Build no genero dist/app/browser/index.html"; exit 1; }'
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/sh -c 'find "$DEPLOYPATH" -maxdepth 1 -type f \( -name "main-*.js" -o -name "styles-*.css" -o -name "polyfills-*.js" -o -name "index*.html" \) -delete'
     - /bin/sh -c 'if command -v rsync >/dev/null 2>&1; then rsync -a --delete dist/app/browser/ "$DEPLOYPATH"/; else cp -R dist/app/browser/. "$DEPLOYPATH"/; fi'

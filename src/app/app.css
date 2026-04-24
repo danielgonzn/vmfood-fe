@@ -3,6 +3,21 @@
 	overflow: hidden;
 }
 
+.vm-reveal {
+	opacity: 0;
+	transform: translateY(24px) scale(0.985);
+	filter: blur(2px);
+	transition: opacity 650ms ease, transform 650ms cubic-bezier(0.22, 1, 0.36, 1), filter 650ms ease;
+	transition-delay: var(--vm-reveal-delay, 0ms);
+	will-change: opacity, transform;
+}
+
+.vm-reveal.is-visible {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	filter: blur(0);
+}
+
 .brand-marquee-track {
 	display: flex;
 	align-items: center;
@@ -46,6 +61,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.vm-reveal {
+		opacity: 1;
+		transform: none;
+		filter: none;
+		transition: none;
+	}
+
 	.brand-marquee-track {
 		animation: none;
 	}

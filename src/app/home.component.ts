@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { WebContentDto } from './core/models/api.models';
 import { CatalogApiService } from './core/services/catalog-api.service';
 import { SeoService } from './shared/services/seo.service';
+import { RevealOnScrollDirective } from './shared/directives/reveal-on-scroll.directive';
 
 interface Product {
   id: number;
@@ -57,7 +58,7 @@ interface CaseStudy {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [MatIconModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [MatIconModule, FormsModule, ReactiveFormsModule, RouterLink, RevealOnScrollDirective],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

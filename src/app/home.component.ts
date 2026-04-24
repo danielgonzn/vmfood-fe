@@ -50,6 +50,7 @@ interface CaseStudy {
   title: string;
   challenge: string;
   outcome: string;
+  image: string;
 }
 
 @Component({
@@ -192,14 +193,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentFeaturedSlide = 0;
   showPromoPopup = false;
 
-  trustStats: TrustStat[] = [
-    { label: 'Año de fundación', value: '2021' },
-    { label: 'Líneas de solución', value: '4' },
-    { label: 'Enfoque de soporte', value: 'Técnico' },
-  ];
+ 
 
   impactHighlights: TrustStat[] = [
-    { label: 'Respuesta comercial', value: '< 24h hábiles' },
+    { label: 'Respuesta comercial', value: '24h hábiles' },
     { label: 'Cobertura', value: 'Venezuela' },
     { label: 'Soporte', value: 'Pre y postventa' },
   ];
@@ -207,18 +204,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   caseStudies: CaseStudy[] = [
     {
       title: 'Optimización de línea de embutidos',
-      challenge: '',
-      outcome: '',
+      challenge: 'Planta con cuellos de botella en mezclado y embutido durante picos de demanda.',
+      outcome: 'Se incrementó la continuidad operativa y se redujo el tiempo de ciclo por lote.',
+      image: '/images/img1.png',
     },
     {
       title: 'Arranque de planta multiproducto',
-      challenge: '',
-      outcome: '',
+      challenge: 'Cliente requería iniciar operaciones con equipos versátiles y plan de escalabilidad.',
+      outcome: 'Se implementó una línea base funcional con ruta clara para crecer por etapas.',
+      image: '/images/banners/background2.jpeg',
     },
     {
       title: 'Modernización de área de empaque',
-      challenge: '',
-      outcome: '',
+      challenge: 'Proceso de empaque con variabilidad y mermas por baja estandarización.',
+      outcome: 'Se logró mayor uniformidad de empaque y mejor rendimiento del personal operativo.',
+      image: '/images/banners/bannerFilter.jpg',
     },
   ];
 
@@ -573,13 +573,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.purchaseSteps = processSteps;
     }
 
-    const stats = this.mapContentByPrefix(items, 'stat_').map((item) => ({
-      label: item.title || item.name,
-      value: item.subtitle || item.body || '-',
-    }));
-    if (stats.length > 0) {
-      this.trustStats = stats;
-    }
+   
 
     const faqItems = this.mapContentByPrefix(items, 'faq_').map((item) => ({
       question: item.title || item.name,

@@ -3,6 +3,9 @@ deployment:
   tasks:
     - export REPOPATH=$PWD
     - export DEPLOYPATH=$HOME/vmfoodimport.com
+    - /bin/sh -c 'command -v npm >/dev/null 2>&1 || { echo "npm no esta disponible en el entorno de deploy"; exit 1; }'
+    - /bin/sh -c 'npm ci --no-audit --no-fund'
+    - /bin/sh -c 'npm run build'
     - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -R deploy/browser/. $DEPLOYPATH/
+    - /bin/cp -R dist/app/browser/. $DEPLOYPATH/
     - /bin/sh -c 'echo "$(date +"%Y-%m-%d %H:%M:%S") | $(git rev-parse --short HEAD) | frontend deploy ok" >> $HOME/deploy-frontend.log'

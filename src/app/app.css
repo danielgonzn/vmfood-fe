@@ -72,3 +72,14 @@
 		animation: none;
 	}
 }
+
+@media (max-width: 767px) {
+	#home {
+		padding-top: calc(5.5rem + env(safe-area-inset-top));
+		padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+	}
+
+	#home h1 {
+		text-wrap: balance;
+	}
+}

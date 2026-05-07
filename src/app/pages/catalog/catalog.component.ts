@@ -49,86 +49,105 @@ import { environment } from '../../../environments/environment';
           </div>
         }
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <aside class="lg:col-span-4 xl:col-span-3">
-            <div class="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 lg:sticky lg:top-32">
-              <h2 class="text-lg font-bold text-black mb-4">Filtros</h2>
+        <div class="space-y-6">
+          <section class="bg-white border border-gray-200 rounded-2xl p-4 md:p-6 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <h2 class="text-lg font-bold text-black">Filtra más rápido</h2>
+                <p class="text-sm text-gray-500">Selecciona una categoría y ajusta detalles en segundos.</p>
+              </div>
+              <button type="button" (click)="clearFilters()" class="vm-btn-secondary px-4 py-2 w-full md:w-auto">Limpiar filtros</button>
+            </div>
 
-              <div class="space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
-                  <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-                  <select [(ngModel)]="selectedCategory" (ngModelChange)="onFilterChange()" class="vm-input">
-                    <option value="all">Todas</option>
-                    @for (category of categories; track category) {
-                      <option [value]="category">{{ category }}</option>
-                    }
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
-                  <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="vm-input">
-                    <option value="all">Todas</option>
-                    @for (subcategory of subcategories; track subcategory) {
-                      <option [value]="subcategory">{{ subcategory }}</option>
-                    }
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
-                  <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="vm-input">
-                    <option value="all">Todas</option>
-                    @for (brand of brands; track brand) {
-                      <option [value]="brand">{{ brand }}</option>
-                    }
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Origen</label>
-                  <select [(ngModel)]="selectedOrigin" (ngModelChange)="onFilterChange()" class="vm-input">
-                    <option value="all">Todos</option>
-                    @for (origin of origins; track origin) {
-                      <option [value]="origin">{{ origin }}</option>
-                    }
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
-                  <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="vm-input">
-                    <option value="all">Todas</option>
-                    <option value="Nueva">Nueva</option>
-                    <option value="Usada">Usada</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                    <input [(ngModel)]="onlyAvailable" (ngModelChange)="onFilterChange()" type="checkbox" class="w-4 h-4 accent-vm-red">
-                    Solo disponibles
-                  </label>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Ordenar</label>
-                  <select [(ngModel)]="sortBy" (ngModelChange)="onFilterChange()" class="vm-input">
-                    <option value="name-asc">Nombre A-Z</option>
-                    <option value="name-desc">Nombre Z-A</option>
-                  </select>
-                </div>
+            <div class="mt-4 overflow-x-auto pb-1">
+              <div class="flex items-center gap-2 min-w-max pr-2">
+                <button
+                  type="button"
+                  (click)="selectCategory('all')"
+                  class="px-4 py-2 rounded-full text-sm font-semibold border transition-colors"
+                  [class.bg-vm-red]="selectedCategory === 'all'"
+                  [class.text-white]="selectedCategory === 'all'"
+                  [class.border-vm-red]="selectedCategory === 'all'"
+                  [class.bg-white]="selectedCategory !== 'all'"
+                  [class.text-gray-700]="selectedCategory !== 'all'"
+                  [class.border-gray-300]="selectedCategory !== 'all'"
+                >
+                  Todas
+                </button>
 
-                <button type="button" (click)="clearFilters()" class="w-full vm-btn-secondary px-4 py-2">Limpiar filtros</button>
+                @for (category of categories; track category) {
+                  <button
+                    type="button"
+                    (click)="selectCategory(category)"
+                    class="px-4 py-2 rounded-full text-sm font-semibold border transition-colors"
+                    [class.bg-vm-red]="selectedCategory === category"
+                    [class.text-white]="selectedCategory === category"
+                    [class.border-vm-red]="selectedCategory === category"
+                    [class.bg-white]="selectedCategory !== category"
+                    [class.text-gray-700]="selectedCategory !== category"
+                    [class.border-gray-300]="selectedCategory !== category"
+                  >
+                    {{ category }}
+                  </button>
+                }
               </div>
             </div>
-          </aside>
 
-          <div class="lg:col-span-8 xl:col-span-9">
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+                <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
+                <select [(ngModel)]="selectedSubcategory" (ngModelChange)="onFilterChange()" class="vm-input">
+                  <option value="all">Todas</option>
+                  @for (subcategory of subcategories; track subcategory) {
+                    <option [value]="subcategory">{{ subcategory }}</option>
+                  }
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
+                <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="vm-input">
+                  <option value="all">Todas</option>
+                  @for (brand of brands; track brand) {
+                    <option [value]="brand">{{ brand }}</option>
+                  }
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
+                <select [(ngModel)]="selectedCondition" (ngModelChange)="onFilterChange()" class="vm-input">
+                  <option value="all">Todas</option>
+                  <option value="Nueva">Nueva</option>
+                  <option value="Usada">Usada</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input [(ngModel)]="onlyAvailable" (ngModelChange)="onFilterChange()" type="checkbox" class="w-4 h-4 accent-vm-red">
+                Solo disponibles
+              </label>
+
+              @if (activeFilterCount > 0) {
+                <p class="text-xs md:text-sm text-gray-500">{{ activeFilterCount }} filtro(s) activos</p>
+              }
+            </div>
+          </section>
+
+          <div>
             <div class="flex items-center justify-between mb-5">
               <p class="text-gray-600">{{ filteredProducts.length }} productos encontrados</p>
               <p class="text-sm text-gray-500">Página {{ currentPage }} de {{ totalPages }}</p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
               @for (product of paginatedProducts; track product.id) {
                 <article class="vm-card overflow-hidden">
                   <div class="h-52 bg-gray-100 overflow-hidden">
@@ -369,6 +388,47 @@ export class CatalogComponent implements OnInit {
     };
 
     return `${industryMap[this.advisorIndustry]} · ${volumeMap[this.advisorVolume]} · ${budgetMap[this.advisorBudget]}`;
+  }
+
+  get activeFilterCount(): number {
+    let count = 0;
+
+    if (this.searchTerm.trim().length > 0) {
+      count += 1;
+    }
+    if (this.selectedCategory !== 'all') {
+      count += 1;
+    }
+    if (this.selectedSubcategory !== 'all') {
+      count += 1;
+    }
+    if (this.selectedBrand !== 'all') {
+      count += 1;
+    }
+    if (this.selectedOrigin !== 'all') {
+      count += 1;
+    }
+    if (this.selectedCondition !== 'all') {
+      count += 1;
+    }
+    if (this.onlyAvailable) {
+      count += 1;
+    }
+    if (this.sortBy !== 'name-asc') {
+      count += 1;
+    }
+
+    return count;
+  }
+
+  selectCategory(category: string): void {
+    this.selectedCategory = category;
+
+    if (this.selectedSubcategory !== 'all' && !this.subcategories.includes(this.selectedSubcategory)) {
+      this.selectedSubcategory = 'all';
+    }
+
+    this.onFilterChange();
   }
 
   onFilterChange(): void {

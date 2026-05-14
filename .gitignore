@@ -5,7 +5,6 @@
 !.env.example
 
 # Compiled output
-/dist
 # cPanel artifact (committed build for hosts without modern Node)
 /tmp
 /out-tsc

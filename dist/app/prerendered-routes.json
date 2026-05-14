@@ -1,0 +1,8 @@
+{
+  "routes": {
+    "/": {},
+    "/aviso-de-privacidad": {},
+    "/catalogo": {},
+    "/terminos-y-condiciones": {}
+  }
+}

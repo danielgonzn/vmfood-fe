@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://vmfoodimport.com/sitemap.xml

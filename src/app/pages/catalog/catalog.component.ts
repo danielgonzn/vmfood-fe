@@ -49,9 +49,23 @@ import { environment } from '../../../environments/environment';
           </div>
         }
 
+        <section class="md:hidden sticky top-20 z-20 mb-4 rounded-2xl border border-gray-200 bg-white/95 backdrop-blur shadow-sm p-3">
+          <button type="button" (click)="openMobileFilters()" class="vm-btn-secondary py-2 w-full inline-flex items-center justify-center gap-2">
+            <mat-icon class="text-base">tune</mat-icon>
+            Filtrar
+          </button>
+
+          <div class="mt-2 flex items-center justify-between gap-2 text-xs text-gray-600">
+            <span>{{ activeFilterCount }} filtro(s) activos</span>
+            @if (activeFilterCount > 0) {
+              <button type="button" (click)="clearFilters()" class="font-semibold text-vm-red">Limpiar</button>
+            }
+          </div>
+        </section>
+
         <div class="space-y-6">
           <section class="bg-white border border-gray-200 rounded-2xl p-4 md:p-6 shadow-sm">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div class="hidden md:flex md:flex-row md:items-center md:justify-between gap-3">
               <div>
                 <h2 class="text-lg font-bold text-black">Filtra más rápido</h2>
                 <p class="text-sm text-gray-500">Selecciona una categoría y ajusta detalles en segundos.</p>
@@ -59,7 +73,7 @@ import { environment } from '../../../environments/environment';
               <button type="button" (click)="clearFilters()" class="vm-btn-secondary px-4 py-2 w-full md:w-auto">Limpiar filtros</button>
             </div>
 
-            <div class="mt-4 overflow-x-auto pb-1">
+            <div class="hidden md:block mt-4 overflow-x-auto pb-1">
               <div class="flex items-center gap-2 min-w-max pr-2">
                 <button
                   type="button"
@@ -93,7 +107,7 @@ import { environment } from '../../../environments/environment';
               </div>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+            <div class="hidden md:grid mt-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
                 <input [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
@@ -129,17 +143,119 @@ import { environment } from '../../../environments/environment';
               </div>
             </div>
 
-            <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                <input [(ngModel)]="onlyAvailable" (ngModelChange)="onFilterChange()" type="checkbox" class="w-4 h-4 accent-vm-red">
-                Solo disponibles
-              </label>
-
+            <div class="hidden md:flex mt-3 flex-wrap items-center justify-end gap-3">
               @if (activeFilterCount > 0) {
                 <p class="text-xs md:text-sm text-gray-500">{{ activeFilterCount }} filtro(s) activos</p>
               }
             </div>
+
+            <div class="md:hidden">
+              @if (activeFilterCount > 0) {
+                <div class="mt-3 flex flex-wrap gap-2">
+                  @if (searchTerm.trim().length > 0) {
+                    <button type="button" (click)="searchTerm = ''; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
+                      Búsqueda
+                      <mat-icon class="text-sm">close</mat-icon>
+                    </button>
+                  }
+                  @if (selectedCategory !== 'all') {
+                    <button type="button" (click)="selectedCategory = 'all'; selectedSubcategory = 'all'; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
+                      {{ selectedCategory }}
+                      <mat-icon class="text-sm">close</mat-icon>
+                    </button>
+                  }
+                  @if (selectedSubcategory !== 'all') {
+                    <button type="button" (click)="selectedSubcategory = 'all'; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
+                      {{ selectedSubcategory }}
+                      <mat-icon class="text-sm">close</mat-icon>
+                    </button>
+                  }
+                  @if (selectedBrand !== 'all') {
+                    <button type="button" (click)="selectedBrand = 'all'; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
+                      {{ selectedBrand }}
+                      <mat-icon class="text-sm">close</mat-icon>
+                    </button>
+                  }
+                  @if (selectedCondition !== 'all') {
+                    <button type="button" (click)="selectedCondition = 'all'; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
+                      {{ selectedCondition }}
+                      <mat-icon class="text-sm">close</mat-icon>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
           </section>
+
+          @if (mobileFiltersOpen) {
+            <div class="md:hidden fixed inset-0 z-50 mb-0">
+              <button type="button" aria-label="Cerrar filtros" (click)="closeMobileFilters()" class="absolute inset-0 bg-black/45"></button>
+
+              <section class="absolute inset-x-0 bottom-0 rounded-t-3xl bg-white shadow-2xl max-h-[88vh] overflow-hidden">
+                <div class="px-4 pt-4 pb-3 border-b border-gray-200 flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-bold text-black">Filtrar catálogo</h3>
+                    <p class="text-xs text-gray-500">Ajusta los criterios y aplica cambios.</p>
+                  </div>
+                  <button type="button" (click)="closeMobileFilters()" class="w-10 h-10 rounded-full border border-gray-200 inline-flex items-center justify-center text-gray-600">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <div class="p-4 space-y-4 overflow-y-auto max-h-[calc(88vh-132px)]">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+                    <input [(ngModel)]="mobileSearchTerm" type="text" placeholder="Ej. embutidora, tumbler, carragenina..." class="vm-input">
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                    <select [(ngModel)]="mobileSelectedCategory" (ngModelChange)="onMobileCategoryChange()" class="vm-input">
+                      <option value="all">Todas</option>
+                      @for (category of categories; track category) {
+                        <option [value]="category">{{ category }}</option>
+                      }
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Subcategoría</label>
+                    <select [(ngModel)]="mobileSelectedSubcategory" class="vm-input">
+                      <option value="all">Todas</option>
+                      @for (subcategory of mobileSubcategories; track subcategory) {
+                        <option [value]="subcategory">{{ subcategory }}</option>
+                      }
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
+                    <select [(ngModel)]="mobileSelectedBrand" class="vm-input">
+                      <option value="all">Todas</option>
+                      @for (brand of brands; track brand) {
+                        <option [value]="brand">{{ brand }}</option>
+                      }
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Condición</label>
+                    <select [(ngModel)]="mobileSelectedCondition" class="vm-input">
+                      <option value="all">Todas</option>
+                      <option value="Nueva">Nueva</option>
+                      <option value="Usada">Usada</option>
+                    </select>
+                  </div>
+
+                </div>
+
+                <div class="px-4 py-3 border-t border-gray-200 bg-white grid grid-cols-2 gap-3">
+                  <button type="button" (click)="clearMobileDraftFilters()" class="vm-btn-secondary py-2">Limpiar</button>
+                  <button type="button" (click)="applyMobileFilters()" class="vm-btn-primary py-2">Aplicar</button>
+                </div>
+              </section>
+            </div>
+          }
 
           <div>
             <div class="flex items-center justify-between mb-5">
@@ -287,8 +403,13 @@ export class CatalogComponent implements OnInit {
   selectedBrand = 'all';
   selectedOrigin = 'all';
   selectedCondition: 'all' | 'Nueva' | 'Usada' = 'all';
-  sortBy: 'name-asc' | 'name-desc' = 'name-asc';
-  onlyAvailable = false;
+  mobileFiltersOpen = false;
+
+  mobileSearchTerm = '';
+  mobileSelectedCategory = 'all';
+  mobileSelectedSubcategory = 'all';
+  mobileSelectedBrand = 'all';
+  mobileSelectedCondition: 'all' | 'Nueva' | 'Usada' = 'all';
 
   products: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   loadError = false;
@@ -318,6 +439,14 @@ export class CatalogComponent implements OnInit {
     return [...new Set(base.map((product) => product.subcategory))];
   }
 
+  get mobileSubcategories(): string[] {
+    const base =
+      this.mobileSelectedCategory === 'all'
+        ? this.products
+        : this.products.filter((product) => product.category === this.mobileSelectedCategory);
+    return [...new Set(base.map((product) => product.subcategory))];
+  }
+
   get brands(): string[] {
     return [...new Set(this.products.map((product) => product.brand))];
   }
@@ -340,17 +469,11 @@ export class CatalogComponent implements OnInit {
       const matchesBrand = this.selectedBrand === 'all' || product.brand === this.selectedBrand;
       const matchesOrigin = this.selectedOrigin === 'all' || product.origin === this.selectedOrigin;
       const matchesCondition = this.selectedCondition === 'all' || product.condition === this.selectedCondition;
-      const matchesAvailability = !this.onlyAvailable || product.available;
 
-      return matchesSearch && matchesCategory && matchesSubcategory && matchesBrand && matchesOrigin && matchesCondition && matchesAvailability;
+      return matchesSearch && matchesCategory && matchesSubcategory && matchesBrand && matchesOrigin && matchesCondition;
     });
 
-    result = [...result].sort((a, b) => {
-      if (this.sortBy === 'name-desc') {
-        return b.title.localeCompare(a.title);
-      }
-      return a.title.localeCompare(b.title);
-    });
+    result = [...result].sort((a, b) => a.title.localeCompare(b.title));
 
     return result;
   }
@@ -411,13 +534,6 @@ export class CatalogComponent implements OnInit {
     if (this.selectedCondition !== 'all') {
       count += 1;
     }
-    if (this.onlyAvailable) {
-      count += 1;
-    }
-    if (this.sortBy !== 'name-asc') {
-      count += 1;
-    }
-
     return count;
   }
 
@@ -429,6 +545,53 @@ export class CatalogComponent implements OnInit {
     }
 
     this.onFilterChange();
+  }
+
+  openMobileFilters(): void {
+    this.mobileSearchTerm = this.searchTerm;
+    this.mobileSelectedCategory = this.selectedCategory;
+    this.mobileSelectedSubcategory = this.selectedSubcategory;
+    this.mobileSelectedBrand = this.selectedBrand;
+    this.mobileSelectedCondition = this.selectedCondition;
+
+    this.mobileFiltersOpen = true;
+
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  closeMobileFilters(): void {
+    this.mobileFiltersOpen = false;
+
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+  }
+
+  onMobileCategoryChange(): void {
+    if (this.mobileSelectedSubcategory !== 'all' && !this.mobileSubcategories.includes(this.mobileSelectedSubcategory)) {
+      this.mobileSelectedSubcategory = 'all';
+    }
+  }
+
+  clearMobileDraftFilters(): void {
+    this.mobileSearchTerm = '';
+    this.mobileSelectedCategory = 'all';
+    this.mobileSelectedSubcategory = 'all';
+    this.mobileSelectedBrand = 'all';
+    this.mobileSelectedCondition = 'all';
+  }
+
+  applyMobileFilters(): void {
+    this.searchTerm = this.mobileSearchTerm;
+    this.selectedCategory = this.mobileSelectedCategory;
+    this.selectedSubcategory = this.mobileSelectedSubcategory;
+    this.selectedBrand = this.mobileSelectedBrand;
+    this.selectedCondition = this.mobileSelectedCondition;
+
+    this.onFilterChange();
+    this.closeMobileFilters();
   }
 
   onFilterChange(): void {
@@ -542,8 +705,6 @@ export class CatalogComponent implements OnInit {
     this.selectedBrand = 'all';
     this.selectedOrigin = 'all';
     this.selectedCondition = 'all';
-    this.sortBy = 'name-asc';
-    this.onlyAvailable = false;
     this.currentPage = 1;
   }
 }

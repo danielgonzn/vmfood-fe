@@ -6,8 +6,9 @@ import { CATALOG_PRODUCTS } from './catalog.data';
 import { CatalogProduct } from './catalog.models';
 import { SeoService } from '../../shared/services/seo.service';
 import { CatalogApiService } from '../../core/services/catalog-api.service';
-import { CatalogProductDto } from '../../core/models/api.models';
+import { BrandDto, CatalogProductDto, CategoryDto } from '../../core/models/api.models';
 import { environment } from '../../../environments/environment';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-catalog',
@@ -89,19 +90,19 @@ import { environment } from '../../../environments/environment';
                   Todas
                 </button>
 
-                @for (category of categories; track category) {
+                @for (category of categories; track category.slug) {
                   <button
                     type="button"
-                    (click)="selectCategory(category)"
+                    (click)="selectCategory(category.slug)"
                     class="px-4 py-2 rounded-full text-sm font-semibold border transition-colors"
-                    [class.bg-vm-red]="selectedCategory === category"
-                    [class.text-white]="selectedCategory === category"
-                    [class.border-vm-red]="selectedCategory === category"
-                    [class.bg-white]="selectedCategory !== category"
-                    [class.text-gray-700]="selectedCategory !== category"
-                    [class.border-gray-300]="selectedCategory !== category"
+                    [class.bg-vm-red]="selectedCategory === category.slug"
+                    [class.text-white]="selectedCategory === category.slug"
+                    [class.border-vm-red]="selectedCategory === category.slug"
+                    [class.bg-white]="selectedCategory !== category.slug"
+                    [class.text-gray-700]="selectedCategory !== category.slug"
+                    [class.border-gray-300]="selectedCategory !== category.slug"
                   >
-                    {{ category }}
+                    {{ category.name }}
                   </button>
                 }
               </div>
@@ -127,8 +128,8 @@ import { environment } from '../../../environments/environment';
                 <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
                 <select [(ngModel)]="selectedBrand" (ngModelChange)="onFilterChange()" class="vm-input">
                   <option value="all">Todas</option>
-                  @for (brand of brands; track brand) {
-                    <option [value]="brand">{{ brand }}</option>
+                  @for (brand of brands; track brand.slug) {
+                    <option [value]="brand.slug">{{ brand.name }}</option>
                   }
                 </select>
               </div>
@@ -160,7 +161,7 @@ import { environment } from '../../../environments/environment';
                   }
                   @if (selectedCategory !== 'all') {
                     <button type="button" (click)="selectedCategory = 'all'; selectedSubcategory = 'all'; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
-                      {{ selectedCategory }}
+                      {{ getSelectedCategoryLabel() }}
                       <mat-icon class="text-sm">close</mat-icon>
                     </button>
                   }
@@ -172,7 +173,7 @@ import { environment } from '../../../environments/environment';
                   }
                   @if (selectedBrand !== 'all') {
                     <button type="button" (click)="selectedBrand = 'all'; onFilterChange()" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-vm-red/10 text-vm-red text-xs font-semibold">
-                      {{ selectedBrand }}
+                      {{ getSelectedBrandLabel() }}
                       <mat-icon class="text-sm">close</mat-icon>
                     </button>
                   }
@@ -212,8 +213,8 @@ import { environment } from '../../../environments/environment';
                     <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
                     <select [(ngModel)]="mobileSelectedCategory" (ngModelChange)="onMobileCategoryChange()" class="vm-input">
                       <option value="all">Todas</option>
-                      @for (category of categories; track category) {
-                        <option [value]="category">{{ category }}</option>
+                      @for (category of categories; track category.slug) {
+                        <option [value]="category.slug">{{ category.name }}</option>
                       }
                     </select>
                   </div>
@@ -232,8 +233,8 @@ import { environment } from '../../../environments/environment';
                     <label class="block text-sm font-medium text-gray-700 mb-1">Marca</label>
                     <select [(ngModel)]="mobileSelectedBrand" class="vm-input">
                       <option value="all">Todas</option>
-                      @for (brand of brands; track brand) {
-                        <option [value]="brand">{{ brand }}</option>
+                      @for (brand of brands; track brand.slug) {
+                        <option [value]="brand.slug">{{ brand.name }}</option>
                       }
                     </select>
                   </div>
@@ -259,12 +260,12 @@ import { environment } from '../../../environments/environment';
 
           <div>
             <div class="flex items-center justify-between mb-5">
-              <p class="text-gray-600">{{ filteredProducts.length }} productos encontrados</p>
+              <p class="text-gray-600">{{ totalProducts }} productos encontrados</p>
               <p class="text-sm text-gray-500">Página {{ currentPage }} de {{ totalPages }}</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-              @for (product of paginatedProducts; track product.id) {
+              @for (product of products; track product.id) {
                 <article class="vm-card overflow-hidden">
                   <div class="h-52 bg-gray-100 overflow-hidden">
                     <img [src]="product.image" [alt]="product.title" class="w-full h-full object-cover" referrerpolicy="no-referrer">
@@ -310,14 +311,14 @@ import { environment } from '../../../environments/environment';
               }
             </div>
 
-            @if (filteredProducts.length === 0) {
+            @if (products.length === 0) {
               <div class="mt-6 rounded-xl border border-gray-200 bg-white px-6 py-8 text-center">
                 <h3 class="text-lg font-semibold text-black">No hay productos para mostrar</h3>
                 <p class="mt-2 text-sm text-gray-600">Ajusta tus filtros o vuelve a intentar en unos minutos.</p>
               </div>
             }
 
-            @if (filteredProducts.length > pageSize) {
+            @if (totalPages > 1) {
               <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
                 <button type="button" (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 rounded border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:border-vm-red">Anterior</button>
                 @for (page of pageNumbers; track page) {
@@ -411,84 +412,57 @@ export class CatalogComponent implements OnInit {
   mobileSelectedBrand = 'all';
   mobileSelectedCondition: 'all' | 'Nueva' | 'Usada' = 'all';
 
+  categories: CategoryDto[] = [];
+  brands: BrandDto[] = [];
   products: CatalogProduct[] = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
   loadError = false;
-  readonly pageSize = 6;
+  totalProducts = 0;
+  totalPages = 1;
+  readonly pageSize = 12;
   currentPage = 1;
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadTaxonomies();
 
     this.route.queryParamMap.subscribe((params) => {
       const categoryFromUrl = params.get('categoria')?.trim();
 
-      if (categoryFromUrl && this.categories.includes(categoryFromUrl)) {
+      if (categoryFromUrl) {
         this.selectedCategory = categoryFromUrl;
-        this.selectedSubcategory = 'all';
-        this.currentPage = 1;
+      } else {
+        this.selectedCategory = 'all';
       }
+
+      this.selectedSubcategory = 'all';
+      this.currentPage = 1;
+      this.loadProducts();
     });
   }
 
-  get categories(): string[] {
-    return [...new Set(this.products.map((product) => product.category))];
-  }
-
   get subcategories(): string[] {
-    const base = this.selectedCategory === 'all' ? this.products : this.products.filter((product) => product.category === this.selectedCategory);
-    return [...new Set(base.map((product) => product.subcategory))];
+    if (this.selectedCategory === 'all') {
+      return this.categories.map((category) => category.name);
+    }
+
+    const categoryName = this.getCategoryNameByValue(this.selectedCategory);
+    return categoryName ? [categoryName] : [];
   }
 
   get mobileSubcategories(): string[] {
-    const base =
-      this.mobileSelectedCategory === 'all'
-        ? this.products
-        : this.products.filter((product) => product.category === this.mobileSelectedCategory);
-    return [...new Set(base.map((product) => product.subcategory))];
-  }
+    if (this.mobileSelectedCategory === 'all') {
+      return this.categories.map((category) => category.name);
+    }
 
-  get brands(): string[] {
-    return [...new Set(this.products.map((product) => product.brand))];
+    const categoryName = this.getCategoryNameByValue(this.mobileSelectedCategory);
+    return categoryName ? [categoryName] : [];
   }
 
   get origins(): string[] {
     return [...new Set(this.products.map((product) => product.origin))];
   }
 
-  get filteredProducts(): CatalogProduct[] {
-    let result = this.products.filter((product) => {
-      const search = this.searchTerm.toLowerCase().trim();
-      const matchesSearch =
-        search.length === 0 ||
-        product.title.toLowerCase().includes(search) ||
-        product.description.toLowerCase().includes(search) ||
-        product.tags.some((tag) => tag.toLowerCase().includes(search));
-
-      const matchesCategory = this.selectedCategory === 'all' || product.category === this.selectedCategory;
-      const matchesSubcategory = this.selectedSubcategory === 'all' || product.subcategory === this.selectedSubcategory;
-      const matchesBrand = this.selectedBrand === 'all' || product.brand === this.selectedBrand;
-      const matchesOrigin = this.selectedOrigin === 'all' || product.origin === this.selectedOrigin;
-      const matchesCondition = this.selectedCondition === 'all' || product.condition === this.selectedCondition;
-
-      return matchesSearch && matchesCategory && matchesSubcategory && matchesBrand && matchesOrigin && matchesCondition;
-    });
-
-    result = [...result].sort((a, b) => a.title.localeCompare(b.title));
-
-    return result;
-  }
-
-  get totalPages(): number {
-    return Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
-  }
-
   get pageNumbers(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
-
-  get paginatedProducts(): CatalogProduct[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredProducts.slice(start, start + this.pageSize);
   }
 
   get advisorSummary(): string {
@@ -547,6 +521,28 @@ export class CatalogComponent implements OnInit {
     this.onFilterChange();
   }
 
+  getSelectedCategoryLabel(): string {
+    if (this.selectedCategory === 'all') {
+      return 'Todas';
+    }
+
+    return this.getCategoryNameByValue(this.selectedCategory) ?? this.selectedCategory;
+  }
+
+  getSelectedBrandLabel(): string {
+    if (this.selectedBrand === 'all') {
+      return 'Todas';
+    }
+
+    const bySlug = this.brands.find((brand) => brand.slug === this.selectedBrand);
+    if (bySlug) {
+      return bySlug.name;
+    }
+
+    const byName = this.brands.find((brand) => brand.name.toLowerCase() === this.selectedBrand.toLowerCase());
+    return byName ? byName.name : this.selectedBrand;
+  }
+
   openMobileFilters(): void {
     this.mobileSearchTerm = this.searchTerm;
     this.mobileSelectedCategory = this.selectedCategory;
@@ -596,6 +592,7 @@ export class CatalogComponent implements OnInit {
 
   onFilterChange(): void {
     this.currentPage = 1;
+    this.loadProducts();
   }
 
   goToPage(page: number): void {
@@ -604,6 +601,7 @@ export class CatalogComponent implements OnInit {
     }
 
     this.currentPage = page;
+    this.loadProducts();
   }
 
   nextPage(): void {
@@ -631,20 +629,116 @@ export class CatalogComponent implements OnInit {
     window.open(`https://wa.me/${this.whatsappDial}?text=${message}`, '_blank', 'noopener');
   }
 
+  private loadTaxonomies(): void {
+    forkJoin({
+      categories: this.catalogApi.getCategories(),
+      brands: this.catalogApi.getBrands(),
+    }).subscribe({
+      next: ({ categories, brands }) => {
+        this.categories = categories.data;
+        this.brands = brands.data;
+        this.normalizeSelectedTaxonomies();
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.categories = [];
+        this.brands = [];
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
   private loadProducts(): void {
     this.loadError = false;
 
-    this.catalogApi.getProducts({ perPage: 100 }).subscribe({
+    this.catalogApi
+      .getProducts({
+        search: this.searchTerm.trim() || undefined,
+        category: this.selectedCategory !== 'all' ? this.selectedCategory : undefined,
+        subcategory: this.selectedSubcategory !== 'all' ? this.selectedSubcategory : undefined,
+        brand: this.selectedBrand !== 'all' ? this.selectedBrand : undefined,
+        origin: this.selectedOrigin !== 'all' ? this.selectedOrigin : undefined,
+        condition: this.selectedCondition,
+        perPage: this.pageSize,
+        page: this.currentPage,
+      })
+      .subscribe({
       next: (response) => {
         this.products = response.data.map((item) => this.mapProduct(item));
+        this.totalProducts = response.meta?.total ?? this.products.length;
+        this.totalPages = Math.max(1, response.meta?.last_page ?? 1);
+        this.currentPage = response.meta?.current_page ?? this.currentPage;
         this.cdr.markForCheck();
       },
       error: () => {
         this.loadError = true;
-        this.products = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
+
+        const fallback = environment.production ? [] : this.withSlug(CATALOG_PRODUCTS);
+        this.totalProducts = fallback.length;
+        this.totalPages = Math.max(1, Math.ceil(this.totalProducts / this.pageSize));
+
+        if (this.currentPage > this.totalPages) {
+          this.currentPage = this.totalPages;
+        }
+
+        const start = (this.currentPage - 1) * this.pageSize;
+        this.products = fallback.slice(start, start + this.pageSize);
         this.cdr.markForCheck();
       },
     });
+  }
+
+  private normalizeSelectedTaxonomies(): void {
+    this.selectedCategory = this.normalizeCategoryValue(this.selectedCategory);
+    this.mobileSelectedCategory = this.normalizeCategoryValue(this.mobileSelectedCategory);
+    this.selectedBrand = this.normalizeBrandValue(this.selectedBrand);
+    this.mobileSelectedBrand = this.normalizeBrandValue(this.mobileSelectedBrand);
+
+    if (this.selectedSubcategory !== 'all' && !this.subcategories.includes(this.selectedSubcategory)) {
+      this.selectedSubcategory = 'all';
+    }
+
+    if (this.mobileSelectedSubcategory !== 'all' && !this.mobileSubcategories.includes(this.mobileSelectedSubcategory)) {
+      this.mobileSelectedSubcategory = 'all';
+    }
+  }
+
+  private normalizeCategoryValue(value: string): string {
+    if (value === 'all' || this.categories.length === 0) {
+      return value;
+    }
+
+    const bySlug = this.categories.find((category) => category.slug === value);
+    if (bySlug) {
+      return bySlug.slug;
+    }
+
+    const byName = this.categories.find((category) => category.name.toLowerCase() === value.toLowerCase());
+    return byName ? byName.slug : value;
+  }
+
+  private normalizeBrandValue(value: string): string {
+    if (value === 'all' || this.brands.length === 0) {
+      return value;
+    }
+
+    const bySlug = this.brands.find((brand) => brand.slug === value);
+    if (bySlug) {
+      return bySlug.slug;
+    }
+
+    const byName = this.brands.find((brand) => brand.name.toLowerCase() === value.toLowerCase());
+    return byName ? byName.slug : value;
+  }
+
+  private getCategoryNameByValue(value: string): string | null {
+    const bySlug = this.categories.find((category) => category.slug === value);
+    if (bySlug) {
+      return bySlug.name;
+    }
+
+    const byName = this.categories.find((category) => category.name.toLowerCase() === value.toLowerCase());
+    return byName ? byName.name : null;
   }
 
   private mapProduct(item: CatalogProductDto): CatalogProduct {
@@ -705,6 +799,6 @@ export class CatalogComponent implements OnInit {
     this.selectedBrand = 'all';
     this.selectedOrigin = 'all';
     this.selectedCondition = 'all';
-    this.currentPage = 1;
+    this.onFilterChange();
   }
 }

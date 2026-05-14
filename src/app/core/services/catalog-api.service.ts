@@ -23,17 +23,25 @@ export class CatalogApiService {
   getProducts(filters?: {
     search?: string;
     category?: string;
+    subcategory?: string;
     brand?: string;
+    origin?: string;
+    condition?: 'all' | 'Nueva' | 'Usada';
     available?: boolean;
     perPage?: number;
+    page?: number;
   }): Observable<ApiListResponse<CatalogProductDto>> {
     let params = new HttpParams();
 
     if (filters?.search) params = params.set('search', filters.search);
     if (filters?.category) params = params.set('category', filters.category);
+    if (filters?.subcategory) params = params.set('subcategory', filters.subcategory);
     if (filters?.brand) params = params.set('brand', filters.brand);
+    if (filters?.origin) params = params.set('origin', filters.origin);
+    if (filters?.condition && filters.condition !== 'all') params = params.set('condition', filters.condition);
     if (filters?.available !== undefined) params = params.set('available', String(filters.available));
     if (filters?.perPage) params = params.set('per_page', String(filters.perPage));
+    if (filters?.page) params = params.set('page', String(filters.page));
 
     return this.http.get<ApiListResponse<CatalogProductDto>>(`${this.api}/catalog/products`, { params });
   }

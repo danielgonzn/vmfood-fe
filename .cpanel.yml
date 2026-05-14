@@ -2,5 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/filecdks/vmfoodimport.com/
-    - /bin/cp -R deploy/* $DEPLOYPATH
+    - /bin/cp -R dist/app/browser/* $DEPLOYPATH
     - /bin/cp .htaccess $DEPLOYPATH 2>/dev/null || echo "No .htaccess found"

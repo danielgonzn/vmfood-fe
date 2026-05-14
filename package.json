@@ -7,7 +7,8 @@
     "dev": "cross-env ng serve --port=3000 --host=0.0.0.0 --define=\"GEMINI_API_KEY=\\'${GEMINI_API_KEY}\\'\" ${DISABLE_HMR:+--live-reload=false}",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "build-prod": "ng build && rm -rf deploy && cp -r dist/vmfood-fe/browser deploy",
+    "build-prod-window": "ng build && shx rm -rf deploy && shx cp -r dist/browser deploy",
+    "build-prod-unix": "ng build && rm -rf deploy && cp -r dist/browser deploy",
     "test": "ng test",
     "lint": "ng lint",
     "serve:ssr:app": "node dist/app/server/server.mjs"

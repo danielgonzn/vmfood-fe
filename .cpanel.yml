@@ -3,4 +3,6 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/filecdks/vmfoodimport.com/
     - /bin/cp -rf dist/app/browser/* $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/cotizar
+    - /bin/cp -rf public/cotizar/* $DEPLOYPATH/cotizar/
     - /bin/cp .htaccess $DEPLOYPATH 2>/dev/null || echo "No .htaccess found"

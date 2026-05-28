@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>VM Food Import — Maquinaria Industrial y Equipos Gastronómicos en Venezuela</title>
+<meta name="description" content="Importadores y distribuidores autorizados. Equipos de alta gama con garantía, asesoría técnica y envíos a toda Venezuela." />
+
+<!-- Favicon (logo oficial VM Food Import) -->
+<link rel="icon" type="image/png" href="https://vmfoodimport.com/images/logo.png" />
+<link rel="shortcut icon" type="image/png" href="https://vmfoodimport.com/images/logo.png" />
+<link rel="apple-touch-icon" href="https://vmfoodimport.com/images/logo.png" />
+
+<!-- Open Graph / Social sharing -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="VM Food Import — Maquinaria Industrial y Equipos Gastronómicos" />
+<meta property="og:description" content="Importadores autorizados de maquinaria europea para la industria alimentaria. Garantía oficial, repuestos y soporte técnico en toda Venezuela." />
+<meta property="og:image" content="https://vmfoodimport.com/images/banners/background1.JPG" />
+<meta property="og:url" content="https://vmfoodimport.com/" />
+<meta property="og:locale" content="es_VE" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#D70000" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Tailwind via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        colors: {
+          // Brand
+          brand: {
+            red:    '#D70000',
+            redDk:  '#B30000',
+            redLt:  '#FFE5E5',
+            ink:    '#0A0A0A',
+            purple: '#663399',
+            purpleLt:'#F1ECF7',
+          },
+          // Neutral scale (paper / zinc-ish)
+          paper: {
+            50:  '#FFFFFF',
+            100: '#FAFAFA',
+            200: '#F4F4F5',
+            300: '#E7E7EA',
+            400: '#D4D4D8',
+            500: '#A1A1AA',
+            600: '#71717A',
+            700: '#52525B',
+            800: '#27272A',
+            900: '#18181B',
+          },
+        },
+        boxShadow: {
+          'cta': '0 12px 28px -10px rgba(215,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
+          'card': '0 30px 60px -30px rgba(10,10,10,0.18)',
+          'soft': '0 1px 2px rgba(10,10,10,0.04), 0 8px 24px -12px rgba(10,10,10,0.08)',
+        },
+      }
+    }
+  }
+</script>
+
+<!-- Lucide Icons (versión fijada para evitar cambios de API/íconos en producción) -->
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #FAFAFA;
+    color: #0A0A0A;
+  }
+
+  /* Industrial grid background (subtle on light) */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(10,10,10,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,10,10,0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: -1px -1px;
+  }
+  .bg-grid-fade {
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 50%, transparent 100%);
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 50%, transparent 100%);
+  }
+
+  /* Hazard tape: brand red + black */
+  .hazard {
+    background-image: repeating-linear-gradient(45deg,
+      #D70000 0 12px, #0A0A0A 12px 24px);
+  }
+
+  /* Reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Pretty text wrap on headings */
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+
+  /* Smooth tab content swap */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: grid; animation: fadeUp .5s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* Form input focus ring */
+  .field {
+    background: #fff;
+    color: #0A0A0A;
+    border: 1px solid #E7E7EA;
+  }
+  .field::placeholder { color: #A1A1AA; }
+  .field:focus {
+    outline: none;
+    border-color: #D70000;
+    box-shadow: 0 0 0 3px rgba(215,0,0,.18);
+  }
+
+  /* Icon stroke */
+  .lucide { stroke-width: 1.75; }
+
+  /* WhatsApp pulse */
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(34,197,94,.55); }
+    100% { box-shadow: 0 0 0 18px rgba(34,197,94,0); }
+  }
+  .wa-pulse { animation: pulse-ring 1.8s ease-out infinite; }
+
+  /* Diagonal stripe accent */
+  .stripe-accent {
+    background-image: repeating-linear-gradient(135deg,
+      rgba(215,0,0,.08) 0 10px, transparent 10px 20px);
+  }
+</style>
+</head>
+<body class="bg-paper-100 text-brand-ink selection:bg-brand-red selection:text-white">
+
+<!-- ============================================================= -->
+<!-- TOPBAR: hazard tape + contact strip                            -->
+<!-- ============================================================= -->
+<div class="hazard h-1.5 w-full"></div>
+<div class="hidden md:block border-b border-paper-300 bg-white">
+  <div class="mx-auto max-w-7xl px-6 py-2 flex items-center justify-between text-xs text-paper-600">
+    <div class="flex items-center gap-5">
+      <span class="inline-flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-red"></i> Los Teques, Edo. Miranda · Venezuela</span>
+      <span class="inline-flex items-center gap-1.5"><i data-lucide="truck" class="w-3.5 h-3.5 text-brand-red"></i> Envíos a toda Venezuela</span>
+      <span class="inline-flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-brand-red"></i> Garantía oficial · Repuestos originales</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a href="https://vmfoodimport.com" target="_blank" rel="noopener" class="hover:text-brand-ink transition inline-flex items-center gap-1.5"><i data-lucide="globe" class="w-3.5 h-3.5"></i> vmfoodimport.com</a>
+      <a href="tel:+584127212203" class="hover:text-brand-ink transition inline-flex items-center gap-1.5"><i data-lucide="phone" class="w-3.5 h-3.5"></i> +58 (412) 721-2203</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================= -->
+<!-- HEADER / NAV                                                   -->
+<!-- ============================================================= -->
+<header id="header" class="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-paper-300 transition-all">
+  <div class="mx-auto max-w-7xl px-6 h-[72px] flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3 group">
+      <img src="https://vmfoodimport.com/images/logo.png" alt="VM Food Import" class="h-10 w-auto object-contain" loading="eager" />
+ 
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8 text-sm text-paper-700">
+      <a href="#lineas" class="hover:text-brand-ink transition">Líneas</a>
+      <a href="#valor" class="hover:text-brand-ink transition">Por qué nosotros</a>
+      <a href="#proceso" class="hover:text-brand-ink transition">Proceso</a>
+      <a href="#faq" class="hover:text-brand-ink transition">Preguntas</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="tel:+584127212203" class="hidden sm:inline-flex items-center gap-2 text-sm text-paper-800 hover:text-brand-ink px-3 py-2 rounded-md border border-paper-300 hover:border-paper-400 transition">
+        <i data-lucide="phone-call" class="w-4 h-4 text-brand-red"></i>
+        <span class="font-medium">+58 412-721-2203</span>
+      </a>
+      <a href="#cotizar" class="inline-flex items-center gap-2 bg-brand-red hover:bg-brand-redDk text-white font-semibold px-4 py-2.5 rounded-md shadow-cta transition text-sm">
+        <i data-lucide="file-text" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Solicitar Cotización</span>
+        <span class="sm:hidden">Cotizar</span>
+      </a>
+      <button id="menuBtn" class="lg:hidden p-2 rounded-md border border-paper-300 text-brand-ink" aria-label="Menú">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="lg:hidden hidden border-t border-paper-300 bg-white">
+    <div class="px-6 py-4 flex flex-col gap-1 text-paper-800">
+      <a href="#lineas" class="py-2.5 border-b border-paper-200">Líneas de producto</a>
+      <a href="#valor" class="py-2.5 border-b border-paper-200">Por qué nosotros</a>
+      <a href="#proceso" class="py-2.5 border-b border-paper-200">Proceso comercial</a>
+      <a href="#faq" class="py-2.5">Preguntas frecuentes</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================= -->
+<!-- HERO                                                           -->
+<!-- ============================================================= -->
+<section id="top" class="relative overflow-hidden bg-white">
+  <div class="absolute inset-0 bg-grid bg-grid-fade"></div>
+  <div class="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-brand-red/5 blur-3xl"></div>
+  <div class="absolute -bottom-40 -left-40 w-[520px] h-[520px] rounded-full bg-brand-purple/10 blur-3xl"></div>
+
+  <div class="relative mx-auto max-w-7xl px-6 pt-12 lg:pt-20 pb-16 lg:pb-24 grid lg:grid-cols-12 gap-10 items-center">
+
+    <!-- LEFT: Copy + form -->
+    <div class="lg:col-span-7">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-red/25 bg-brand-redLt text-brand-redDk text-xs font-semibold tracking-wide uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-pulse"></span>
+        Importador autorizado · Stock disponible
+      </div>
+
+      <h1 class="mt-5 text-4xl sm:text-5xl lg:text-[64px] lg:leading-[1.04] font-extrabold tracking-tight text-brand-ink">
+        Maquinaria Industrial y
+        <span class="text-brand-red">Equipos Gastronómicos</span>
+        de alta gama con respaldo en Venezuela.
+      </h1>
+
+      <p class="mt-5 text-lg text-paper-700 max-w-2xl">
+        Equipamos restaurantes, panaderías y plantas de alimentos con tecnología de punta,
+        asesoría técnica especializada por ingenieros y envíos seguros a todo el país.
+      </p>
+
+      <!-- Trust micro-row -->
+      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-paper-700">
+        <span class="inline-flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-brand-red"></i> Garantía oficial</span>
+        <span class="inline-flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-brand-red"></i> Repuestos en stock</span>
+        <span class="inline-flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-brand-red"></i> Financiamiento empresarial</span>
+      </div>
+
+      <!-- CTA + form -->
+      <div id="cotizar" class="mt-8 grid sm:grid-cols-[auto,1fr] gap-3 sm:gap-4 items-start">
+        <a id="waCta" href="#" target="_blank" rel="noopener"
+           class="group relative inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1FBA57] text-white font-bold px-6 py-4 rounded-lg shadow-cta transition text-base whitespace-nowrap">
+          <span class="absolute inset-0 rounded-lg wa-pulse pointer-events-none"></span>
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          Cotizar por WhatsApp
+          <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-0.5 transition"></i>
+        </a>
+        <div class="text-sm text-paper-600 self-center">
+          completa el <span class="text-brand-ink font-medium">formulario de</span> abajo y te contactamos.
+        </div>
+      </div>
+
+      <!-- Inline form -->
+      <form id="leadForm" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 sm:p-5 rounded-xl border border-paper-300 bg-white shadow-soft">
+        <div class="sm:col-span-2 flex items-center justify-between">
+          <div class="text-sm font-semibold text-brand-ink inline-flex items-center gap-2">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-brand-red"></i> Formulario de cotización
+          </div>
+          <div class="text-[11px] uppercase tracking-wider text-paper-500">Respuesta &lt; 1h hábil</div>
+        </div>
+
+        <label class="block">
+          <span class="text-xs text-paper-600">Nombre y apellido</span>
+          <input required name="nombre" type="text" placeholder="Ej. Andrés Marín"
+            class="field mt-1 w-full rounded-md px-3 py-2.5 text-sm transition" />
+        </label>
+        <label class="block">
+          <span class="text-xs text-paper-600">Empresa / Negocio</span>
+          <input required name="empresa" type="text" placeholder="Ej. Panadería La Cresta"
+            class="field mt-1 w-full rounded-md px-3 py-2.5 text-sm transition" />
+        </label>
+        <label class="block">
+          <span class="text-xs text-paper-600">Teléfono / WhatsApp</span>
+          <input required name="telefono" type="tel" placeholder="0414-000-0000"
+            class="field mt-1 w-full rounded-md px-3 py-2.5 text-sm transition" />
+        </label>
+        <label class="block">
+          <span class="text-xs text-paper-600">Línea de interés</span>
+          <select required name="linea"
+            class="field mt-1 w-full rounded-md px-3 py-2.5 text-sm transition">
+            <option value="">Selecciona una línea…</option>
+            <option>Línea Gastronómica</option>
+            <option>Línea Industrial</option>
+            <option>Ambas líneas</option>
+          </select>
+        </label>
+
+        <button type="submit"
+          class="sm:col-span-2 inline-flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-redDk text-white font-bold px-5 py-3 rounded-md shadow-cta transition">
+          <i data-lucide="send-horizontal" class="w-4 h-4"></i>
+          Enviar y recibir cotización
+        </button>
+        <p class="sm:col-span-2 text-[11px] text-paper-500 inline-flex items-center gap-1.5">
+          <i data-lucide="lock" class="w-3 h-3"></i> Tus datos se usan únicamente para contactarte. No spam.
+        </p>
+      </form>
+    </div>
+
+    <!-- RIGHT: Visual composition -->
+    <div class="lg:col-span-5">
+      <div class="relative">
+        <!-- Main image -->
+        <div class="relative rounded-2xl overflow-hidden border border-paper-300 shadow-card aspect-[4/5]">
+          <img src="https://vmfoodimport.com/images/banners/background1.JPG"
+               alt="VM Food Import — Equipos y alimentos para tu negocio" loading="eager"
+               class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink/85 via-brand-ink/10 to-transparent"></div>
+
+          <!-- Floating spec card -->
+          <div class="absolute left-4 right-4 bottom-4 p-4 rounded-xl bg-white/95 backdrop-blur border border-paper-300 shadow-soft">
+            <div class="flex items-center gap-2 text-xs text-brand-red font-bold tracking-wider uppercase">
+              <i data-lucide="factory" class="w-4 h-4"></i> Maquinaria europea Handtmann
+            </div>
+            <div class="mt-1 text-brand-ink font-semibold">Embutidora al vacío VF 300</div>
+            <div class="mt-2 grid grid-cols-3 gap-2 text-[11px] text-paper-600">
+              <div><span class="block text-brand-ink font-bold">380V</span>trifásico</div>
+              <div><span class="block text-brand-ink font-bold">10.000</span>kg/h</div>
+              <div><span class="block text-brand-ink font-bold">7 kW</span>potencia</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary stacked images -->
+        <div class="absolute -left-6 -bottom-8 hidden md:block w-40 h-40 rounded-xl overflow-hidden border border-paper-300 shadow-card rotate-[-4deg] bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPVBBQNAPECQR581HJ12W97V.jpg"
+               alt="Cortadora de carne Magurit" class="w-full h-full object-cover" />
+        </div>
+        <div class="absolute -right-6 -top-8 hidden md:block w-44 h-32 rounded-xl overflow-hidden border border-paper-300 shadow-card rotate-[5deg] bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KQ0H8PAYKJ0D1GYWCHWA0W1H.jpg"
+               alt="Chuleteadora Treif modelo 2411" class="w-full h-full object-cover" />
+        </div>
+
+        <!-- Stat pill -->
+        <div class="absolute -right-2 lg:-right-6 bottom-10 lg:bottom-16 px-4 py-3 rounded-xl bg-brand-ink text-white shadow-card">
+          <div class="text-2xl font-black leading-none">Desde 2021</div>
+          <div class="text-[11px] font-semibold tracking-wider uppercase text-brand-red">equipando Venezuela</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand logos band (marcas representadas oficialmente) -->
+  <div class="relative border-t border-paper-300 bg-white">
+    <div class="mx-auto max-w-7xl px-6 py-8">
+      <div class="text-center text-[11px] uppercase tracking-[0.22em] text-paper-500 font-semibold">Marcas representadas</div>
+      <div class="mt-5 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 items-center gap-6 opacity-90">
+        <img src="https://vmfoodimport.com/images/brands/handtmann.webp" alt="Handtmann" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/treif.png" alt="Treif" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/polyclip.svg" alt="Poly-Clip" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/marel.ico" alt="Marel" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/multivac.png" alt="Multivac" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/bizerba.ico" alt="Bizerba" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/gea.png" alt="GEA" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+        <img src="https://vmfoodimport.com/images/brands/ulma.png" alt="ULMA Packaging" class="h-10 w-auto object-contain mx-auto grayscale hover:grayscale-0 transition" loading="lazy" />
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============================================================= -->
+<!-- VALUE PROPOSITION — 4 pilares                                  -->
+<!-- ============================================================= -->
+<section id="valor" class="relative py-20 lg:py-28 bg-paper-100">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="max-w-3xl reveal">
+      <div class="text-brand-red text-xs font-bold uppercase tracking-[0.22em]">Por qué VM Food Import</div>
+      <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-ink tracking-tight">
+        Cuatro pilares que sostienen tu inversión.
+      </h2>
+      <p class="mt-4 text-paper-700 text-lg">
+        No vendemos equipos: entregamos continuidad operativa. Cada compra incluye respaldo técnico real, repuestos a la mano y un equipo de ingenieros disponibles cuando los necesites.
+      </p>
+    </div>
+
+    <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Pillar 1 -->
+      <article class="reveal group relative p-6 rounded-2xl bg-white border border-paper-300 hover:border-brand-red/40 hover:shadow-card transition overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-brand-red/5 group-hover:bg-brand-red/10 transition blur-xl"></div>
+        <div class="relative">
+          <div class="w-12 h-12 rounded-lg bg-brand-redLt border border-brand-red/20 grid place-items-center">
+            <i data-lucide="shield-check" class="w-6 h-6 text-brand-red"></i>
+          </div>
+          <h3 class="mt-5 text-xl font-bold text-brand-ink">Garantía y respaldo</h3>
+          <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+            Equipos de marcas líderes con garantía oficial de hasta 24 meses y soporte técnico asegurado en sitio.
+          </p>
+          <div class="mt-4 text-xs text-brand-purple font-bold tracking-wider uppercase">Confianza</div>
+        </div>
+      </article>
+
+      <!-- Pillar 2 -->
+      <article class="reveal group relative p-6 rounded-2xl bg-white border border-paper-300 hover:border-brand-red/40 hover:shadow-card transition overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-brand-red/5 group-hover:bg-brand-red/10 transition blur-xl"></div>
+        <div class="relative">
+          <div class="w-12 h-12 rounded-lg bg-brand-redLt border border-brand-red/20 grid place-items-center">
+            <i data-lucide="truck" class="w-6 h-6 text-brand-red"></i>
+          </div>
+          <h3 class="mt-5 text-xl font-bold text-brand-ink">Envíos nacionales</h3>
+          <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+            Logística y distribución segura a toda Venezuela, con embalaje industrial y seguro de carga incluido.
+          </p>
+          <div class="mt-4 text-xs text-brand-purple font-bold tracking-wider uppercase">Logística</div>
+        </div>
+      </article>
+
+      <!-- Pillar 3 -->
+      <article class="reveal group relative p-6 rounded-2xl bg-white border border-paper-300 hover:border-brand-red/40 hover:shadow-card transition overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-brand-red/5 group-hover:bg-brand-red/10 transition blur-xl"></div>
+        <div class="relative">
+          <div class="w-12 h-12 rounded-lg bg-brand-redLt border border-brand-red/20 grid place-items-center">
+            <i data-lucide="headset" class="w-6 h-6 text-brand-red"></i>
+          </div>
+          <h3 class="mt-5 text-xl font-bold text-brand-ink">Asesoría pre y post venta</h3>
+          <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+            Acompañamiento técnico total por ingenieros y especialistas, desde la selección hasta la puesta en marcha.
+          </p>
+          <div class="mt-4 text-xs text-brand-purple font-bold tracking-wider uppercase">Expertos</div>
+        </div>
+      </article>
+
+      <!-- Pillar 4 -->
+      <article class="reveal group relative p-6 rounded-2xl bg-white border border-paper-300 hover:border-brand-red/40 hover:shadow-card transition overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-brand-red/5 group-hover:bg-brand-red/10 transition blur-xl"></div>
+        <div class="relative">
+          <div class="w-12 h-12 rounded-lg bg-brand-redLt border border-brand-red/20 grid place-items-center">
+            <i data-lucide="cog" class="w-6 h-6 text-brand-red"></i>
+          </div>
+          <h3 class="mt-5 text-xl font-bold text-brand-ink">Stock y repuestos</h3>
+          <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+            Inventario nacional de repuestos críticos para asegurar la continuidad operativa de tu negocio.
+          </p>
+          <div class="mt-4 text-xs text-brand-purple font-bold tracking-wider uppercase">Continuidad</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- LÍNEAS DE PRODUCTO — Tabs (dark section for contrast)          -->
+<!-- ============================================================= -->
+<section id="lineas" class="relative py-20 lg:py-28 bg-brand-ink text-white border-y border-paper-300 overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.06]" style="background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px); background-size: 56px 56px;"></div>
+  <div class="absolute -top-32 right-0 w-[420px] h-[420px] rounded-full bg-brand-red/15 blur-3xl"></div>
+  <div class="absolute -bottom-32 left-0 w-[420px] h-[420px] rounded-full bg-brand-purple/20 blur-3xl"></div>
+
+  <div class="relative mx-auto max-w-7xl px-6">
+
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+      <div class="max-w-2xl reveal">
+        <div class="text-brand-red text-xs font-bold uppercase tracking-[0.22em]">Nuestras dos líneas</div>
+        <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+          Equipos diseñados para el negocio que estás construyendo.
+        </h2>
+      </div>
+      <!-- Tab switcher -->
+      <div class="inline-flex p-1.5 rounded-xl bg-white/5 border border-white/10 self-start lg:self-end">
+        <button data-tab="gastro" class="tab-btn active px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition">
+          <i data-lucide="utensils" class="w-4 h-4"></i> Gastronómica
+        </button>
+        <button data-tab="industrial" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition">
+          <i data-lucide="factory" class="w-4 h-4"></i> Industrial
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB: Gastronómica -->
+    <div id="panel-gastro" class="tab-panel active mt-12 grid lg:grid-cols-12 gap-6">
+
+      <!-- Hero card -->
+      <div class="lg:col-span-7 relative rounded-2xl overflow-hidden border border-white/10 min-h-[400px] group">
+        <img src="https://vmfoodimport.com/images/banners/background2.jpeg"
+             alt="Línea gastronómica VM Food Import" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-ink via-brand-ink/60 to-transparent"></div>
+        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+          <div class="text-xs font-bold uppercase tracking-[0.22em] text-brand-red inline-flex items-center gap-2">
+            <i data-lucide="chef-hat" class="w-4 h-4"></i> Línea Gastronómica
+          </div>
+          <h3 class="mt-3 text-3xl lg:text-4xl font-extrabold text-white max-w-lg">
+            Para restaurantes, panaderías y emprendedores gastronómicos.
+          </h3>
+          <p class="mt-3 text-white/80 max-w-xl">
+            Hornos rotativos y de convección, amasadoras, rebanadoras, refrigeración comercial, cocinas industriales y línea fría — todo bajo un solo proveedor.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#cotizar" class="inline-flex items-center gap-2 bg-brand-red hover:bg-brand-redDk text-white font-bold px-5 py-3 rounded-md shadow-cta transition">
+              Ver catálogo / Cotizar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="inline-flex items-center gap-2 text-white hover:text-brand-red border border-white/30 hover:border-brand-red/60 px-5 py-3 rounded-md transition">
+              Descargar ficha técnica <i data-lucide="download" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-categories -->
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KQ0H8PAYKJ0D1GYWCHWA0W1H.jpg" alt="Chuleteadora Treif" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Chuleteadoras</div>
+            <div class="text-xs text-white/60">Treif · Cortes precisos</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPVBBQNAPECQR581HJ12W97V.jpg" alt="Cortadora Magurit" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Cortadoras</div>
+            <div class="text-xs text-white/60">Magurit · Línea cárnica</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPBCW6JDD6HCEWDXY105XF6B.jpg" alt="Brazo torsionador Handtmann" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Brazo torsionador</div>
+            <div class="text-xs text-white/60">Handtmann · Maquinaria europea</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPVE42P03RM0T1JXXTJCEAKM.jpg" alt="Clipadora Tipper Tie DC" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Clipadoras</div>
+            <div class="text-xs text-white/60">Tipper Tie DC · Embutidos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Industrial -->
+    <div id="panel-industrial" class="tab-panel mt-12 grid lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 relative rounded-2xl overflow-hidden border border-white/10 min-h-[400px] group">
+        <img src="https://vmfoodimport.com/images/banners/bannerFilter.jpg"
+             alt="Línea industrial VM Food Import" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-ink via-brand-ink/60 to-transparent"></div>
+        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+          <div class="text-xs font-bold uppercase tracking-[0.22em] text-brand-red inline-flex items-center gap-2">
+            <i data-lucide="factory" class="w-4 h-4"></i> Línea Industrial
+          </div>
+          <h3 class="mt-3 text-3xl lg:text-4xl font-extrabold text-white max-w-lg">
+            Para PYMEs de alimentos y sector agropecuario.
+          </h3>
+          <p class="mt-3 text-white/80 max-w-xl">
+            Procesadoras industriales, empacadoras al vacío, embutidoras, líneas de envasado, sistemas de pesaje y maquinaria pesada para producción a escala.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#cotizar" class="inline-flex items-center gap-2 bg-brand-red hover:bg-brand-redDk text-white font-bold px-5 py-3 rounded-md shadow-cta transition">
+              Ver catálogo / Cotizar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="inline-flex items-center gap-2 text-white hover:text-brand-red border border-white/30 hover:border-brand-red/60 px-5 py-3 rounded-md transition">
+              Descargar ficha técnica <i data-lucide="download" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KP3KVPXYA0F37VDY9WJ0HBZD.jpg" alt="Embutidora al vacío VF 300" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Embutidoras al vacío</div>
+            <div class="text-xs text-white/60">Handtmann VF 300 · 10.000 kg/h</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPVDTY6GGZJ3TAHV05J3RR05.jpg" alt="Embutidora Frey Konti E80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Embutidoras industriales</div>
+            <div class="text-xs text-white/60">Frey Konti E80 · 3.600 kg/h</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPVDN3Q72AQ5DQWGGCKHYW92.jpg" alt="Embutidora Vemag Robby 136" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Embutidoras Vemag</div>
+            <div class="text-xs text-white/60">Robby 136 · 2.700 kg/h</div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-white/10 group relative aspect-square bg-white">
+          <img src="https://panel.vmfoodimport.com/storage/products/01KPVEPQK459PPR6CVZC0P76YB.jpg" alt="Embutidora Handtmann VF200" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-ink to-transparent"></div>
+          <div class="absolute left-4 right-4 bottom-4">
+            <div class="text-white font-bold">Handtmann VF200</div>
+            <div class="text-xs text-white/60">5.000 kg/h · Producción a escala</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- PROCESO COMERCIAL — 3 pasos                                    -->
+<!-- ============================================================= -->
+<section id="proceso" class="relative py-20 lg:py-28 bg-white">
+  <div class="mx-auto max-w-7xl px-6">
+
+    <div class="max-w-3xl reveal">
+      <div class="text-brand-red text-xs font-bold uppercase tracking-[0.22em]">Proceso comercial</div>
+      <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-ink tracking-tight">
+        De tu mensaje al despacho en 3 pasos claros.
+      </h2>
+      <p class="mt-4 text-paper-700 text-lg">
+        Diseñamos un proceso simple para que tomes la mejor decisión sin fricción ni sorpresas.
+      </p>
+    </div>
+
+    <div class="mt-14 relative">
+      <!-- connecting line -->
+      <div class="hidden lg:block absolute top-12 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-brand-red/40 to-transparent"></div>
+
+      <div class="grid lg:grid-cols-3 gap-6 lg:gap-10">
+
+        <!-- Step 1 -->
+        <div class="reveal relative">
+          <div class="flex items-start gap-4">
+            <div class="relative shrink-0">
+              <div class="w-24 h-24 rounded-2xl bg-paper-100 border border-paper-300 grid place-items-center">
+                <i data-lucide="search" class="w-8 h-8 text-brand-red"></i>
+              </div>
+              <div class="absolute -top-2 -left-2 w-9 h-9 rounded-lg bg-brand-red text-white font-black grid place-items-center text-lg shadow-cta">01</div>
+            </div>
+            <div class="pt-2">
+              <h3 class="text-xl font-bold text-brand-ink">Selecciona tus equipos</h3>
+              <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+                Explora nuestro catálogo o cuéntanos qué necesitas. Un especialista te orienta sin compromiso.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="reveal relative">
+          <div class="flex items-start gap-4">
+            <div class="relative shrink-0">
+              <div class="w-24 h-24 rounded-2xl bg-paper-100 border border-paper-300 grid place-items-center">
+                <i data-lucide="file-check-2" class="w-8 h-8 text-brand-red"></i>
+              </div>
+              <div class="absolute -top-2 -left-2 w-9 h-9 rounded-lg bg-brand-red text-white font-black grid place-items-center text-lg shadow-cta">02</div>
+            </div>
+            <div class="pt-2">
+              <h3 class="text-xl font-bold text-brand-ink">Asesoría y cotización</h3>
+              <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+                Recibe una propuesta técnico-comercial personalizada con tiempos, opciones de pago y plan de instalación.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="reveal relative">
+          <div class="flex items-start gap-4">
+            <div class="relative shrink-0">
+              <div class="w-24 h-24 rounded-2xl bg-paper-100 border border-paper-300 grid place-items-center">
+                <i data-lucide="package-check" class="w-8 h-8 text-brand-red"></i>
+              </div>
+              <div class="absolute -top-2 -left-2 w-9 h-9 rounded-lg bg-brand-red text-white font-black grid place-items-center text-lg shadow-cta">03</div>
+            </div>
+            <div class="pt-2">
+              <h3 class="text-xl font-bold text-brand-ink">Despacho con garantía</h3>
+              <p class="mt-2 text-paper-600 text-sm leading-relaxed">
+                Coordinamos el envío a tu negocio en cualquier parte de Venezuela, con instalación y garantía total.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA banner -->
+    <div class="mt-16 relative overflow-hidden rounded-2xl border border-paper-300 bg-paper-100 stripe-accent p-8 lg:p-12">
+      <div class="absolute -right-20 -top-20 w-72 h-72 rounded-full bg-brand-red/10 blur-3xl"></div>
+      <div class="absolute inset-y-0 right-0 w-1.5 hazard hidden lg:block"></div>
+      <div class="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div>
+          <div class="text-brand-red text-xs font-bold uppercase tracking-[0.22em]">¿Listo para empezar?</div>
+          <h3 class="mt-2 text-2xl lg:text-3xl font-extrabold text-brand-ink max-w-xl">
+            Habla con un especialista hoy y recibe tu cotización en menos de 1 hora hábil.
+          </h3>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a id="waCta2" target="_blank" rel="noopener" href="#"
+             class="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1FBA57] text-white font-bold px-6 py-4 rounded-lg shadow-cta transition">
+            <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp directo
+          </a>
+          <a href="#cotizar" class="inline-flex items-center justify-center gap-2 bg-brand-red hover:bg-brand-redDk text-white font-bold px-6 py-4 rounded-lg shadow-cta transition">
+            <i data-lucide="file-text" class="w-5 h-5"></i> Solicitar cotización
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- FAQ                                                            -->
+<!-- ============================================================= -->
+<section id="faq" class="py-20 lg:py-24 bg-paper-100 border-t border-paper-300">
+  <div class="mx-auto max-w-4xl px-6">
+    <div class="text-center reveal">
+      <div class="text-brand-red text-xs font-bold uppercase tracking-[0.22em]">Preguntas frecuentes</div>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-brand-ink tracking-tight">Lo que más nos preguntan</h2>
+    </div>
+
+    <div class="mt-10 space-y-3">
+      <details class="group rounded-xl border border-paper-300 bg-white p-5 open:border-brand-red/40 transition">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold text-brand-ink">¿Tienen los equipos en stock o son por encargo?</span>
+          <i data-lucide="plus" class="w-5 h-5 text-brand-red group-open:rotate-45 transition"></i>
+        </summary>
+        <p class="mt-3 text-paper-600 text-sm">Manejamos inventario nacional de los modelos más solicitados. Para equipos especializados o configuraciones específicas, gestionamos el pedido directo con el fabricante con tiempos confirmados al momento de cotizar.</p>
+      </details>
+      <details class="group rounded-xl border border-paper-300 bg-white p-5 open:border-brand-red/40 transition">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold text-brand-ink">¿Cómo funciona la garantía?</span>
+          <i data-lucide="plus" class="w-5 h-5 text-brand-red group-open:rotate-45 transition"></i>
+        </summary>
+        <p class="mt-3 text-paper-600 text-sm">Todos nuestros equipos cuentan con garantía oficial del fabricante (12 a 24 meses según modelo). Adicionalmente nuestro equipo técnico atiende cualquier eventualidad directamente en sitio en las principales ciudades.</p>
+      </details>
+      <details class="group rounded-xl border border-paper-300 bg-white p-5 open:border-brand-red/40 transition">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold text-brand-ink">¿Despachan a todo el país?</span>
+          <i data-lucide="plus" class="w-5 h-5 text-brand-red group-open:rotate-45 transition"></i>
+        </summary>
+        <p class="mt-3 text-paper-600 text-sm">Sí. Operamos con aliados logísticos en todo el territorio nacional. Embalaje industrial, seguro de carga e instalación en destino disponibles.</p>
+      </details>
+      <details class="group rounded-xl border border-paper-300 bg-white p-5 open:border-brand-red/40 transition">
+        <summary class="flex items-center justify-between cursor-pointer list-none">
+          <span class="font-semibold text-brand-ink">¿Manejan opciones de financiamiento?</span>
+          <i data-lucide="plus" class="w-5 h-5 text-brand-red group-open:rotate-45 transition"></i>
+        </summary>
+        <p class="mt-3 text-paper-600 text-sm">Trabajamos con esquemas de pago para empresas, leasing operativo y planes con cuota inicial. Cuéntanos tu caso y armamos la opción más conveniente.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- FOOTER                                                         -->
+<!-- ============================================================= -->
+<footer class="bg-brand-ink text-white">
+  <div class="mx-auto max-w-7xl px-6 py-14 grid md:grid-cols-12 gap-10">
+    <div class="md:col-span-5">
+      <div class="flex items-center gap-3">
+        <div class="bg-white rounded-md p-2">
+          <img src="https://vmfoodimport.com/images/logo.png" alt="VM Food Import" class="h-10 w-auto object-contain" />
+        </div>
+        <div class="leading-tight">
+          <div class="font-extrabold tracking-tight">VM FOOD IMPORT</div>
+          <div class="text-[10px] uppercase tracking-[0.18em] text-white/50">Tecnología para la industria alimentaria</div>
+        </div>
+      </div>
+      <p class="mt-5 text-white/70 text-sm max-w-md">
+        Importación y distribución de maquinaria industrial y equipos para la industria alimentaria, con respaldo técnico, repuestos originales y garantía oficial en todo el territorio venezolano.
+      </p>
+      <div class="mt-5 flex items-center gap-3">
+        <a href="https://www.instagram.com/vmfoodimport" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 rounded-md border border-white/15 grid place-items-center text-white/80 hover:text-white hover:border-brand-red transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        </a>
+        <a href="https://www.facebook.com/vmfoodimport" target="_blank" rel="noopener" aria-label="Facebook" class="w-9 h-9 rounded-md border border-white/15 grid place-items-center text-white/80 hover:text-white hover:border-brand-red transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.563 9.876v-6.988h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.888h-2.33v6.988A10.002 10.002 0 0 0 22 12z"/></svg>
+        </a>
+        <a href="https://wa.me/584127212203" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 rounded-md border border-white/15 grid place-items-center text-white/80 hover:text-white hover:border-brand-red transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.554-5.338 11.89-11.893 11.89a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l.6.954-1 3.648 3.736-.98zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.711.306 1.265.489 1.697.626.713.226 1.362.194 1.876.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        </a>
+        <a href="https://vmfoodimport.com" target="_blank" rel="noopener" aria-label="Sitio web" class="w-9 h-9 rounded-md border border-white/15 grid place-items-center text-white/80 hover:text-white hover:border-brand-red transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="md:col-span-3">
+      <div class="text-xs uppercase tracking-[0.22em] text-white/50 font-semibold">Contacto</div>
+      <ul class="mt-4 space-y-3 text-sm text-white/85">
+        <li class="flex items-start gap-2"><i data-lucide="phone" class="w-4 h-4 text-brand-red mt-0.5"></i><a href="tel:+584127212203" class="hover:text-white">+58 (412) 721-2203</a></li>
+        <li class="flex items-start gap-2"><i data-lucide="globe" class="w-4 h-4 text-brand-red mt-0.5"></i><a href="https://vmfoodimport.com" target="_blank" rel="noopener" class="hover:text-white">vmfoodimport.com</a></li>
+        <li class="flex items-start gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-brand-red mt-0.5"></i> Los Teques, Edo. Miranda — Venezuela</li>
+        <li class="flex items-start gap-2"><i data-lucide="clock" class="w-4 h-4 text-brand-red mt-0.5"></i> Lun–Vie 8:00 AM – 5:00 PM<br/>Sáb 8:00 AM – 12:00 PM</li>
+      </ul>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="text-xs uppercase tracking-[0.22em] text-white/50 font-semibold">Catálogo</div>
+      <ul class="mt-4 space-y-2.5 text-sm text-white/85">
+        <li><a href="https://vmfoodimport.com/catalogo?categoria=Maquinaria%20Alemana" target="_blank" rel="noopener" class="hover:text-white">Maquinaria Alemana</a></li>
+        <li><a href="https://vmfoodimport.com/catalogo?categoria=Maquinaria%20China" target="_blank" rel="noopener" class="hover:text-white">Maquinaria China</a></li>
+        <li><a href="https://vmfoodimport.com/catalogo?categoria=Equipamiento%20Complementario" target="_blank" rel="noopener" class="hover:text-white">Equipamiento</a></li>
+        <li><a href="https://vmfoodimport.com/catalogo?categoria=Materias%20Primas" target="_blank" rel="noopener" class="hover:text-white">Materias Primas</a></li>
+      </ul>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="text-xs uppercase tracking-[0.22em] text-white/50 font-semibold">Legal</div>
+      <ul class="mt-4 space-y-2.5 text-sm text-white/85">
+        <li><a href="https://vmfoodimport.com/terminos-y-condiciones" target="_blank" rel="noopener" class="hover:text-white">Términos y Condiciones</a></li>
+        <li><a href="https://vmfoodimport.com/aviso-de-privacidad" target="_blank" rel="noopener" class="hover:text-white">Aviso de Privacidad</a></li>
+        <li><a href="#valor" class="hover:text-white">Garantía</a></li>
+        <li><a href="#faq" class="hover:text-white">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="hazard h-1.5 w-full"></div>
+  <div class="bg-black/40">
+    <div class="mx-auto max-w-7xl px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/55">
+      <div>© <span id="year"></span> VM Food Import. Todos los derechos reservados.</div>
+      <div class="inline-flex items-center gap-2">Los Teques, Edo. Miranda · Venezuela</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================= -->
+<!-- STICKY MOBILE WHATSAPP                                         -->
+<!-- ============================================================= -->
+<a id="waFloat" href="#" target="_blank" rel="noopener"
+   class="fixed bottom-5 right-5 z-50 lg:hidden inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-4 py-3 rounded-full shadow-cta">
+  <i data-lucide="message-circle" class="w-5 h-5"></i> WhatsApp
+</a>
+
+<!-- ============================================================= -->
+<!-- SCRIPTS                                                        -->
+<!-- ============================================================= -->
+<script>
+  // Lucide
+  lucide.createIcons();
+
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn?.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+  mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+  // Header shadow on scroll
+  const header = document.getElementById('header');
+  const onScroll = () => {
+    if (window.scrollY > 12) header.classList.add('shadow-[0_8px_30px_-12px_rgba(10,10,10,0.10)]');
+    else header.classList.remove('shadow-[0_8px_30px_-12px_rgba(10,10,10,0.10)]');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // WhatsApp links — dynamic message
+  const waNumber = '584127212203';
+  const buildWaUrl = (msg) => `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+  const defaultMsg = 'Hola VM Food Import, me interesa recibir una cotización. ';
+  document.getElementById('waCta').href = buildWaUrl(defaultMsg);
+  document.getElementById('waCta2').href = buildWaUrl(defaultMsg);
+  document.getElementById('waFloat').href = buildWaUrl(defaultMsg);
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const setActiveStyles = () => {
+    tabBtns.forEach(b => {
+      const active = b.classList.contains('active');
+      b.classList.toggle('bg-brand-red', active);
+      b.classList.toggle('text-white', active);
+      b.classList.toggle('shadow-cta', active);
+      b.classList.toggle('text-white/70', !active);
+      b.classList.toggle('hover:text-white', !active);
+    });
+  };
+  setActiveStyles();
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      setActiveStyles();
+      const target = btn.dataset.tab;
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + target).classList.add('active');
+    });
+  });
+
+  // Lead form — friendly success state
+  const form = document.getElementById('leadForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const nombre = fd.get('nombre');
+    const empresa = fd.get('empresa');
+    const linea = fd.get('linea');
+    const telefono = fd.get('telefono');
+
+    const msg =
+`Hola VM Food Import, soy ${nombre} de ${empresa}.
+Estoy interesado(a) en la *${linea}*.
+Mi teléfono: ${telefono}.
+Por favor envíenme cotización.`;
+    const url = buildWaUrl(msg);
+
+    form.innerHTML = `
+      <div class="sm:col-span-2 text-center py-8 px-4">
+        <div class="mx-auto w-14 h-14 rounded-full bg-brand-redLt border border-brand-red/30 grid place-items-center">
+          <i data-lucide="check" class="w-7 h-7 text-brand-red"></i>
+        </div>
+        <h3 class="mt-4 text-xl font-bold text-brand-ink">¡Listo, ${String(nombre).split(' ')[0]}!</h3>
+        <p class="mt-2 text-paper-600 text-sm max-w-md mx-auto">
+          Recibimos tu solicitud para la <b class="text-brand-ink">${linea}</b>.
+          Te abrimos WhatsApp para finalizar — un especialista te contactará en menos de 1 hora hábil.
+        </p>
+        <a href="${url}" target="_blank" rel="noopener"
+           class="mt-5 inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1FBA57] text-white font-bold px-5 py-3 rounded-md shadow-cta transition">
+          <i data-lucide="message-circle" class="w-4 h-4"></i> Continuar por WhatsApp
+        </a>
+      </div>`;
+    lucide.createIcons();
+    setTimeout(() => window.open(url, '_blank'), 250);
+  });
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

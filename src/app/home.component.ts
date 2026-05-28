@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   currentHeroSlide = 0;
+  private readonly loadedHeroSlides = new Set<number>([0]);
 
   brandLogos: BrandLogo[] = [
     { id: 1, name: 'Handtmann', image: '/images/brands/handtmann.webp' },
@@ -351,17 +352,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.currentHeroSlide = index;
+    this.loadedHeroSlides.add(index);
     this.cdr.markForCheck();
   }
 
   nextHeroSlide(): void {
     this.currentHeroSlide = (this.currentHeroSlide + 1) % this.heroSlides.length;
+    this.loadedHeroSlides.add(this.currentHeroSlide);
     this.cdr.markForCheck();
   }
 
   prevHeroSlide(): void {
     this.currentHeroSlide = (this.currentHeroSlide - 1 + this.heroSlides.length) % this.heroSlides.length;
+    this.loadedHeroSlides.add(this.currentHeroSlide);
     this.cdr.markForCheck();
+  }
+
+  shouldLoadHeroImage(index: number): boolean {
+    return this.loadedHeroSlides.has(index);
   }
 
   nextFeaturedSlide(): void {

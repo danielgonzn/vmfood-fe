@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -13,10 +13,12 @@ import {
   SiteConfigDto,
   WebContentDto,
 } from '../models/api.models';
+import { SKIP_LOADING } from '../interceptors/http-loading.interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class CatalogApiService {
   private readonly api = environment.apiBaseUrl;
+  private readonly skipLoadingContext = new HttpContext().set(SKIP_LOADING, true);
 
   constructor(private readonly http: HttpClient) {}
 
@@ -64,11 +66,16 @@ export class CatalogApiService {
     if (filters?.section) params = params.set('section', filters.section);
     if (filters?.key) params = params.set('key', filters.key);
 
-    return this.http.get<ApiListResponse<WebContentDto>>(`${this.api}/catalog/content`, { params });
+    return this.http.get<ApiListResponse<WebContentDto>>(`${this.api}/catalog/content`, {
+      params,
+      context: this.skipLoadingContext,
+    });
   }
 
   getSiteConfig(): Observable<ApiItemResponse<SiteConfigDto>> {
-    return this.http.get<ApiItemResponse<SiteConfigDto>>(`${this.api}/catalog/site-config`);
+    return this.http.get<ApiItemResponse<SiteConfigDto>>(`${this.api}/catalog/site-config`, {
+      context: this.skipLoadingContext,
+    });
   }
 
   createInquiry(payload: InquiryCreatePayload): Observable<InquiryCreateResponse> {

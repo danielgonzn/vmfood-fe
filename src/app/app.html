@@ -8,8 +8,11 @@
       [attr.aria-hidden]="currentHeroSlide !== i"
     >
       <img
-        [src]="slide.image"
+        [attr.src]="shouldLoadHeroImage(i) ? slide.image : null"
         [alt]="slide.title"
+        [attr.fetchpriority]="i === 0 ? 'high' : null"
+        [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+        decoding="async"
         class="w-full h-full object-cover object-center"
         referrerpolicy="no-referrer"
       >
